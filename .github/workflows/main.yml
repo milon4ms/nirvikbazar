@@ -1,0 +1,21 @@
+name: Inject Secrets
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Create secrets file
+        run: |
+          echo "const SECRETS = {
+            TELEGRAM_TOKEN: '${{ secrets.TELEGRAM_BOT_TOKEN }}',
+            CHAT_ID: '${{ secrets.TELEGRAM_CHAT_ID }}',
+            GOOGLE_URL: '${{ secrets.GOOGLE_SCRIPT_URL }}'
+          };" > secrets.js
+
+      # এখানে আপনার সাইট ডেপ্লয় করার কমান্ড থাকবে (যেমন GitHub Pages)
