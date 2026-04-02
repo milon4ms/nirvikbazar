@@ -1,109 +1,87 @@
 // save-order.js
-// সুরক্ষিত - Token গুলি GitHub Secrets এ সংরক্ষিত
+// Uses window.SECRETS.{TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, GOOGLE_SCRIPT_URL}
+// Do NOT hardcode tokens in this file. Inject via public/secrets.js or GitHub Action.
 
-// Runtime এ Variables সেট করুন (Client-side এর জন্য)
-// একটি initialization script থেকে এটি সেট করা হবে
-
-async function getSecrets() {
-    // এটি GitHub Actions থেকে Runtime এ সেট হবে
-    // অথবা Backend API থেকে আসবে
-    
-    return {
-        TELEGRAM_BOT_TOKEN: window.SECRETS?.TELEGRAM_BOT_TOKEN || '',
-        TELEGRAM_CHAT_ID: window.SECRETS?.TELEGRAM_CHAT_ID || '',
-        GOOGLE_SCRIPT_URL: window.SECRETS?.GOOGLE_SCRIPT_URL || ''
-    };
-}
-
-// অর্ডার সংরক্ষণ ফাংশন
 async function saveOrder(orderData) {
-    try {
-        const secrets = await getSecrets();
-        
-        if (!secrets.TELEGRAM_BOT_TOKEN) {
-            console.warn('⚠️ Token লোড হয়নি। Fallback ব্যবহার করছি।');
-        }
-        
-        // ১. টেলিগ্রামে পাঠান
-        await sendToTelegram(orderData, secrets);
-        
-        // २. Google Sheet এ পাঠান
-        await sendToGoogleSheet(orderData, secrets);
-        
-        console.log('✅ অর্ডার সংরক্ষিত হয়েছে');
-        return true;
-    } catch(error) {
-        console.error('❌ Error:', error);
-        return false;
+  try {
+    const secrets = (window.SECRETS || {});
+    const TELEGRAM_BOT_TOKEN = secrets.TELEGRAM_BOT_TOKEN || '';
+    const TELEGRAM_CHAT_ID = secrets.TELEGRAM_CHAT_ID || '';
+    const GOOGLE_SCRIPT_URL = secrets.GOOGLE_SCRIPT_URL || '';
+
+    // Send Telegram (best-effort)
+    if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID) {
+      await sendToTelegram(TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, orderData);
+    } else {
+      console.warn('Telegram secrets missing, skipping telegram notify.');
     }
+
+    // Send Google Sheet (best-effort)
+    if (GOOGLE_SCRIPT_URL) {
+      await sendToGoogleSheet(GOOGLE_SCRIPT_URL, orderData);
+    } else {
+      console.warn('Google Script URL missing, skipping sheet sync.');
+    }
+
+    return true;
+  } catch (err) {
+    console.error('saveOrder error', err);
+    return false;
+  }
 }
 
-// টেলিগ্রামে পাঠান
-async function sendToTelegram(orderData, secrets) {
-    const message = `
-🛍️ <b>নতুন অর্ডার এসেছে!</b>
+async function sendToTelegram(token, chatId, orderData) {
+  const message = [
+    '🛍️ *নতুন অর্ডার এসেছে!*',
+    '',
+    `*অর্ডার নম্বর:* ${orderData.orderId}`,
+    `*নাম:* ${escapeMarkdown(orderData.name)}`,
+    `*মোবাইল:* ${escapeMarkdown(orderData.mobile)}`,
+    `*ঠিকানা:* ${escapeMarkdown(orderData.address)}`,
+    '',
+    '*পন্যসমূহ:*',
+    ...orderData.products.map(p => `• ${escapeMarkdown(p.name)} x${p.quantity} = ৳${p.price * p.quantity}`),
+    '',
+    `*মোট:* ৳${orderData.total}`,
+    `*সময়:* ${new Date().toLocaleString('bn-BD')}`
+  ].join('\n');
 
-📦 <b>অর্ডার নম্বর:</b> ${orderData.orderId}
-👤 <b>গ্রাহকের নাম:</b> ${orderData.name}
-📱 <b>মোবাইল:</b> ${orderData.mobile}
-📍 <b>ঠিকানা:</b> ${orderData.address}
-
-📋 <b>পণ্যের তালিকা:</b>
-${orderData.products.map(p => `  • ${p.name} x${p.quantity} = ৳${p.price * p.quantity}`).join('\n')}
-
-💰 <b>মোট মূল্য:</b> ৳${orderData.total}
-🚚 <b>ডেলিভারি:</b> ক্যাশ অন ডেলিভারি
-📅 <b>সময়:</b> ${new Date().toLocaleString('bn-BD')}
-    `;
-
-    const url = `https://api.telegram.org/bot${secrets.TELEGRAM_BOT_TOKEN}/sendMessage`;
-    
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            chat_id: secrets.TELEGRAM_CHAT_ID,
-            text: message,
-            parse_mode: 'HTML'
-        })
-    });
-
-    if (!response.ok) {
-        console.error('Telegram API error');
-        throw new Error('Telegram API error');
-    }
-    
-    return response.json();
+  const url = `https://api.telegram.org/bot${token}/sendMessage`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'Markdown' })
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    console.warn('Telegram API returned', res.status, text);
+  }
 }
 
-// Google Sheet এ পাঠান
-async function sendToGoogleSheet(orderData, secrets) {
-    const payload = {
-        orderId: orderData.orderId,
-        name: orderData.name,
-        mobile: orderData.mobile,
-        address: orderData.address,
-        products: orderData.products.map(p => `${p.name} x${p.quantity}`).join(', '),
-        total: orderData.total,
-        date: new Date().toLocaleString('bn-BD'),
-        status: 'নতুন'
-    };
+async function sendToGoogleSheet(scriptUrl, orderData) {
+  const payload = {
+    orderId: orderData.orderId,
+    name: orderData.name,
+    mobile: orderData.mobile,
+    address: orderData.address,
+    products: orderData.products.map(p => `${p.name} x${p.quantity}`).join(', '),
+    total: orderData.total,
+    date: new Date().toLocaleString('bn-BD'),
+    status: 'নতুন'
+  };
 
-    try {
-        const response = await fetch(secrets.GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify(payload)
-        });
+  const res = await fetch(scriptUrl, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) {
+    const t = await res.text();
+    console.warn('Google Script returned', res.status, t);
+  }
+}
 
-        if (!response.ok) {
-            console.warn('Google Sheet sync warning');
-        }
-        
-        return response.json();
-    } catch(error) {
-        console.warn('Google Sheet error:', error);
-        // এটি ফেইল হলেও অর্ডার চলবে
-    }
+// minor helper to escape Markdown reserved chars
+function escapeMarkdown(text = '') {
+  return String(text).replace(/([_*[\]()~`>#+\-=|{}.!])/g, '\\$1');
 }
