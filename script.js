@@ -5,7 +5,14 @@
 
 // ১. পন্যের তালিকা (১৬টি পণ্য + ক্যাটাগরি)
 const products = [
-    { id: 1, name: "প্রিমিয়াম কটন শার্ট", price: 1250, category: "man", popular: true, new: false, image: "https://via.placeholder.com/300x300?text=Shirt" },
+    { { 
+  id: 1, 
+  name: "খাঁটি সুন্দরবনের মধু", 
+  price: 650, 
+  category: "natural", 
+  description: "সুন্দরবনের প্রাকৃতিক চাক থেকে সংগৃহীত ১০০% বিশুদ্ধ মধু। এতে কোনো কৃত্রিম চিনি বা প্রিজারভেটিভ নেই।", // বিস্তারিত এখানে লিখুন
+  image: "images/honey.jpg" 
+}," },
     { id: 2, name: "ডিজাইনার সিল্ক শাড়ি", price: 3800, category: "women", popular: true, new: false, image: "https://via.placeholder.com/300x300?text=Saree" },
     { id: 3, name: "বেবি ফিডিং সেট", price: 950, category: "baby", popular: false, new: true, image: "https://via.placeholder.com/300x300?text=BabySet" },
     { id: 4, name: "খাঁটি সুন্দরবনের মধু (১ কেজি)", price: 850, category: "natural", popular: true, new: true, image: "https://via.placeholder.com/300x300?text=Honey" },
