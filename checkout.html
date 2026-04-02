@@ -1,77 +1,79 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Checkout - Nirvik Bazar</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script>window.SECRETS = window.SECRETS || {};</script>
+    <meta charset="UTF-8">
+    <title>চেকআউট - নির্বিক বাজার</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .checkout-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; }
+        .order-summary { background: #fff; padding: 20px; border-radius: 10px; box-shadow: var(--shadow); }
+        .summary-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .total-row { font-size: 20px; color: var(--primary-green); font-weight: bold; }
+        .qty-controls button { width: 30px; height: 30px; cursor: pointer; }
+    </style>
 </head>
 <body>
-  <header class="site-header">
-    <h1>Checkout</h1>
-    <nav><a href="index.html">Home</a></nav>
-  </header>
+    <div class="container">
+        <h1 style="text-align: center; margin-top: 30px;">চেকআউট ফরম</h1>
+        <div class="checkout-container">
+            <div class="delivery-info">
+                <form id="orderForm">
+                    <div class="form-group">
+                        <label>নাম (আবশ্যিক):</label>
+                        <input type="text" id="custName" required placeholder="আপনার পুরো নাম">
+                    </div>
+                    <div class="form-group">
+                        <label>মোবাইল নম্বর (১১ সংখ্যা):</label>
+                        <input type="text" id="custMobile" required maxlength="11" placeholder="যেমন: 01700000000">
+                    </div>
+                    <div class="form-group">
+                        <label>ঠিকানা (আবশ্যিক):</label>
+                        <textarea id="custAddress" required rows="4" placeholder="আপনার বিস্তারিত ঠিকানা"></textarea>
+                    </div>
+                    <p><strong>পেমেন্ট মেথড:</strong> ক্যাশ অন ডেলিভারি (COD)</p>
+                    <button type="submit" class="btn" style="width: 100%; font-size: 18px;">অর্ডার কনফার্ম করুন</button>
+                </form>
+            </div>
 
-  <main style="max-width:700px;margin:20px auto;padding:12px;">
-    <form id="checkoutForm">
-      <label>নাম:<br/><input id="name" name="name" required /></label><br/><br/>
-      <label>মোবাইল:<br/><input id="mobile" name="mobile" required /></label><br/><br/>
-      <label>ঠিকানা:<br/><textarea id="address" name="address" required></textarea></label><br/><br/>
-      <div>
-        <strong>কার্ট থেকে মোট: </strong><span id="cartTotal">৳0</span>
-      </div>
-      <br/>
-      <button type="submit">অর্ডার সম্পন্ন করুন</button>
-    </form>
-  </main>
+            <div class="order-summary">
+                <h3>অর্ডার সামারি</h3>
+                <div id="summary-items">
+                    </div>
+                <div class="summary-row">
+                    <span>সাব-টোটাল:</span>
+                    <span id="subtotal">৳০</span>
+                </div>
+                <div class="summary-row">
+                    <span>কুরিয়ার খরচ:</span>
+                    <span id="shipping">৳৮০</span>
+                </div>
+                <div class="summary-row total-row">
+                    <span>সর্বমোট:</span>
+                    <span id="grandtotal">৳০</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <script src="script.js"></script>
-  <script src="save-order.js"></script>
-  <script>
-    // show cart total on page load
-    document.addEventListener('DOMContentLoaded', () => {
-      const totalEl = document.getElementById('cartTotal');
-      totalEl.textContent = '৳' + getCartTotal();
-    });
+    <script src="script.js"></script>
+    <script>
+        // Checkout page logic
+        document.addEventListener('DOMContentLoaded', updateCheckoutSummary);
 
-    // form submit handler uses saveOrder defined in save-order.js
-    document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = document.getElementById('name').value.trim();
-      const mobile = document.getElementById('mobile').value.trim();
-      const address = document.getElementById('address').value.trim();
-      const cart = getCart();
-
-      if (!cart || cart.length === 0) { alert('কার্ট খালি আছে!'); return; }
-
-      const orderId = 'ORD-' + Date.now();
-      const total = getCartTotal();
-
-      const orderData = { orderId, name, mobile, address, products: cart, total };
-
-      const submitBtn = e.target.querySelector('button[type="submit"]');
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'প্রসেস করছি...';
-
-      try {
-        const saved = await saveOrder(orderData);
-        if (saved) {
-          alert(`✅ অর্ডার সফল!\nঅর্ডার নম্বর: ${orderId}`);
-          localStorage.removeItem('cart');
-          window.location.href = 'index.html';
-        } else {
-          alert('অর্ডার সেভ করতে সমস্যা। পরে চেষ্টা করুন।');
-          submitBtn.disabled = false;
-          submitBtn.textContent = 'অর্ডার সম্পন্ন করুন';
-        }
-      } catch(err) {
-        console.error(err);
-        alert('ত্রুটি হয়েছে। কনসোলে দেখুন।');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'অর্ডার সম্পন্ন করুন';
-      }
-    });
-  </script>
+        document.getElementById('orderForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const mobile = document.getElementById('custMobile').value;
+            if(!/^[0-9]{11}$/.test(mobile)) {
+                alert("ভুল নম্বর! দয়া করে ১১ সংখ্যার সঠিক মোবাইল নম্বর দিন।");
+                return;
+            }
+            alert("ধন্যবাদ! আপনার অর্ডারটি গ্রহণ করা হয়েছে।");
+            localStorage.clear();
+            window.location.href = 'index.html';
+        });
+    </script>
 </body>
 </html>
