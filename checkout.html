@@ -1,110 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-    <!-- GitHub Secrets Injector -->
-<script>
-    // এটি Runtime এ GitHub Secrets inject করে
-    // Production এ এটি server-side rendering এর মাধ্যমে আসবে
-    
-    window.SECRETS = window.SECRETS || {};
-    
-    // Local development এর জন্য
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        console.log('ℹ️ Local development mode detected');
-        // Local development এ config.js ব্যবহার করুন
-    }
-</script>
-    <script src="save-order.js"></script>
-    
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Checkout - Nirvik Bazar</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>window.SECRETS = window.SECRETS || {};</script>
 </head>
 <body>
-    <h1>Checkout Page</h1>
-    <form>
-        <label for="name">Customer Name:</label><br>
-        <input type="text" id="name" name="name" required><br><br>
-        
-        <label for="mobile">Mobile Number:</label><br>
-        <input type="tel" id="mobile" name="mobile" required><br><br>
-        
-        <label for="address">Full Address:</label><br>
-        <textarea id="address" name="address" required></textarea><br><br>
-        
-        <label>Payment Method:</label><br>
-        <input type="radio" id="cod" name="payment" value="cash_on_delivery" checked>
-        <label for="cod">Cash on Delivery</label><br><br>
-        
-        <input type="submit" value="Place Order">
+  <header class="site-header">
+    <h1>Checkout</h1>
+    <nav><a href="index.html">Home</a></nav>
+  </header>
+
+  <main style="max-width:700px;margin:20px auto;padding:12px;">
+    <form id="checkoutForm">
+      <label>নাম:<br/><input id="name" name="name" required /></label><br/><br/>
+      <label>মোবাইল:<br/><input id="mobile" name="mobile" required /></label><br/><br/>
+      <label>ঠিকানা:<br/><textarea id="address" name="address" required></textarea></label><br/><br/>
+      <div>
+        <strong>কার্ট থেকে মোট: </strong><span id="cartTotal">৳0</span>
+      </div>
+      <br/>
+      <button type="submit">অর্ডার সম্পন্ন করুন</button>
     </form>
-    <script>
-    document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const name = document.getElementById('name').value.trim();
-        const mobile = document.getElementById('mobile').value.trim();
-        const address = document.getElementById('address').value.trim();
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        
-        // ভ্যালিডেশন
-        if (cart.length === 0) {
-            alert('❌ কার্ট খালি আছে!');
-            return;
-        }
+  </main>
 
-        if (!name || name.length < 2) {
-            alert('❌ সঠিক নাম দিন!');
-            return;
-        }
-
-        if (!mobile || mobile.length < 10) {
-            alert('❌ সঠিক মোবাইল নম্বর দিন!');
-            return;
-        }
-
-        if (!address || address.length < 5) {
-            alert('❌ সঠিক ঠিকানা দিন!');
-            return;
-        }
-
-        const orderId = 'ORD-' + Date.now();
-        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-        const orderData = {
-            orderId,
-            name,
-            mobile,
-            address,
-            products: cart,
-            total
-        };
-
-        // সাবমিট বাটন ডিসেবল করুন
-        const submitBtn = e.target.querySelector('button[type="submit"]');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'প্রসেস করছি...';
-
-        try {
-            // অর্ডার সংরক্ষণ করুন
-            const saved = await saveOrder(orderData);
-
-            if (saved) {
-                alert(`✅ আপনার অর্ডার সফল হয়েছে!\n\nঅর্ডার নম্বর: ${orderId}\n\nআমরা শীঘ্রই যোগাযোগ করব।`);
-                localStorage.removeItem('cart');
-                window.location.href = 'index.html';
-            } else {
-                alert('⚠️ অর্ডার প্রসেসিং এ সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন।');
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'অর্ডার সম্পন্ন করুন';
-            }
-        } catch(error) {
-            console.error('Order error:', error);
-            alert('❌ অর্ডার সংরক্ষণে ত্রুটি। দয়া করে আবার চেষ্টা করুন।');
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'অর্ডার সম্পন্ন করুন';
-        }
+  <script src="script.js"></script>
+  <script src="save-order.js"></script>
+  <script>
+    // show cart total on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      const totalEl = document.getElementById('cartTotal');
+      totalEl.textContent = '৳' + getCartTotal();
     });
-</script>
+
+    // form submit handler uses saveOrder defined in save-order.js
+    document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const mobile = document.getElementById('mobile').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const cart = getCart();
+
+      if (!cart || cart.length === 0) { alert('কার্ট খালি আছে!'); return; }
+
+      const orderId = 'ORD-' + Date.now();
+      const total = getCartTotal();
+
+      const orderData = { orderId, name, mobile, address, products: cart, total };
+
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'প্রসেস করছি...';
+
+      try {
+        const saved = await saveOrder(orderData);
+        if (saved) {
+          alert(`✅ অর্ডার সফল!\nঅর্ডার নম্বর: ${orderId}`);
+          localStorage.removeItem('cart');
+          window.location.href = 'index.html';
+        } else {
+          alert('অর্ডার সেভ করতে সমস্যা। পরে চেষ্টা করুন।');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'অর্ডার সম্পন্ন করুন';
+        }
+      } catch(err) {
+        console.error(err);
+        alert('ত্রুটি হয়েছে। কনসোলে দেখুন।');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'অর্ডার সম্পন্ন করুন';
+      }
+    });
+  </script>
 </body>
 </html>
