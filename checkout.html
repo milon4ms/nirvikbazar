@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <script src="public/secrets.js"></script>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>চেকআউট - নির্বিক বাজার</title>
     <link rel="stylesheet" href="styles.css">
     <style>
@@ -10,10 +10,14 @@
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; }
         input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; }
-        .order-summary { background: #fff; padding: 20px; border-radius: 10px; box-shadow: var(--shadow); }
+        .order-summary { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .summary-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
-        .total-row { font-size: 20px; color: var(--primary-green); font-weight: bold; }
-        .qty-controls button { width: 30px; height: 30px; cursor: pointer; }
+        .total-row { font-size: 20px; color: #27ae60; font-weight: bold; border-top: 2px solid #eee; margin-top: 10px; }
+        
+        /* মোবাইল রেসপন্সিভ */
+        @media (max-width: 768px) {
+            .checkout-container { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -32,10 +36,10 @@
                     </div>
                     <div class="form-group">
                         <label>ঠিকানা (আবশ্যিক):</label>
-                        <textarea id="custAddress" required rows="4" placeholder="আপনার বিস্তারিত ঠিকানা"></textarea>
+                        <textarea id="custAddress" required rows="4" placeholder="আপনার বিস্তারিত ঠিকানা (গ্রাম/শহর, থানা, জেলা)"></textarea>
                     </div>
                     <p><strong>পেমেন্ট মেথড:</strong> ক্যাশ অন ডেলিভারি (COD)</p>
-                    <button type="submit" class="btn" style="width: 100%; font-size: 18px;">অর্ডার কনফার্ম করুন</button>
+                    <button type="submit" class="btn" style="width: 100%; font-size: 18px; padding: 15px;">অর্ডার কনফার্ম করুন</button>
                 </form>
             </div>
 
@@ -43,12 +47,12 @@
                 <h3>অর্ডার সামারি</h3>
                 <div id="summary-items">
                     </div>
-                <div class="summary-row">
+                <div class="summary-row" style="margin-top: 20px;">
                     <span>সাব-টোটাল:</span>
                     <span id="subtotal">৳০</span>
                 </div>
                 <div class="summary-row">
-                    <span>কুরিয়ার খরচ:</span>
+                    <span>কুরিয়ার খরচ:</span>
                     <span id="shipping">৳৮০</span>
                 </div>
                 <div class="summary-row total-row">
@@ -59,25 +63,8 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
-    <script>
-        // Checkout page logic
-        document.addEventListener('DOMContentLoaded', updateCheckoutSummary);
-
-        document.getElementById('orderForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const mobile = document.getElementById('custMobile').value;
-            if(!/^[0-9]{11}$/.test(mobile)) {
-                alert("ভুল নম্বর! দয়া করে ১১ সংখ্যার সঠিক মোবাইল নম্বর দিন।");
-                return;
-            }
-            alert("ধন্যবাদ! আপনার অর্ডারটি গ্রহণ করা হয়েছে।");
-            localStorage.clear();
-            window.location.href = 'index.html';
-        });
-    </script>
-</body>
     <script src="public/secrets.js"></script>
-<script src="script.js"></script>
-<script src="save-order.js"></script>
+    <script src="script.js"></script>
+    <script src="save-order.js"></script>
+</body>
 </html>
