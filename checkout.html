@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+</head>
+<body>
+    <h1>Checkout Page</h1>
+    <form>
+        <label for="name">Customer Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+        
+        <label for="mobile">Mobile Number:</label><br>
+        <input type="tel" id="mobile" name="mobile" required><br><br>
+        
+        <label for="address">Full Address:</label><br>
+        <textarea id="address" name="address" required></textarea><br><br>
+        
+        <label>Payment Method:</label><br>
+        <input type="radio" id="cod" name="payment" value="cash_on_delivery" checked>
+        <label for="cod">Cash on Delivery</label><br><br>
+        
+        <input type="submit" value="Place Order">
+    </form>
+</body>
+</html>
