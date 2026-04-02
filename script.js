@@ -5,8 +5,7 @@
 
 // ১. পন্যের তালিকা (১৬টি পণ্য + ক্যাটাগরি)
 const products = [
-    { { 
-  id: 1, 
+    {id: 1, 
   name: "খাঁটি সুন্দরবনের মধু", 
   price: 650, 
   category: "natural", 
