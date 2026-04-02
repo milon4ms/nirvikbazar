@@ -1,39 +1,100 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Nirvik Bazar</title>
-  <link rel="stylesheet" href="styles.css" />
-  <!-- secrets injector (production: injected by GitHub Action to public/secrets.js or via server) -->
-  <script>
-    // Development: create public/secrets.js or config.js with window.SECRETS
-    window.SECRETS = window.SECRETS || {};
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>নির্বিক বাজার | প্রিমিয়াম ইকমার্স</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-  <header class="site-header">
-    <h1>Nirvik Bazar</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="cart.html">Cart</a>
-      <a href="checkout.html">Checkout</a>
+    <header class="main-header">
+        <div class="container header-flex">
+            <div class="logo">
+                <a href="index.html">🌿 <span>Nirvik</span> Bazar</a>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="পণ্য খুঁজুন...">
+                <button><i class="fa fa-search"></i></button>
+            </div>
+            <div class="header-icons">
+                <a href="cart.html" class="cart-icon">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="badge" id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <nav class="navbar">
+        <div class="container">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li class="dropdown">
+                    <a href="#">Man Fashion <i class="fa fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Shirt</a></li>
+                        <li><a href="#">Pant</a></li>
+                        <li><a href="#">Punjabi</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#">Women Fashion <i class="fa fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Saree</a></li>
+                        <li><a href="#">Salwar Kameez</a></li>
+                        <li><a href="#">Ornaments</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#">Baby Item <i class="fa fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Toys</a></li>
+                        <li><a href="#">Diapers</a></li>
+                        <li><a href="#">Clothing</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#">Natural Product <i class="fa fa-chevron-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Organic Honey</a></li>
+                        <li><a href="#">Pure Oil</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Electronics</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="checkout.html">Checkout</a></li>
+            </ul>
+        </div>
     </nav>
-  </header>
 
-  <main>
-    <section class="product-grid" aria-label="Products">
-      <!-- products will be rendered here -->
-    </section>
-  </main>
+    <div class="hero-section" style="background-image: url('hero_banner.png');">
+        <div class="hero-content">
+            <h1>সেরা দামে সেরা পণ্য</h1>
+            <p>আপনার প্রতিদিনের প্রয়োজনীয় সবকিছু এক জায়গায়।</p>
+            <a href="#main-grid" class="btn">কেনাকাটা শুরু করুন</a>
+        </div>
+    </div>
 
-  <footer>
-    <p>&copy; 2026 Nirvik Bazar</p>
-  </footer>
+    <main class="container" id="main-grid">
+        <h2 class="section-title">আমাদের পণ্যসমূহ</h2>
+        <div class="product-grid" id="product-container">
+            </div>
 
-  <!-- scripts: load products, cart logic, renderer -->
-  <script src="products.js"></script>
-  <script src="script.js"></script>
-  <script src="render-products.js"></script>
+        <h2 class="section-title">জনপ্রিয় প্রোডাক্ট</h2>
+        <div class="product-grid" id="popular-products">
+            </div>
+
+        <h2 class="section-title">নতুন প্রোডাক্ট</h2>
+        <div class="product-grid" id="new-products">
+            </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 নির্বিক বাজার। সকল অধিকার সংরক্ষিত।</p>
+    </footer>
+
+    <script src="products.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
