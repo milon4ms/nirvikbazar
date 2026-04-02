@@ -1,49 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Nirvik Bazar</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nirvik Bazar</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- secrets injector (production: injected by GitHub Action to public/secrets.js or via server) -->
+  <script>
+    // Development: create public/secrets.js or config.js with window.SECRETS
+    window.SECRETS = window.SECRETS || {};
+  </script>
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li>Home</li>
-                <li>Man Fashion</li>
-                <li>Women Fashion</li>
-                <li>Baby Items</li>
-                <li>Natural Product</li>
-                <li>Electronics</li>
-                <li>Cart</li>
-                <li>Checkout</li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section class="product-grid">
-            <!-- 4x4 product grid -->
-            <div class="product-item">Product 1</div>
-            <div class="product-item">Product 2</div>
-            <div class="product-item">Product 3</div>
-            <div class="product-item">Product 4</div>
-            <div class="product-item">Product 5</div>
-            <div class="product-item">Product 6</div>
-            <div class="product-item">Product 7</div>
-            <div class="product-item">Product 8</div>
-        </section>
-        <section class="popular-products">
-            <h2>Popular Products</h2>
-            <!-- Popular products will be displayed here -->
-        </section>
-        <section class="new-products">
-            <h2>New Products</h2>
-            <!-- New products will be displayed here -->
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2026 Nirvik Bazar</p>
-    </footer>
+  <header class="site-header">
+    <h1>Nirvik Bazar</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cart.html">Cart</a>
+      <a href="checkout.html">Checkout</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="product-grid" aria-label="Products">
+      <!-- products will be rendered here -->
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Nirvik Bazar</p>
+  </footer>
+
+  <!-- scripts: load products, cart logic, renderer -->
+  <script src="products.js"></script>
+  <script src="script.js"></script>
+  <script src="render-products.js"></script>
 </body>
 </html>
