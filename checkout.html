@@ -14,6 +14,8 @@
         // Local development এ config.js ব্যবহার করুন
     }
 </script>
+    <script src="save-order.js"></script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout</title>
@@ -36,5 +38,73 @@
         
         <input type="submit" value="Place Order">
     </form>
+    <script>
+    document.getElementById('checkoutForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const name = document.getElementById('name').value.trim();
+        const mobile = document.getElementById('mobile').value.trim();
+        const address = document.getElementById('address').value.trim();
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        // ভ্যালিডেশন
+        if (cart.length === 0) {
+            alert('❌ কার্ট খালি আছে!');
+            return;
+        }
+
+        if (!name || name.length < 2) {
+            alert('❌ সঠিক নাম দিন!');
+            return;
+        }
+
+        if (!mobile || mobile.length < 10) {
+            alert('❌ সঠিক মোবাইল নম্বর দিন!');
+            return;
+        }
+
+        if (!address || address.length < 5) {
+            alert('❌ সঠিক ঠিকানা দিন!');
+            return;
+        }
+
+        const orderId = 'ORD-' + Date.now();
+        const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+        const orderData = {
+            orderId,
+            name,
+            mobile,
+            address,
+            products: cart,
+            total
+        };
+
+        // সাবমিট বাটন ডিসেবল করুন
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'প্রসেস করছি...';
+
+        try {
+            // অর্ডার সংরক্ষণ করুন
+            const saved = await saveOrder(orderData);
+
+            if (saved) {
+                alert(`✅ আপনার অর্ডার সফল হয়েছে!\n\nঅর্ডার নম্বর: ${orderId}\n\nআমরা শীঘ্রই যোগাযোগ করব।`);
+                localStorage.removeItem('cart');
+                window.location.href = 'index.html';
+            } else {
+                alert('⚠️ অর্ডার প্রসেসিং এ সমস্যা হয়েছে। দয়া করে আবার চেষ্টা করুন।');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'অর্ডার সম্পন্ন করুন';
+            }
+        } catch(error) {
+            console.error('Order error:', error);
+            alert('❌ অর্ডার সংরক্ষণে ত্রুটি। দয়া করে আবার চেষ্টা করুন।');
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'অর্ডার সম্পন্ন করুন';
+        }
+    });
+</script>
 </body>
 </html>
