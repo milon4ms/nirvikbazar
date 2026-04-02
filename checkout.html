@@ -1,6 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- GitHub Secrets Injector -->
+<script>
+    // এটি Runtime এ GitHub Secrets inject করে
+    // Production এ এটি server-side rendering এর মাধ্যমে আসবে
+    
+    window.SECRETS = window.SECRETS || {};
+    
+    // Local development এর জন্য
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        console.log('ℹ️ Local development mode detected');
+        // Local development এ config.js ব্যবহার করুন
+    }
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout</title>
