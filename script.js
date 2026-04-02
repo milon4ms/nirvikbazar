@@ -1,60 +1,66 @@
-// script.js - cart handling (global functions used by renderer and checkout)
-// cart stored in localStorage under 'cart'
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-let cart = [];
-
-function loadCart() {
-  const saved = localStorage.getItem('cart');
-  cart = saved ? JSON.parse(saved) : [];
-  updateCartBadge();
+function renderHomeProducts() {
+    const container = document.getElementById('product-container');
+    if (!container) return;
+    
+    container.innerHTML = products.map(p => `
+        <div class="product-card">
+            <img src="${p.image}" alt="${p.name}">
+            <h3>${p.name}</h3>
+            <span class="price">৳${p.price}</span>
+            <div class="card-btns">
+                <button class="add-cart" onclick="addToCart(${p.id})">কার্টে যোগ করুন</button>
+                <button class="order-now" onclick="buyNow(${p.id})">অর্ডার করুন</button>
+            </div>
+        </div>
+    `).join('');
 }
+
+function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    const item = cart.find(i => i.id === id);
+    if (item) {
+        item.qty++;
+    } else {
+        cart.push({ ...product, qty: 1 });
+    }
+    saveCart();
+    alert("কার্টে যোগ হয়েছে!");
+}
+
+function buyNow(id) {
+    addToCart(id);
+    window.location.href = 'checkout.html';
+}
+
 function saveCart() {
-  localStorage.setItem('cart', JSON.stringify(cart));
-  updateCartBadge();
-}
-function updateCartBadge() {
-  // optional: update a cart count UI if exists
-  const badge = document.querySelector('.cart-badge');
-  if (badge) badge.textContent = cart.reduce((s,i)=>s+i.quantity,0);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    const badge = document.getElementById('cart-count');
+    if(badge) badge.innerText = cart.length;
 }
 
-// addToCart(productId, name, price) signature used by renderer
-function addToCart(productId, productName, productPrice) {
-  const pid = Number(productId);
-  const existing = cart.find(i => i.id === pid);
-  if (existing) {
-    existing.quantity += 1;
-  } else {
-    cart.push({ id: pid, name: productName, price: productPrice, quantity: 1 });
-  }
-  saveCart();
-  alert(`${productName} কার্টে যোগ করা হয়েছে`);
+function updateCheckoutSummary() {
+    const summaryList = document.getElementById('summary-items');
+    if (!summaryList) return;
+
+    let subtotal = 0;
+    const shipping = 80;
+
+    summaryList.innerHTML = cart.map(item => {
+        subtotal += item.price * item.qty;
+        return `
+            <div class="summary-row">
+                <span>${item.name} (x${item.qty})</span>
+                <span>৳${item.price * item.qty}</span>
+            </div>
+        `;
+    }).join('');
+
+    document.getElementById('subtotal').innerText = `৳${subtotal}`;
+    document.getElementById('grandtotal').innerText = `৳${subtotal + shipping}`;
 }
 
-// remove item
-function removeFromCart(productId) {
-  cart = cart.filter(i => i.id !== Number(productId));
-  saveCart();
-}
-
-// update quantity
-function updateQuantity(productId, qty) {
-  const item = cart.find(i => i.id === Number(productId));
-  if (!item) return;
-  item.quantity = Number(qty);
-  if (item.quantity <= 0) removeFromCart(productId);
-  saveCart();
-}
-
-function getCartTotal() {
-  return cart.reduce((sum, it) => sum + (Number(it.price) * Number(it.quantity)), 0);
-}
-
-function getCart() {
-  return cart;
-}
-
-// initialize on load
-document.addEventListener('DOMContentLoaded', () => {
-  loadCart();
-});
+// Initial Call
+renderHomeProducts();
+saveCart();
