@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ধন্যবাদ - নির্বিক বাজার</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .thank-you-container { text-align: center; padding: 100px 20px; }
+        .success-icon { font-size: 80px; color: var(--primary-green); margin-bottom: 20px; }
+        .order-id { background: #eee; padding: 10px; border-radius: 5px; font-weight: bold; color: #333; }
+        .btn-home { margin-top: 30px; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container thank-you-container">
+        <i class="fa fa-check-circle success-icon"></i>
+        <h1>আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!</h1>
+        <p style="margin: 20px 0;">আমরা খুব শীঘ্রই আপনার সাথে যোগাযোগ করব। আপনার সাথে থাকার জন্য ধন্যবাদ।</p>
+        <p>অর্ডার নম্বর: <span class="order-id" id="displayOrderId">#ORD-00000</span></p>
+        
+        <a href="index.html" class="btn btn-home">কেনাকাটা চালিয়ে যান</a>
+    </div>
+
+    <script>
+        // URL থেকে অর্ডার আইডি নিয়ে দেখানো
+        const params = new URLSearchParams(window.location.search);
+        const orderId = params.get('oid');
+        if(orderId) document.getElementById('displayOrderId').innerText = '#' + orderId;
+    </script>
+</body>
+</html>
