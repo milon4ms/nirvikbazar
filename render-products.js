@@ -1,27 +1,34 @@
 function createCardHTML(product) {
     return `
         <div class="product-card">
-            <div class="product-badge-container">
-                ${product.new ? '<span class="badge-new">নতুন</span>' : ''}
-            </div>
             <a href="product-details.html?id=${product.id}">
-                <img src="${product.image}" alt="${product.name}" loading="lazy">
+                <img src="${product.image}" alt="${product.name}">
             </a>
             <div class="product-info">
-                <a href="product-details.html?id=${product.id}" class="product-title-link">
+                <a href="product-details.html?id=${product.id}" style="text-decoration:none; color:#333;">
                     <h3>${product.name}</h3>
                 </a>
-                <div class="price-tag" style="font-size: 20px; font-weight: bold; color: #e67e22; margin: 10px 0;">৳${product.price}</div>
-                
-                <div class="button-group" style="display: flex; gap: 8px;">
-                    <button onclick="addToCart(${product.id})" class="btn" style="flex: 1; background: #27ae60; font-size: 13px; padding: 8px 2px;">
+                <div class="price-tag">৳${product.price}</div>
+                <div class="btn-group">
+                    <button onclick="addToCart(${product.id})" class="btn cart-btn">
                         <i class="fa fa-shopping-cart"></i> কার্ট
                     </button>
-                    <button onclick="buyNow(${product.id})" class="btn" style="flex: 1; background: #e67e22; font-size: 13px; padding: 8px 2px;">
-                        অর্ডার করুন
-                    </button>
+                    <button onclick="buyNow(${product.id})" class="btn order-btn">অর্ডার</button>
                 </div>
             </div>
         </div>
     `;
 }
+
+// হোমপেজে বিভিন্ন সেকশনে ডাটা দেখানোর ফাংশন
+function renderAllSections() {
+    const mainGrid = document.getElementById('product-container');
+    const popularGrid = document.getElementById('popular-products');
+    const newGrid = document.getElementById('new-products');
+
+    if (popularGrid) popularGrid.innerHTML = products.filter(p => p.popular).map(p => createCardHTML(p)).join('');
+    if (newGrid) newGrid.innerHTML = products.filter(p => p.new).map(p => createCardHTML(p)).join('');
+    if (mainGrid) mainGrid.innerHTML = products.map(p => createCardHTML(p)).join('');
+}
+
+document.addEventListener('DOMContentLoaded', renderAllSections);
