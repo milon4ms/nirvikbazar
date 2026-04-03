@@ -1,51 +1,60 @@
-// render-products.js - products UI renderer
+/**
+ * Nirvik Bazar - Product Rendering Logic
+ * এই ফাইলটি শুধুমাত্র হোমপেজে পণ্য প্রদর্শনের কাজ করবে।
+ */
 
 document.addEventListener('DOMContentLoaded', () => {
-  const grid = document.querySelector('.product-grid');
-  if (!grid) return console.warn('.product-grid পাওয়া যায়নি');
-
-  const items = window.products && Array.isArray(window.products) ? window.products : [];
-  if (items.length === 0) {
-    grid.innerHTML = '<p class="small">কোনো পণ্য নেই।</p>';
-    return;
-  }
-
-  grid.innerHTML = items.map(p => renderCard(p)).join('\n');
-
-  // attach event listeners to add buttons
-  grid.querySelectorAll('.add-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const pid = e.currentTarget.dataset.id;
-      const name = e.currentTarget.dataset.name;
-      const price = e.currentTarget.dataset.price;
-      // call global addToCart
-      if (typeof addToCart === 'function') addToCart(pid, name, Number(price));
-      else alert('Cart function not available');
-    });
-  });
+    // products.js লোড হয়েছে কিনা চেক করা
+    if (typeof products !== 'undefined') {
+        renderAllSections();
+    } else {
+        console.error("Error: products.js ফাইলে কোনো ডাটা পাওয়া যায়নি!");
+    }
 });
 
-function renderCard(p) {
-  return `
-    <article class="product-item card" role="article" aria-labelledby="p${p.id}-name">
-      <div class="product-image">
-        <img src="${escapeHtml(p.image || 'https://via.placeholder.com/300x300?text=No+Image')}" alt="${escapeHtml(p.name)}" />
-      </div>
-      <div class="product-info">
-        <h3 id="p${p.id}-name" class="product-name">${escapeHtml(p.name)}</h3>
-        <p class="product-desc">${escapeHtml(p.description || '')}</p>
-        <div class="price-row">
-          <span class="price">৳${p.price}</span>
-          ${p.originalPrice ? `<span class="original-price">৳${p.originalPrice}</span>` : ''}
-        </div>
-        <div class="prod-actions">
-          <button class="add-btn" data-id="${p.id}" data-name="${escapeAttr(p.name)}" data-price="${p.price}">Add to cart</button>
-        </div>
-      </div>
-    </article>
-  `;
+// সব সেকশন একসাথে রেন্ডার করার মেইন ফাংশন
+function renderAllSections() {
+    const mainGrid = document.getElementById('product-container');
+    const popularGrid = document.getElementById('popular-products');
+    const newGrid = document.getElementById('new-products');
+
+    // ১. জনপ্রিয় পণ্য (Popular Products)
+    if (popularGrid) {
+        const popularItems = products.filter(p => p.popular === true);
+        popularGrid.innerHTML = popularItems.map(product => createCardHTML(product)).join('');
+    }
+
+    // ২. নতুন পণ্য (New Arrivals)
+    if (newGrid) {
+        const newItems = products.filter(p => p.new === true);
+        newGrid.innerHTML = newItems.map(product => createCardHTML(product)).join('');
+    }
+
+    // ৩. সকল পণ্য (All Products)
+    if (mainGrid) {
+        mainGrid.innerHTML = products.map(product => createCardHTML(product)).join('');
+    }
 }
 
-// helpers
-function escapeHtml(s){ if(!s) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function escapeAttr(s){ if(!s) return ''; return String(s).replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+// প্রতিটি পণ্যের জন্য HTML কার্ড তৈরি করার ফাংশন
+function createCardHTML(product) {
+    return `
+        <div class="product-card">
+            <div class="product-badge-container">
+                ${product.new ? '<span class="badge-new">নতুন</span>' : ''}
+            </div>
+            <a href="product-details.html?id=${product.id}">
+                <img src="${product.image}" alt="${product.name}" loading="lazy">
+            </a>
+            <div class="product-info">
+                <a href="product-details.html?id=${product.id}" class="product-title-link">
+                    <h3>${product.name}</h3>
+                </a>
+                <div class="price-tag">৳${product.price}</div>
+                <button onclick="addToCart(${product.id})" class="btn add-to-cart-btn">
+                    <i class="fa fa-shopping-cart"></i> কার্টে যোগ করুন
+                </button>
+            </div>
+        </div>
+    `;
+}
