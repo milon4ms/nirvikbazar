@@ -49,92 +49,118 @@
         // ১. আপনার মূল ডাটাবেজ (এখানে প্রতিটি পণ্যে 'category' যোগ করা হয়েছে)
         const products = [
        {
-        id: 1,
+          id: 1,
         name: "সুন্দরবনের খাঁটি মধু (৫০০ গ্রাম)",
         price: 450,
-        category: "herbal",
+        category: "mens",
         description: "সুন্দরবনের প্রাকৃতিক চাক থেকে সংগৃহীত ১০০% বিশুদ্ধ ও ভেজালমুক্ত মধু। সরাসরি খামারিদের থেকে সংগৃহীত।",
         image: "images/product1.jpg",
-        popular: true,
-        new: false
+     
     },
     {
         id: 2,
         name: "গাওয়া ঘি - প্রিমিয়াম কোয়ালিটি",
         price: 950,
-        category: "herbal",
+        category: "mens",
         description: "সম্পূর্ণ ঘরোয়া পদ্ধতিতে তৈরি সুগন্ধি গাওয়া ঘি। কোনো কৃত্রিম ফ্লেভার বা রং নেই।",
         image: "images/product2.jpg",
-        popular: true,
-        new: true
+    
     },
 
-    // ২. ম্যানস ফ্যাশন (Man's Fashion)
+    // ২. ওমেন্স ফ্যাশন (womens Fashion)
     {
         id: 3,
         name: "প্রিমিয়াম কটন ফরমাল শার্ট",
         price: 1250,
-        category: "mens",
+        category: "womens",
         description: "১০০% কটন কাপড়ের আরামদায়ক ফরমাল শার্ট। অফিস বা যেকোনো অনুষ্ঠানের জন্য পারফেক্ট।",
         image: "images/product3.jpg",
-        popular: false,
-        new: true
+      
     },
     {
         id: 4,
         name: "স্টাইলিশ পাঞ্জাবি - ঈদ কালেকশন",
         price: 1800,
-        category: "mens",
+        category: "womens",
         description: "লিলেন কাপড়ের ওপর আধুনিক এমব্রয়ডারি করা প্রিমিয়াম পাঞ্জাবি।",
         image: "images/product4.jpg",
-        popular: true,
-        new: false
+     
     },
 
-    // ৩. ওমেন্স ফ্যাশন (womens Fashion)
+    // ৩. বেবি আইটেম (Baby Items) 
     {
         id: 5,
         name: "টাঙ্গাইল সিল্ক শাড়ি",
         price: 2500,
-        category: "womens",
+        category: "Baby",
         description: "ঐতিহ্যবাহী টাঙ্গাইল সিল্ক শাড়ি। আকর্ষণীয় ডিজাইন ও উন্নত মানের সুতায় তৈরি।",
         image: "images/product5.jpg",
-        popular: false,
-        new: true
+    
     },
-
-    // ৪. বেবি আইটেম (Baby Items)
-    {
-        id: 6,
-        name: "কিডস সফট কটন ড্রেস সেট",
-        price: 850,
-        category: "baby",
-        description: "শিশুদের ত্বকের জন্য উপযোগী নরম সুতি কাপড়ের তৈরি ড্রেস সেট।",
+     id: 6,
+        name: "টাঙ্গাইল সিল্ক শাড়ি",
+        price: 2500,
+        category: "Baby",
+        description: "ঐতিহ্যবাহী টাঙ্গাইল সিল্ক শাড়ি। আকর্ষণীয় ডিজাইন ও উন্নত মানের সুতায় তৈরি।",
         image: "images/product6.jpg",
-        popular: true,
-        new: true
+     
     },
 
-    // ৫. ইলেকট্রনিক্স (electronics)
+    // ৪.  ইলেকট্রনিক্স (electronics) 
     {
         id: 7,
+        name: "কিডস সফট কটন ড্রেস সেট",
+        price: 850,
+        category: "electronics",
+        description: "শিশুদের ত্বকের জন্য উপযোগী নরম সুতি কাপড়ের তৈরি ড্রেস সেট।",
+        image: "images/product6.jpg",
+       
+    },
+ id: 8,
         name: "স্মার্ট ওয়াচ - সিরিজ ৮ ক্লোন",
         price: 2200,
         category: "electronics",
         description: "ফুল টাচ স্ক্রিন, হার্ট রেট মনিটর এবং কলিং ফিচার সমৃদ্ধ আধুনিক স্মার্ট ওয়াচ।",
         image: "images/product7.jpg",
-        popular: false,
-        new: true
+      
+
+    // ৫.  ন্যাচারাল প্রোডাক্ট (herbal Products)
+    {
+        id: 9,
+        name: "স্মার্ট ওয়াচ - সিরিজ ৮ ক্লোন",
+        price: 2200,
+        category: "herbal",
+        description: "ফুল টাচ স্ক্রিন, হার্ট রেট মনিটর এবং কলিং ফিচার সমৃদ্ধ আধুনিক স্মার্ট ওয়াচ।",
+        image: "images/product7.jpg",
+       
     },
     {
-        id: 8,
+        id: 10,
         name: "প্রিমিয়াম হেডফোন - এক্সট্রা বাস",
         price: 1500,
-        category: "electronics",
+        category: "herbal",
         description: "চমৎকার সাউন্ড কোয়ালিটি এবং আরামদায়ক ইয়ারপ্যাড সমৃদ্ধ হেডফোন।",
         image: "images/product8.jpg",
-        popular: true,
-        new: true
+          
+    }
+ // ৬.  অনান্য প্রোডাক্ট (others Products)
+    {
+        id: 9,
+        name: "স্মার্ট ওয়াচ - সিরিজ ৮ ক্লোন",
+        price: 2200,
+        category: "others",
+        description: "ফুল টাচ স্ক্রিন, হার্ট রেট মনিটর এবং কলিং ফিচার সমৃদ্ধ আধুনিক স্মার্ট ওয়াচ।",
+        image: "images/product7.jpg",
+       
+    },
+    {
+        id: 10,
+        name: "প্রিমিয়াম হেডফোন - এক্সট্রা বাস",
+        price: 1500,
+        category: "others",
+        description: "চমৎকার সাউন্ড কোয়ালিটি এবং আরামদায়ক ইয়ারপ্যাড সমৃদ্ধ হেডফোন।",
+        image: "images/product8.jpg",
+          
     }
             // অন্য সব প্রোডাক্ট এখানে থাকবে...
         ];
