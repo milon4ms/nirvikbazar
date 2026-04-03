@@ -62,11 +62,7 @@
             </div>
         </div>
     </div>
-
-    <script src="public/secrets.js"></script>
-    <script src="script.js"></script>
-    <script src="save-order.js"></script>
-    // checkout.html এর নিচের দিকে এই স্ক্রিপ্টটি চেক করুন
+        // checkout.html এর নিচের দিকে এই স্ক্রিপ্টটি চেক করুন
 window.onload = function() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     let subtotal = 0;
@@ -80,5 +76,10 @@ window.onload = function() {
     document.getElementById('shipping').innerText = '৳' + shipping;
     document.getElementById('total').innerText = '৳' + (subtotal + shipping);
 };
+
+    <script src="public/secrets.js"></script>
+    <script src="script.js"></script>
+    <script src="save-order.js"></script>
+
 </body>
 </html>
