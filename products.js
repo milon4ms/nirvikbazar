@@ -1,7 +1,6 @@
 /**
  * Nirvik Bazar - Product Database
  * এই ফাইলে আপনার দোকানের সব পণ্যের তালিকা থাকবে।
- * নতুন পণ্য যোগ করতে নিচের ফরম্যাটটি কপি করে পেস্ট করুন।
  */
 
 const products = [
@@ -83,19 +82,18 @@ const products = [
         image: "images/product7.jpg",
         popular: false,
         new: true
-    }
-      // ৫. ইলেকট্রনিক্স (Electronics)
+    },
     {
-        id: 7,
-        name: "স্মার্ট ওয়াচ - সিরিজ ৮ ক্লোন",
-        price: 2200,
+        id: 8,
+        name: "প্রিমিয়াম হেডফোন - এক্সট্রা বাস",
+        price: 1500,
         category: "electronics",
-        description: "ফুল টাচ স্ক্রিন, হার্ট রেট মনিটর এবং কলিং ফিচার সমৃদ্ধ আধুনিক স্মার্ট ওয়াচ।",
+        description: "চমৎকার সাউন্ড কোয়ালিটি এবং আরামদায়ক ইয়ারপ্যাড সমৃদ্ধ হেডফোন।",
         image: "images/product8.jpg",
-        popular: false,
+        popular: true,
         new: true
     }
 ];
 
-// এই লাইনটি নিশ্চিত করে যে ডাটা অন্য ফাইল থেকে পাওয়া যাবে
-console.log("Products loaded successfully: ", products.length);
+// লোড হওয়ার নিশ্চয়তা পেতে কনসোল চেক
+console.log("Products database updated: " + products.length + " items.");
