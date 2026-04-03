@@ -11,7 +11,7 @@ const products = [
         price: 450,
         category: "natural",
         description: "সুন্দরবনের প্রাকৃতিক চাক থেকে সংগৃহীত ১০০% বিশুদ্ধ ও ভেজালমুক্ত মধু। সরাসরি খামারিদের থেকে সংগৃহীত।",
-        image: "images/product1.jpg" "images/product2.jpg",
+        image: "images/product1.jpg",
         popular: true,
         new: false
     },
