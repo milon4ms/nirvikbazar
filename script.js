@@ -56,6 +56,21 @@ function renderProducts() {
         </div>
     `).join('');
 }
+// script.js এর ভেতরে renderProducts ফাংশনটি এভাবে আপডেট করুন
+container.innerHTML = products.map(product => `
+    <div class="product-card">
+        <a href="product-details.html?id=${product.id}">
+            <img src="${product.image}" alt="${product.name}">
+        </a>
+        <div class="product-info">
+            <a href="product-details.html?id=${product.id}" style="text-decoration:none; color:inherit;">
+                <h3>${product.name}</h3>
+            </a>
+            <p class="price">৳${product.price}</p>
+            <button onclick="addToCart(${product.id})" class="btn">কার্টে যোগ করুন</button>
+        </div>
+    </div>
+`).join('');
 
 // ৫. কার্ট ফাংশনালিটি
 function addToCart(id) {
