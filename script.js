@@ -1,8 +1,4 @@
-function buyNow(productId) {
-    addToCart(productId);
-    window.location.href = "checkout.html";
-}
-
+// ১. কার্টে পণ্য যোগ করা
 function addToCart(productId) {
     let cart = JSON.parse(localStorage.getItem('nirvik_cart')) || [];
     const product = products.find(p => p.id === productId);
@@ -17,9 +13,27 @@ function addToCart(productId) {
         localStorage.setItem('nirvik_cart', JSON.stringify(cart));
         updateCartCount();
         
-        // শুধু কার্ট বাটনে ক্লিক করলে মেসেজ দেখাবে
-        if (!window.location.href.includes('checkout.html')) {
-            alert(`${product.name} কার্টে যোগ করা হয়েছে!`);
+        // যদি ইউজার চেকআউট পেজে না থাকে তবে অ্যালার্ট দিবে
+        if (!window.location.href.includes('checkout')) {
+            alert(product.name + " কার্টে যোগ হয়েছে!");
         }
     }
 }
+
+// ২. সরাসরি অর্ডার (Buy Now)
+function buyNow(productId) {
+    addToCart(productId);
+    window.location.href = "checkout.html";
+}
+
+// ৩. কার্ট কাউন্ট আপডেট
+function updateCartCount() {
+    const cartCountElement = document.getElementById('cart-count');
+    if (cartCountElement) {
+        const cart = JSON.parse(localStorage.getItem('nirvik_cart')) || [];
+        const total = cart.reduce((sum, item) => sum + item.qty, 0);
+        cartCountElement.innerText = total;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', updateCartCount);
