@@ -4,167 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>পণ্যের বিস্তারিত - নির্বিক বাজার</title>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
-
-    <style>
-        .details-wrapper {
-            padding: 40px 0;
-            min-height: 60vh;
-        }
-        .details-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-            background: #fff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-        }
-        .details-image-side {
-            flex: 1 1 400px;
-            text-align: center;
-        }
-        .details-image-side img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-            border: 1px solid #eee;
-        }
-        .details-info-side {
-            flex: 1 1 400px;
-        }
-        .product-name {
-            font-size: 28px;
-            color: #222;
-            margin-bottom: 15px;
-        }
-        .product-price {
-            font-size: 32px;
-            font-weight: bold;
-            color: #e67e22;
-            margin-bottom: 20px;
-        }
-        .product-desc-title {
-            font-size: 18px;
-            margin-bottom: 10px;
-            border-bottom: 2px solid #004a99;
-            display: inline-block;
-        }
-        .product-full-desc {
-            color: #555;
-            line-height: 1.8;
-            margin-bottom: 30px;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-        }
-        .back-link {
-            display: inline-block;
-            margin-top: 20px;
-            color: #004a99;
-            text-decoration: none;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        @media (max-width: 600px) {
-            .product-name { font-size: 22px; }
-            .action-buttons { flex-direction: column; }
-        }
-    </style>
 </head>
 <body>
-
     <header class="main-header">
         <div class="container header-flex">
-            <div class="logo">
-                <a href="index.html">
-                    <img src="images/logo.png" alt="Nirvik Bazar Logo" style="height: 60px;">
-                </a>
-            </div>
+            <div class="logo"><a href="index.html"><img src="images/logo.png" alt="Logo" style="height: 60px;"></a></div>
             <div class="header-icons">
-                <a href="checkout.html" class="cart-icon">
-                    <i class="fa fa-shopping-cart"></i>
-                    <span class="badge" id="cart-count">0</span>
-                </a>
+                <a href="checkout.html" class="cart-icon"><i class="fa fa-shopping-cart"></i><span class="badge" id="cart-count">0</span></a>
             </div>
         </div>
     </header>
 
-    <div class="container details-wrapper">
-        <div id="product-details-content">
-            <div style="text-align:center; padding: 50px;">
-                <i class="fa fa-spinner fa-spin" style="font-size: 40px; color: #004a99;"></i>
-                <p>লোডিং হচ্ছে...</p>
-            </div>
-        </div>
-        <a href="index.html" class="back-link"><i class="fa fa-arrow-left"></i> কেনাকাটা চালিয়ে যান</a>
+    <div class="container" style="padding: 40px 0;">
+        <div id="product-details-content"></div>
+        <a href="index.html" class="back-link" style="display:inline-block; margin-top:20px; color:#004a99; text-decoration:none;"><i class="fa fa-arrow-left"></i> কেনাকাটা চালিয়ে যান</a>
     </div>
-
-    <footer class="main-footer">
-        <div class="container footer-bottom">
-            <p>&copy; ২০২৬ নির্বিক বাজার | ডিজাইন ও ডেভেলপমেন্ট: মোঃ আসাদুজ্জামান মিলন</p>
-        </div>
-    </footer>
 
     <script src="products.js"></script>
     <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // ১. URL থেকে পণ্যের ID সংগ্রহ করা
             const urlParams = new URLSearchParams(window.location.search);
             const productId = parseInt(urlParams.get('id'));
-
-            // ২. products.js থেকে ডাটা খুঁজে বের করা
             const product = products.find(p => p.id === productId);
 
-            const displayContainer = document.getElementById('product-details-content');
-
             if (product) {
-                // ৩. পেজের টাইটেল পরিবর্তন করা
-                document.title = `${product.name} - নির্বিক বাজার`;
+                // মূল ছবির নাম থেকে এক্সটেনশন আলাদা করা (যেমন product1.jpg থেকে product1)
+                const baseImage = product.image.split('.')[0]; 
+                
+                let galleryHTML = `<div class="thumb-item active" onclick="changeMainImg('${product.image}', this)"><img src="${product.image}"></div>`;
+                
+                // অতিরিক্ত ৫টি ছবির জন্য লুপ (product1.2 থেকে product1.6)
+                for(let i=2; i<=6; i++) {
+                    const extraImg = `${baseImage}.${i}.jpg`;
+                    galleryHTML += `<div class="thumb-item" onclick="changeMainImg('${extraImg}', this)"><img src="${extraImg}" onerror="this.parentElement.style.display='none'"></div>`;
+                }
 
-                // ৪. HTML ইনজেক্ট করা
-                displayContainer.innerHTML = `
-                    <div class="details-container">
-                        <div class="details-image-side">
-                            <img src="${product.image}" alt="${product.name}">
-                        </div>
-                        <div class="details-info-side">
-                            <h1 class="product-name">${product.name}</h1>
-                            <div class="product-price">৳${product.price}</div>
-                            <h3 class="product-desc-title">পণ্যের বিবরণ:</h3>
-                            <p class="product-full-desc">${product.description}</p>
-                            
-                            <div class="action-buttons">
-                                <button onclick="addToCart(${product.id})" class="btn" style="padding: 15px 40px; font-size: 18px; width: 100%;">
-                                    <i class="fa fa-cart-plus"></i> কার্টে যোগ করুন
-                                </button>
+                document.getElementById('product-details-content').innerHTML = `
+                    <div class="details-container" style="display: flex; flex-wrap: wrap; gap: 30px; background: #fff; padding: 20px; border-radius: 10px;">
+                        <div class="details-image-side" style="flex: 1 1 400px;">
+                            <img id="mainProductImg" src="${product.image}" style="width: 100%; border-radius: 10px; border: 1px solid #eee;">
+                            <div class="product-gallery" style="display: flex; gap: 10px; margin-top: 15px; overflow-x: auto; padding-bottom: 5px;">
+                                ${galleryHTML}
                             </div>
-                            <p style="margin-top: 20px; color: #666; font-size: 14px;">
-                                <i class="fa fa-truck"></i> সারা বাংলাদেশে ক্যাশ অন ডেলিভারি পাওয়া যাবে।
-                            </p>
+                        </div>
+                        <div class="details-info-side" style="flex: 1 1 400px;">
+                            <h1 style="font-size: 24px; margin-bottom: 10px;">${product.name}</h1>
+                            <div style="font-size: 28px; color: #e67e22; font-weight: bold; margin-bottom: 20px;">৳${product.price}</div>
+                            <h3 style="border-bottom: 2px solid #004a99; display: inline-block; margin-bottom: 10px;">পণ্যের বিবরণ:</h3>
+                            <p style="color: #555; line-height: 1.6;">${product.description}</p>
+                            <div style="display: flex; gap: 15px; margin-top: 30px;">
+                                <button onclick="addToCart(${product.id})" class="btn" style="flex:1; background:#27ae60;"><i class="fa fa-cart-plus"></i> কার্টে যোগ করুন</button>
+                                <button onclick="buyNow(${product.id})" class="btn" style="flex:1; background:#e67e22;">অর্ডার করুন</button>
+                            </div>
                         </div>
                     </div>
                 `;
-            } else {
-                displayContainer.innerHTML = `
-                    <div style="text-align:center; padding: 100px 0;">
-                        <i class="fa fa-exclamation-triangle" style="font-size: 50px; color: #ccc;"></i>
-                        <h2>দুঃখিত! পণ্যটি পাওয়া যায়নি।</h2>
-                        <a href="index.html" class="btn">হোমপেজে ফিরে যান</a>
-                    </div>
-                `;
-            }
-            
-            // কার্ট কাউন্ট আপডেট করা (script.js থেকে)
-            if (typeof updateCartCount === "function") {
-                updateCartCount();
             }
         });
+
+        function changeMainImg(src, el) {
+            document.getElementById('mainProductImg').src = src;
+            document.querySelectorAll('.thumb-item').forEach(item => item.classList.remove('active'));
+            el.classList.add('active');
+        }
     </script>
 </body>
 </html>
