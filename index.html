@@ -24,19 +24,15 @@
         .cart-icon { position: relative; font-size: 24px; color: var(--primary); text-decoration: none; }
         .badge { position: absolute; top: -10px; right: -10px; background: red; color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; }
 
-        /* Navigation with Dropdown (বাম দিকে এলাইন) */
-       <nav class="nav-menu">
-    <div class="container">
-        <ul class="menu-list">
-            <li><a href="category.html?cat=mens"><i class="fas fa-tshirt"></i> পুরুষের কাপড়</a></li>
-            <li><a href="category.html?cat=womens"><i class="fas fa-female"></i> মহিলাদের কাপড়</a></li>
-            <li><a href="category.html?cat=kids"><i class="fas fa-child"></i> শিশুদের পন্য</a></li>
-            <li><a href="category.html?cat=herbal"><i class="fas fa-leaf"></i> হারবাল পন্য</a></li>
-            <li><a href="category.html?cat=others"><i class="fas fa-box-open"></i> অন্যান্য পন্য</a></li>
-            <li><a href="checkout.html" style="background: var(--secondary); padding: 8px 15px; border-radius: 5px;"><i class="fas fa-shopping-cart"></i> চেক আউট</a></li>
-        </ul>
-    </div>
-</nav>
+        /* Navigation (আপডেট করা মেনু) */
+        .nav-menu { background: var(--primary); color: white; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .menu-list { list-style: none; display: flex; gap: 10px; justify-content: flex-start; padding: 0; overflow-x: auto; scrollbar-width: none; }
+        .menu-list::-webkit-scrollbar { display: none; } /* মোবাইলে স্ক্রলবার লুকানোর জন্য */
+        .menu-list > li { position: relative; }
+        .menu-list a { color: white; text-decoration: none; font-weight: 600; font-size: 14px; display: block; padding: 15px 12px; white-space: nowrap; transition: 0.3s; }
+        .menu-list a:hover { background: rgba(255,255,255,0.1); }
+        .menu-list a i { margin-right: 5px; }
+        .menu-checkout { background: var(--secondary); }
 
         /* Hero Banner */
         .hero-section { 
@@ -88,25 +84,13 @@
     <nav class="nav-menu">
         <div class="container">
             <ul class="menu-list">
-                <li><a href="index.html">হোম</a></li>
-                <li class="dropdown">
-                    <a href="#">ফ্যাশন <i class="fa fa-chevron-down"></i></a>
-                    <ul class="dropdown-content">
-                        <li><a href="#">ম্যানস শার্ট</a></li>
-                        <li><a href="#">পাঞ্জাবি</a></li>
-                        <li><a href="#">ওমেন্স থ্রি-পিস</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#">খাদ্য <i class="fa fa-chevron-down"></i></a>
-                    <ul class="dropdown-content">
-                        <li><a href="#">খাঁটি মধু</a></li>
-                        <li><a href="#">ঘি ও তেল</a></li>
-                    </ul>
-                </li>
-                <li><a href="#">বেবি আইটেম</a></li>
-                <li><a href="#">ইলেকট্রনিক্স</a></li>
-                <li><a href="checkout.html">চেকআউট</a></li>
+                <li><a href="index.html"><i class="fa fa-home"></i> হোম</a></li>
+                <li><a href="mens.html">পুরুষের কাপড়</a></li>
+                <li><a href="womens.html">মহিলাদের কাপড়</a></li>
+                <li><a href="kids.html">শিশুদের পন্য</a></li>
+                <li><a href="herbal.html">হারবাল পন্য</a></li>
+                <li><a href="others.html">অন্যান্য পন্য</a></li>
+                <li><a href="checkout.html" class="menu-checkout">চেক আউট</a></li>
             </ul>
         </div>
     </nav>
@@ -115,7 +99,7 @@
         <section class="hero-section">
             <div class="hero-content">
                 <h1>সেরা দামে সেরা পণ্য</h1>
-                <p>নিশ্চিত বিশুদ্ধতায় আপনার প্রয়োজনীয় সবকিছু</p>
+                <p>নিশ্চিত বিশুদ্ধতায় আপনার প্রয়োজনীয় সবকিছু</p>
             </div>
         </section>
 
@@ -150,7 +134,6 @@
     </footer>
 
     <script>
-        // ১৬টি প্রোডাক্ট ডাটা (ছবির পাথ ঠিক করা হয়েছে)
         const products = [
             { id: 1, name: "সুন্দরবনের খাঁটি মধু", price: 450, image: "images/product1.jpg" },
             { id: 2, name: "প্রিমিয়াম গাওয়া ঘি", price: 950, image: "images/product2.jpg" },
@@ -158,13 +141,13 @@
             { id: 4, name: "স্টাইলিশ পাঞ্জাবি", price: 1800, image: "images/product4.jpg" },
             { id: 5, name: "বেবি ড্রেস সেট", price: 850, image: "images/product5.jpg" },
             { id: 6, name: "অর্গানিক সরিষার তেল", price: 320, image: "images/product6.jpg" },
-            { id: 7, name: "স্মার্ট ওয়াচ", price: 2500, image: "images/product7.jpg" },
+            { id: 7, name: "স্মার্ট ওয়াচ", price: 2500, image: "images/product7.jpg" },
             { id: 8, name: "ব্লুটুথ হেডফোন", price: 1200, image: "images/product8.jpg" },
             { id: 9, name: "ব্ল্যাক কফি পাউডার", price: 550, image: "images/product1.jpg" },
             { id: 10, name: "পিঙ্ক হিজাব", price: 350, image: "images/product2.jpg" },
             { id: 11, name: "জিন্স প্যান্ট", price: 1100, image: "images/product3.jpg" },
             { id: 12, name: "টি-শার্ট কম্বো", price: 700, image: "images/product4.jpg" },
-            { id: 13, name: "চামড়ার মানিব্যাগ", price: 650, image: "images/product5.jpg" },
+            { id: 13, name: "চামড়ার মানিব্যাগ", price: 650, image: "images/product5.jpg" },
             { id: 14, name: "লেদার বেল্ট", price: 450, image: "images/product6.jpg" },
             { id: 15, name: "ট্রাভেল ব্যাগ", price: 1400, image: "images/product7.jpg" },
             { id: 16, name: "শীতের হুডি", price: 950, image: "images/product8.jpg" }
@@ -189,7 +172,6 @@
             `).join('');
         }
 
-        // সার্চ ফাংশন
         function searchProduct() {
             const term = document.getElementById('searchInput').value.toLowerCase();
             const filtered = products.filter(p => p.name.toLowerCase().includes(term));
@@ -199,10 +181,17 @@
         function addToCart(id) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             const p = products.find(i => i.id === id);
-            cart.push({...p, quantity: 1});
+            
+            const existing = cart.find(i => i.id === id);
+            if(existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({...p, quantity: 1});
+            }
+            
             localStorage.setItem('cart', JSON.stringify(cart));
             updateCartCount();
-            alert(p.name + " কার্টে যোগ হয়েছে!");
+            alert(p.name + " কার্টে যোগ হয়েছে!");
         }
 
         function buyNow(id) {
@@ -212,7 +201,8 @@
 
         function updateCartCount() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            document.getElementById('cart-count').innerText = cart.length;
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').innerText = totalItems;
         }
 
         window.onload = () => { renderProducts(products); updateCartCount(); };
