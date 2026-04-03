@@ -4,30 +4,112 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ধন্যবাদ - নির্বিক বাজার</title>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .thank-you-container { text-align: center; padding: 100px 20px; }
-        .success-icon { font-size: 80px; color: var(--primary-green); margin-bottom: 20px; }
-        .order-id { background: #eee; padding: 10px; border-radius: 5px; font-weight: bold; color: #333; }
-        .btn-home { margin-top: 30px; display: inline-block; }
+        :root { --primary: #00a651; --secondary: #e67e22; --dark: #333; --light: #f4f7f6; --white: #fff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
+        body { background: var(--light); color: var(--dark); padding: 20px; }
+        
+        .thank-you-container { max-width: 600px; margin: 0 auto; background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        
+        /* Success Header */
+        .success-header { background: var(--primary); color: white; padding: 40px 20px; text-align: center; }
+        .success-header i { font-size: 60px; margin-bottom: 15px; }
+        .success-header h1 { font-size: 28px; }
+
+        .content-body { padding: 30px; }
+        .message-box { text-align: center; margin-bottom: 30px; }
+        .message-box p { font-size: 17px; line-height: 1.6; color: #555; }
+        .highlight-text { color: var(--secondary); font-weight: bold; }
+
+        /* Order Summary Table */
+        .order-summary { background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 1px solid #eee; }
+        .order-summary h3 { border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px; font-size: 18px; }
+        .summary-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 15px; }
+        .summary-total { border-top: 2px solid #eee; padding-top: 10px; margin-top: 10px; font-weight: bold; font-size: 18px; color: var(--primary); }
+
+        /* Contact Buttons */
+        .contact-section { text-align: center; }
+        .contact-title { margin-bottom: 15px; font-weight: 600; color: #444; }
+        .btn-flex { display: flex; flex-direction: column; gap: 12px; }
+        
+        .btn-action { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; transition: 0.3s; color: white; }
+        .btn-fb { background: #1877F2; }
+        .btn-wa { background: #25D366; }
+        .btn-home { background: var(--dark); margin-top: 10px; }
+        
+        .btn-action:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        @media (max-width: 480px) { .success-header h1 { font-size: 22px; } }
     </style>
 </head>
 <body>
-    <div class="container thank-you-container">
-        <i class="fa fa-check-circle success-icon"></i>
-        <h1>আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে!</h1>
-        <p style="margin: 20px 0;">আমরা খুব শীঘ্রই আপনার সাথে যোগাযোগ করব। আপনার সাথে থাকার জন্য ধন্যবাদ।</p>
-        <p>অর্ডার নম্বর: <span class="order-id" id="displayOrderId">#ORD-00000</span></p>
-        
-        <a href="index.html" class="btn btn-home">কেনাকাটা চালিয়ে যান</a>
+
+    <div class="thank-you-container">
+        <div class="success-header">
+            <i class="fas fa-check-circle"></i>
+            <h1>অর্ডার সফল হয়েছে!</h1>
+        </div>
+
+        <div class="content-body">
+            <div class="message-box">
+                <p>ধন্যবাদ! আপনার অর্ডারটি আমরা গ্রহণ করেছি।</p>
+                <p class="highlight-text">আমাদের একজন প্রতিনিধি খুব শীঘ্রই আপনাকে ফোন করে অর্ডারটি কনফার্ম করবেন।</p>
+            </div>
+
+            <div class="order-summary">
+                <h3>অর্ডারের তথ্য</h3>
+                <div id="order-items">
+                    </div>
+                <div class="summary-total" id="order-total">
+                    </div>
+            </div>
+
+            <div class="contact-section">
+                <p class="contact-title">যেকোনো প্রয়োজনে আমাদের সাথে যুক্ত থাকুন:</p>
+                <div class="btn-flex">
+                    <a href="https://facebook.com/yourpage" target="_blank" class="btn-action btn-fb">
+                        <i class="fab fa-facebook"></i> আমাদের ফেসবুক পেজ
+                    </a>
+                    <a href="https://wa.me/88017XXXXXXXX" target="_blank" class="btn-action btn-wa">
+                        <i class="fab fa-whatsapp"></i> হোয়াটসঅ্যাপে কথা বলুন
+                    </a>
+                    <a href="index.html" class="btn-action btn-home">
+                        <i class="fas fa-shopping-bag"></i> আরও কেনাকাটা করুন
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // URL থেকে অর্ডার আইডি নিয়ে দেখানো
-        const params = new URLSearchParams(window.location.search);
-        const orderId = params.get('oid');
-        if(orderId) document.getElementById('displayOrderId').innerText = '#' + orderId;
+        document.addEventListener('DOMContentLoaded', () => {
+            // লোকাল স্টোরেজ থেকে শেষ অর্ডারের ডাটা নেওয়া (যদি থাকে)
+            // চেকআউট পেজে 'cart' ডিলিট করার ঠিক আগে আমরা চাইলে ডাটাটা এখানে দেখাতে পারি
+            // তবে সহজ করার জন্য আমরা সরাসরি শেষবার কেনা আইটেমগুলো দেখাচ্ছি।
+            
+            const lastOrder = JSON.parse(localStorage.getItem('lastOrder')) || [];
+            const lastTotal = localStorage.getItem('lastTotal') || '০';
+            
+            const itemsContainer = document.getElementById('order-items');
+            const totalContainer = document.getElementById('order-total');
+
+            if (lastOrder.length > 0) {
+                lastOrder.forEach(item => {
+                    itemsContainer.innerHTML += `
+                        <div class="summary-item">
+                            <span>${item.name} (x${item.quantity})</span>
+                            <span>৳${item.price * item.quantity}</span>
+                        </div>
+                    `;
+                });
+                totalContainer.innerHTML = `<span>সর্বমোট:</span> <span>৳${lastTotal}</span>`;
+            } else {
+                itemsContainer.innerHTML = '<p style="text-align:center; color:#999;">অর্ডার প্রসেস সম্পন্ন হয়েছে।</p>';
+                totalContainer.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
