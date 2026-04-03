@@ -122,3 +122,13 @@ body { background-color: #f9f9f9; color: var(--text-color); }
         display: flex;
     }
 }
+.product-card .desc {
+    font-size: 13px;
+    color: #666;
+    margin: 8px 0;
+    height: 36px; /* নির্দিষ্ট উচ্চতা */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* সর্বোচ্চ ২ লাইন দেখাবে */
+    -webkit-box-orient: vertical;
+}
