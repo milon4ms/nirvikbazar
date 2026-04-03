@@ -1,230 +1,146 @@
 /**
- * Nirvik Bazar - Main Script File
- * Handles: Product Rendering, Cart Logic, Checkout & Order Processing
+ * Nirvik Bazar - Main Logic File
+ * Handles: Product Rendering, Cart Management, and UI Updates
  */
 
-
-// ২. কার্ট স্টেট ম্যানেজমেন্ট
-let cart = JSON.parse(localStorage.getItem('nirvik_cart')) || [];
-const SHIPPING_COST = 80; // কুরিয়ার খরচ
-
-// ৩. ইনিশিয়ালাইজেশন
+// ১. পেজ লোড হলে প্রডাক্ট দেখানো শুরু করবে
 document.addEventListener('DOMContentLoaded', () => {
-    renderHomeProducts();
-    updateCartBadge();
+    renderProducts();
+    updateCartCount();
+    
+    // চেকআউট পেজে থাকলে সামারি আপডেট করবে
     if (document.getElementById('summary-items')) {
         updateCheckoutSummary();
     }
 });
 
-// ৪. হোমপেজে পণ্য রেন্ডারিং
-function renderHomeProducts() {
+// ২. হোমপেজে প্রডাক্ট রেন্ডার করার ফাংশন
+function renderProducts() {
     const mainGrid = document.getElementById('product-container');
     const popularGrid = document.getElementById('popular-products');
     const newGrid = document.getElementById('new-products');
 
-    if (mainGrid) mainGrid.innerHTML = products.map(p => createProductCard(p)).join('');
-    if (popularGrid) popularGrid.innerHTML = products.filter(p => p.popular).map(p => createProductCard(p)).join('');
-    if (newGrid) newGrid.innerHTML = products.filter(p => p.new).map(p => createProductCard(p)).join('');
+    // products.js থেকে আসা ডাটা চেক করা
+    if (typeof products === 'undefined') {
+        console.error("products.js ফাইলটি খুঁজে পাওয়া যায়নি!");
+        return;
+    }
+
+    // সব পণ্যের জন্য (Main Grid)
+    if (mainGrid) {
+        mainGrid.innerHTML = products.map(product => createProductCard(product)).join('');
+    }
+
+    // জনপ্রিয় পণ্যের জন্য
+    if (popularGrid) {
+        const popularItems = products.filter(p => p.popular);
+        popularGrid.innerHTML = popularItems.map(product => createProductCard(product)).join('');
+    }
+
+    // নতুন পণ্যের জন্য
+    if (newGrid) {
+        const newItems = products.filter(p => p.new);
+        newGrid.innerHTML = newItems.map(product => createProductCard(product)).join('');
+    }
 }
 
-function createProductCard(p) {
+// ৩. প্রডাক্ট কার্ডের HTML তৈরি করার কমন ফাংশন
+function createProductCard(product) {
     return `
         <div class="product-card">
-            <img src="${p.image}" alt="${p.name}" loading="lazy">
-            <h3>${p.name}</h3>
-            <span class="price">৳${p.price}</span>
-            <div class="card-btns">
-                <button class="add-cart" onclick="addToCart(${p.id})">কার্টে যোগ করুন</button>
-                <button class="order-now" onclick="buyNow(${p.id})">অর্ডার করুন</button>
-            </div>
-        </div>
-    `;
-}
-function renderProducts() {
-    const container = document.getElementById('product-container');
-    if (!container) return;
-
-    container.innerHTML = products.map(product => `
-        <div class="product-card">
-            <img src="${product.image}" alt="${product.name}">
+            <a href="product-details.html?id=${product.id}">
+                <img src="${product.image}" alt="${product.name}" loading="lazy">
+            </a>
             <div class="product-info">
-                <h3>${product.name}</h3>
-                <p class="desc">${product.description}</p> <p class="price">৳${product.price}</p>
+                <a href="product-details.html?id=${product.id}" style="text-decoration:none; color:inherit;">
+                    <h3>${product.name}</h3>
+                </a>
+                <p class="price">৳${product.price}</p>
                 <button onclick="addToCart(${product.id})" class="btn">কার্টে যোগ করুন</button>
             </div>
         </div>
-    `).join('');
-}
-// script.js এর ভেতরে renderProducts ফাংশনটি এভাবে আপডেট করুন
-container.innerHTML = products.map(product => `
-    <div class="product-card">
-        <a href="product-details.html?id=${product.id}">
-            <img src="${product.image}" alt="${product.name}">
-        </a>
-        <div class="product-info">
-            <a href="product-details.html?id=${product.id}" style="text-decoration:none; color:inherit;">
-                <h3>${product.name}</h3>
-            </a>
-            <p class="price">৳${product.price}</p>
-            <button onclick="addToCart(${product.id})" class="btn">কার্টে যোগ করুন</button>
-        </div>
-    </div>
-`).join('');
-
-// ৫. কার্ট ফাংশনালিটি
-function addToCart(id) {
-    const product = products.find(p => p.id === id);
-    const existingItem = cart.find(item => item.id === id);
-
-    if (existingItem) {
-        existingItem.qty += 1;
-    } else {
-        cart.push({ ...product, qty: 1 });
-    }
-    saveCart();
-    alert(`${product.name} কার্টে যোগ করা হয়েছে!`);
+    `;
 }
 
-function buyNow(id) {
-    const product = products.find(p => p.id === id);
-    const existingItem = cart.find(item => item.id === id);
-    if (!existingItem) {
-        cart.push({ ...product, qty: 1 });
-    }
-    saveCart();
-    window.location.href = 'checkout.html';
-}
+// ৪. কার্টে পণ্য যোগ করার ফাংশন
+function addToCart(productId) {
+    let cart = JSON.parse(localStorage.getItem('nirvik_cart')) || [];
+    const product = products.find(p => p.id === productId);
 
-function saveCart() {
-    localStorage.setItem('nirvik_cart', JSON.stringify(cart));
-    updateCartBadge();
-}
-
-function updateCartBadge() {
-    const badge = document.getElementById('cart-count');
-    if (badge) {
-        badge.innerText = cart.reduce((total, item) => total + item.qty, 0);
+    if (product) {
+        const existingItem = cart.find(item => item.id === productId);
+        if (existingItem) {
+            existingItem.qty += 1;
+        } else {
+            cart.push({ ...product, qty: 1 });
+        }
+        
+        localStorage.setItem('nirvik_cart', JSON.stringify(cart));
+        updateCartCount();
+        alert(`${product.name} কার্টে যোগ করা হয়েছে!`);
     }
 }
 
-// ৬. চেকআউট সামারি ও ক্যালকুলেশন
+// ৫. কার্ট কাউন্ট আপডেট (হেডারে দেখানোর জন্য)
+function updateCartCount() {
+    const cartCountElement = document.getElementById('cart-count');
+    if (cartCountElement) {
+        const cart = JSON.parse(localStorage.getItem('nirvik_cart')) || [];
+        const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+        cartCountElement.innerText = totalItems;
+    }
+}
+
+// ৬. চেকআউট পেজের সামারি আপডেট
 function updateCheckoutSummary() {
     const summaryContainer = document.getElementById('summary-items');
-    if (!summaryContainer) return;
+    const subtotalElement = document.getElementById('subtotal');
+    const grandTotalElement = document.getElementById('grandtotal');
+    
+    const cart = JSON.parse(localStorage.getItem('nirvik_cart')) || [];
+    const shipping = 80; // ডেলিভারি চার্জ
 
-    if (cart.length === 0) {
-        summaryContainer.innerHTML = '<p>আপনার কার্ট খালি।</p>';
-        return;
-    }
-
-    let subtotal = 0;
-    summaryContainer.innerHTML = cart.map(item => {
-        subtotal += item.price * item.qty;
-        return `
+    if (summaryContainer) {
+        summaryContainer.innerHTML = cart.map(item => `
             <div class="summary-row">
-                <span>${item.name} 
-                    <div class="qty-controls">
-                        <button onclick="changeQty(${item.id}, -1)">-</button>
-                        <b>${item.qty}</b>
-                        <button onclick="changeQty(${item.id}, 1)">+</button>
-                    </div>
-                </span>
+                <span>${item.name} (x${item.qty})</span>
                 <span>৳${item.price * item.qty}</span>
             </div>
-        `;
-    }).join('');
+        `).join('');
 
-    document.getElementById('subtotal').innerText = `৳${subtotal}`;
-    document.getElementById('shipping').innerText = `৳${SHIPPING_COST}`;
-    document.getElementById('grandtotal').innerText = `৳${subtotal + SHIPPING_COST}`;
-}
-
-function changeQty(id, delta) {
-    const item = cart.find(i => i.id === id);
-    if (item) {
-        item.qty += delta;
-        if (item.qty <= 0) {
-            cart = cart.filter(i => i.id !== id);
-        }
-        saveCart();
-        updateCheckoutSummary();
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+        subtotalElement.innerText = `৳${subtotal}`;
+        grandTotalElement.innerText = `৳${subtotal + shipping}`;
     }
 }
 
-// ৭. অর্ডার প্রসেসিং (টেলিগ্রাম ও গুগল শিট)
-async function submitOrder(event) {
-    event.preventDefault();
-
-    const name = document.getElementById('custName').value;
-    const mobile = document.getElementById('custMobile').value;
-    const address = document.getElementById('custAddress').value;
-
-    // ১১ সংখ্যার মোবাইল ভ্যালিডেশন
-    if (!/^[0-9]{11}$/.test(mobile)) {
-        alert("দয়া করে সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন।");
-        return;
-    }
-
-    if (cart.length === 0) {
-        alert("আপনার কার্ট খালি!");
-        return;
-    }
-
-    const orderId = "ORD-" + Math.floor(100000 + Math.random() * 900000);
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-    const total = subtotal + SHIPPING_COST;
-
-    const orderData = {
-        orderId, name, mobile, address, total,
-        products: cart.map(item => ({ name: item.name, qty: item.qty, price: item.price }))
-    };
-
-    // সিক্রেটস চেক (GitHub Actions থেকে আসবে)
-    const secrets = window.SECRETS || {};
-    const botToken = secrets.TELEGRAM_BOT_TOKEN;
-    const chatId = secrets.TELEGRAM_CHAT_ID;
-    const scriptUrl = secrets.GOOGLE_SCRIPT_URL;
-
-    // ১. টেলিগ্রাম নোটিফিকেশন
-    if (botToken && chatId) {
-        const msg = `
-🛍️ *নতুন অর্ডার এসেছে!*
-━━━━━━━━━━━━━━
-🆔 অর্ডার নং: ${orderId}
-👤 নাম: ${name}
-📞 ফোন: ${mobile}
-🏠 ঠিকানা: ${address}
-━━━━━━━━━━━━━━
-📦 পন্যসমূহ:
-${cart.map(p => `- ${p.name} (x${p.qty})`).join('\n')}
-━━━━━━━━━━━━━━
-💰 মোট বিল: ৳${total} (কুরিয়ারসহ)
-    `;
-        fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'Markdown' })
-        });
-    }
-
-    // ২. গুগল শিটে পাঠানো
-    if (scriptUrl) {
-        fetch(scriptUrl, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(orderData)
-        });
-    }
-
-    // অর্ডার সফল হলে
-    localStorage.removeItem('nirvik_cart');
-    window.location.href = `thank-you.html?oid=${orderId}`;
-}
-
-// চেকআউট ফর্ম হ্যান্ডলার অ্যাটাচ করা
+// ৭. অর্ডার সাবমিট হ্যান্ডলার (Checkout Form)
 const orderForm = document.getElementById('orderForm');
 if (orderForm) {
-    orderForm.addEventListener('submit', submitOrder);
+    orderForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const cart = JSON.parse(localStorage.getItem('nirvik_cart')) || [];
+        if (cart.length === 0) {
+            alert("আপনার কার্ট খালি!");
+            return;
+        }
+
+        const orderData = {
+            orderId: "NB" + Date.now().toString().slice(-6),
+            name: document.getElementById('custName').value,
+            mobile: document.getElementById('custMobile').value,
+            address: document.getElementById('custAddress').value,
+            total: document.getElementById('grandtotal').innerText.replace('৳', ''),
+            products: cart
+        };
+
+        // save-order.js এর ফাংশন কল করা
+        if (typeof processOrder === "function") {
+            await processOrder(orderData);
+            localStorage.removeItem('nirvik_cart'); // অর্ডার সফল হলে কার্ট খালি করা
+        } else {
+            alert("সিস্টেম লোড হতে সমস্যা হচ্ছে, পেজটি রিফ্রেশ করুন।");
+        }
+    });
 }
