@@ -3,23 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>পণ্যের বিস্তারিত - নির্বিক বাজার</title>
+    <title>পণ্যের বিবরণ - নির্বিক বাজার</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header class="main-header">
         <div class="container header-flex">
-            <div class="logo"><a href="index.html"><img src="images/logo.png" alt="Logo" style="height: 60px;"></a></div>
-            <div class="header-icons">
-                <a href="checkout.html" class="cart-icon"><i class="fa fa-shopping-cart"></i><span class="badge" id="cart-count">0</span></a>
-            </div>
+            <div class="logo"><a href="index.html"><img src="images/logo.png" alt="Logo"></a></div>
+            <a href="checkout.html" class="cart-icon"><i class="fa fa-shopping-cart"></i><span class="badge" id="cart-count">0</span></a>
         </div>
     </header>
 
-    <div class="container" style="padding: 40px 0;">
+    <div class="container">
         <div id="product-details-content"></div>
-        <a href="index.html" class="back-link" style="display:inline-block; margin-top:20px; color:#004a99; text-decoration:none;"><i class="fa fa-arrow-left"></i> কেনাকাটা চালিয়ে যান</a>
+        <a href="index.html" style="display:block; margin:20px 0; color:var(--primary); text-decoration:none;"><i class="fa fa-arrow-left"></i> কেনাকাটা চালিয়ে যান</a>
     </div>
 
     <script src="products.js"></script>
@@ -31,33 +29,30 @@
             const product = products.find(p => p.id === productId);
 
             if (product) {
-                // মূল ছবির নাম থেকে এক্সটেনশন আলাদা করা (যেমন product1.jpg থেকে product1)
-                const baseImage = product.image.split('.')[0]; 
+                // গ্যালারি লজিক (product1.jpg -> product1.2.jpg, product1.3.jpg...)
+                const basePath = product.image.substring(0, product.image.lastIndexOf('.'));
+                const extension = product.image.substring(product.image.lastIndexOf('.'));
                 
-                let galleryHTML = `<div class="thumb-item active" onclick="changeMainImg('${product.image}', this)"><img src="${product.image}"></div>`;
+                let galleryHTML = `<div class="thumb-item active" onclick="changeImg('${product.image}', this)"><img src="${product.image}"></div>`;
                 
-                // অতিরিক্ত ৫টি ছবির জন্য লুপ (product1.2 থেকে product1.6)
                 for(let i=2; i<=6; i++) {
-                    const extraImg = `${baseImage}.${i}.jpg`;
-                    galleryHTML += `<div class="thumb-item" onclick="changeMainImg('${extraImg}', this)"><img src="${extraImg}" onerror="this.parentElement.style.display='none'"></div>`;
+                    const extraImg = `${basePath}.${i}${extension}`;
+                    galleryHTML += `<div class="thumb-item" onclick="changeImg('${extraImg}', this)"><img src="${extraImg}" onerror="this.style.display='none'"></div>`;
                 }
 
                 document.getElementById('product-details-content').innerHTML = `
-                    <div class="details-container" style="display: flex; flex-wrap: wrap; gap: 30px; background: #fff; padding: 20px; border-radius: 10px;">
-                        <div class="details-image-side" style="flex: 1 1 400px;">
-                            <img id="mainProductImg" src="${product.image}" style="width: 100%; border-radius: 10px; border: 1px solid #eee;">
-                            <div class="product-gallery" style="display: flex; gap: 10px; margin-top: 15px; overflow-x: auto; padding-bottom: 5px;">
-                                ${galleryHTML}
-                            </div>
+                    <div class="details-container">
+                        <div class="details-image-side">
+                            <img id="mainImg" class="main-img" src="${product.image}">
+                            <div class="product-gallery">${galleryHTML}</div>
                         </div>
-                        <div class="details-info-side" style="flex: 1 1 400px;">
-                            <h1 style="font-size: 24px; margin-bottom: 10px;">${product.name}</h1>
-                            <div style="font-size: 28px; color: #e67e22; font-weight: bold; margin-bottom: 20px;">৳${product.price}</div>
-                            <h3 style="border-bottom: 2px solid #004a99; display: inline-block; margin-bottom: 10px;">পণ্যের বিবরণ:</h3>
-                            <p style="color: #555; line-height: 1.6;">${product.description}</p>
-                            <div style="display: flex; gap: 15px; margin-top: 30px;">
-                                <button onclick="addToCart(${product.id})" class="btn" style="flex:1; background:#27ae60;"><i class="fa fa-cart-plus"></i> কার্টে যোগ করুন</button>
-                                <button onclick="buyNow(${product.id})" class="btn" style="flex:1; background:#e67e22;">অর্ডার করুন</button>
+                        <div class="details-info-side" style="flex:1 1 400px;">
+                            <h1>${product.name}</h1>
+                            <div class="price-tag" style="font-size:30px;">৳${product.price}</div>
+                            <p style="margin-bottom:20px; color:#666;">${product.description}</p>
+                            <div class="btn-group">
+                                <button onclick="addToCart(${product.id})" class="btn cart-btn">কার্টে যোগ করুন</button>
+                                <button onclick="buyNow(${product.id})" class="btn order-btn">সরাসরি অর্ডার</button>
                             </div>
                         </div>
                     </div>
@@ -65,9 +60,9 @@
             }
         });
 
-        function changeMainImg(src, el) {
-            document.getElementById('mainProductImg').src = src;
-            document.querySelectorAll('.thumb-item').forEach(item => item.classList.remove('active'));
+        function changeImg(src, el) {
+            document.getElementById('mainImg').src = src;
+            document.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('active'));
             el.classList.add('active');
         }
     </script>
