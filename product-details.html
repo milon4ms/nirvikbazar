@@ -140,11 +140,21 @@
                             </button>
                         </div>
 
-                        <div class="share-row">
-                            <span>শেয়ার করুন:</span>
-                            <div class="share-icons">
-                                <a href="#"><i class="fab fa-facebook"></i></a>
-                                <a href="#"><i class="fab fa-whatsapp"></i></a>
+                       // শেয়ার রো-এর কোডটি এভাবে আপডেট করুন:
+`
+<div class="share-row">
+    <span>শেয়ার করুন:</span>
+    <div class="share-icons">
+        <a href="https://www.facebook.com/sharer/sharer.php?u=${currentUrl}" target="_blank">
+            <i class="fab fa-facebook" style="color: #1877F2;"></i>
+        </a>
+        
+        <a href="https://api.whatsapp.com/send?text=${shareText}%20${currentUrl}" target="_blank">
+            <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+        </a>
+    </div>
+</div>
+`
                             </div>
                         </div>
                     </div>
