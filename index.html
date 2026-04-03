@@ -67,4 +67,158 @@
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
         .footer-col h4 { margin-bottom: 20px; color: var(--primary); }
         .footer-col ul { list-style: none; }
-        .footer-col ul li { margin-
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col ul li a { color: #ccc; text-decoration: none; font-size: 14px; }
+        .footer-bottom { border-top: 1px solid #444; padding-top: 20px; text-align: center; font-size: 14px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container header-flex">
+            <a href="index.html" class="logo">Nirvik <span>Bazar</span></a>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="পণ্য খুঁজুন..." onkeyup="searchProduct()">
+                <button onclick="searchProduct()"><i class="fa fa-search"></i></button>
+            </div>
+            <a href="checkout.html" class="cart-icon">
+                <i class="fa fa-shopping-cart"></i>
+                <span class="badge" id="cart-count">0</span>
+            </a>
+        </div>
+    </header>
+
+    <nav class="nav-menu">
+        <div class="container">
+            <ul class="menu-list">
+                <li><a href="index.html">হোম</a></li>
+                <li class="dropdown">
+                    <a href="#">ফ্যাশন <i class="fa fa-chevron-down"></i></a>
+                    <ul class="dropdown-content">
+                        <li><a href="#">ম্যানস শার্ট</a></li>
+                        <li><a href="#">পাঞ্জাবি</a></li>
+                        <li><a href="#">ওমেন্স থ্রি-পিস</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#">খাদ্য <i class="fa fa-chevron-down"></i></a>
+                    <ul class="dropdown-content">
+                        <li><a href="#">খাঁটি মধু</a></li>
+                        <li><a href="#">ঘি ও তেল</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">বেবি আইটেম</a></li>
+                <li><a href="#">ইলেকট্রনিক্স</a></li>
+                <li><a href="checkout.html">চেকআউট</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>সেরা দামে সেরা পণ্য</h1>
+                <p>নিশ্চিত বিশুদ্ধতায় আপনার প্রয়োজনীয় সবকিছু</p>
+            </div>
+        </section>
+
+        <h2 class="section-title">আমাদের পণ্যসমূহ</h2>
+        <div id="product-list" class="product-grid"></div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>সম্পর্কে</h4>
+                    <p style="font-size: 14px; color: #ccc;">নির্বিক বাজার - বিশুদ্ধতা ও আস্থার প্রতীক।</p>
+                </div>
+                <div class="footer-col">
+                    <h4>লিংকসমূহ</h4>
+                    <ul>
+                        <li><a href="index.html">হোম</a></li>
+                        <li><a href="#">যোগাযোগ</a></li>
+                        <li><a href="checkout.html">অর্ডার ট্র্যাকিং</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>সাপোর্ট</h4>
+                    <p style="font-size: 14px; color: #ccc;">হেল্পলাইন: ০১৭০০-০০০০০০</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; ২০২৬ নির্বিক বাজার | মিলন ভাই</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ১৬টি প্রোডাক্ট ডাটা (ছবির পাথ ঠিক করা হয়েছে)
+        const products = [
+            { id: 1, name: "সুন্দরবনের খাঁটি মধু", price: 450, image: "images/product1.jpg" },
+            { id: 2, name: "প্রিমিয়াম গাওয়া ঘি", price: 950, image: "images/product2.jpg" },
+            { id: 3, name: "ম্যানস কটন শার্ট", price: 1250, image: "images/product3.jpg" },
+            { id: 4, name: "স্টাইলিশ পাঞ্জাবি", price: 1800, image: "images/product4.jpg" },
+            { id: 5, name: "বেবি ড্রেস সেট", price: 850, image: "images/product5.jpg" },
+            { id: 6, name: "অর্গানিক সরিষার তেল", price: 320, image: "images/product6.jpg" },
+            { id: 7, name: "স্মার্ট ওয়াচ", price: 2500, image: "images/product7.jpg" },
+            { id: 8, name: "ব্লুটুথ হেডফোন", price: 1200, image: "images/product8.jpg" },
+            { id: 9, name: "ব্ল্যাক কফি পাউডার", price: 550, image: "images/product1.jpg" },
+            { id: 10, name: "পিঙ্ক হিজাব", price: 350, image: "images/product2.jpg" },
+            { id: 11, name: "জিন্স প্যান্ট", price: 1100, image: "images/product3.jpg" },
+            { id: 12, name: "টি-শার্ট কম্বো", price: 700, image: "images/product4.jpg" },
+            { id: 13, name: "চামড়ার মানিব্যাগ", price: 650, image: "images/product5.jpg" },
+            { id: 14, name: "লেদার বেল্ট", price: 450, image: "images/product6.jpg" },
+            { id: 15, name: "ট্রাভেল ব্যাগ", price: 1400, image: "images/product7.jpg" },
+            { id: 16, name: "শীতের হুডি", price: 950, image: "images/product8.jpg" }
+        ];
+
+        function renderProducts(data) {
+            const list = document.getElementById('product-list');
+            list.innerHTML = data.map(p => `
+                <div class="product-card">
+                    <a href="product-details.html?id=${p.id}">
+                        <img src="${p.image}" onerror="this.src='https://via.placeholder.com/200x180?text=No+Image'" alt="${p.name}">
+                    </a>
+                    <a href="product-details.html?id=${p.id}" style="text-decoration:none; color:inherit;">
+                        <h3>${p.name}</h3>
+                    </a>
+                    <span class="price-tag">৳${p.price}</span>
+                    <div class="btn-group">
+                        <button class="btn cart-btn" onclick="addToCart(${p.id})">কার্ট</button>
+                        <button class="btn order-btn" onclick="buyNow(${p.id})">অর্ডার</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // সার্চ ফাংশন
+        function searchProduct() {
+            const term = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+            renderProducts(filtered);
+        }
+
+        function addToCart(id) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const p = products.find(i => i.id === id);
+            cart.push({...p, quantity: 1});
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            alert(p.name + " কার্টে যোগ হয়েছে!");
+        }
+
+        function buyNow(id) {
+            addToCart(id);
+            window.location.href = 'checkout.html';
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            document.getElementById('cart-count').innerText = cart.length;
+        }
+
+        window.onload = () => { renderProducts(products); updateCartCount(); };
+    </script>
+</body>
+</html>
