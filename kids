@@ -61,7 +61,7 @@
             const list = document.getElementById('category-product-list');
             
             // ফিল্টার লজিক: যাদের ক্যাটাগরি 'mens'
-            const mensProducts = products.filter(p => p.category === "womens");
+            const mensProducts = products.filter(p => p.category === "baby");
 
             if(mensProducts.length === 0) {
                 list.innerHTML = "<p>দুঃখিত, এই মুহূর্তে কোনো পণ্য নেই।</p>";
