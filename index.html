@@ -10,7 +10,7 @@
     <style>
         :root { --primary: #00a651; --secondary: #e67e22; --dark: #333; --light: #f9f9f9; --white: #fff; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
-        body { background: var(--light); color: var(--dark); display: flex; flex-direction: column; min-height: 100vh; }
+        body { background: var(--light); color: var(--dark); }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
 
         /* Header */
@@ -23,18 +23,17 @@
         .cart-icon { position: relative; font-size: 24px; color: var(--primary); text-decoration: none; }
         .badge { position: absolute; top: -10px; right: -10px; background: red; color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; }
 
-        /* Navigation with Dropdowns */
+        /* Navigation - Left Aligned (বাম দিকে এলাইন করা হয়েছে) */
         .nav-menu { background: var(--primary); color: white; position: sticky; top: 0; z-index: 1000; }
-        .menu-list { list-style: none; display: flex; gap: 15px; justify-content: center; overflow: visible; }
+        .menu-list { list-style: none; display: flex; gap: 20px; justify-content: flex-start; } /* বামে আনা হয়েছে */
         .menu-list > li { padding: 15px 0; position: relative; }
         .menu-list a { color: white; text-decoration: none; font-weight: 600; font-size: 14px; }
+        
         .dropdown-content { display: none; position: absolute; background: white; min-width: 180px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); z-index: 100; top: 100%; left: 0; border-radius: 0 0 5px 5px; }
         .dropdown:hover .dropdown-content { display: block; }
         .dropdown-content a { color: #333; padding: 10px 15px; display: block; border-bottom: 1px solid #eee; font-size: 13px; }
-        .dropdown-content a:hover { background: #f5f5f5; color: var(--primary); }
 
-        /* Hero Banner - আরও ছোট প্রস্থ (১ ইঞ্চি গ্যাপ) */
-        .hero-wrapper { max-width: 900px; margin: 20px auto; padding: 0 20px; }
+        /* Hero Banner - বডির প্রস্থের সমান করা হয়েছে */
         .hero-section { 
             background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80'); 
             height: 250px; 
@@ -45,32 +44,26 @@
             justify-content: center;
             color: white; 
             text-align: center; 
-            border-radius: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            width: 100%;
         }
         .hero-content h1 { font-size: 28px; margin-bottom: 5px; }
-<div class="container">
-    <section class="hero-section" style="height: 200px; margin: 15px 0;"> <div class="hero-content">
-            <h1 style="font-size: 24px;">সেরা দামে সেরা পণ্য</h1>
-            <p style="font-size: 14px;">নিশ্চিত বিশুদ্ধতায় আপনার প্রয়োজনীয় সবকিছু</p>
-        </div>
-    </section>
-</div>
+
         /* Product Grid */
-        .section-title { margin: 30px 0 15px; padding-left: 10px; border-left: 5px solid var(--primary); font-size: 18px; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-bottom: 40px; }
-        .product-card { background: var(--white); padding: 12px; border-radius: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.05); text-align: center; }
-        .product-card img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; }
-        .price-tag { font-size: 16px; font-weight: bold; color: var(--secondary); margin: 8px 0; }
-        .btn-group { display: flex; gap: 5px; }
-        .btn { flex: 1; padding: 7px; border: none; border-radius: 4px; cursor: pointer; color: white; font-weight: bold; font-size: 12px; text-decoration: none; }
+        .section-title { margin: 30px 0 15px; padding-left: 10px; border-left: 5px solid var(--primary); font-size: 18px; font-weight: bold; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .product-card { background: var(--white); padding: 15px; border-radius: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.05); text-align: center; transition: 0.3s; }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; }
+        
+        .btn-group { display: flex; gap: 8px; margin-top: 15px; }
+        .btn { flex: 1; padding: 8px; border: none; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; font-size: 13px; text-decoration: none; }
         .cart-btn { background: var(--primary); }
         .order-btn { background: var(--secondary); }
 
-        /* Footer - আগের স্টাইল */
-        .main-footer { background: #222; color: white; padding: 40px 0; text-align: center; margin-top: auto; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-bottom: 20px; text-align: left; }
-        .footer-col h4 { margin-bottom: 15px; border-bottom: 2px solid var(--primary); display: inline-block; }
-        .footer-col p, .footer-col li { font-size: 13px; color: #bbb; line-height: 1.8; list-style: none; }
+        /* Footer */
+        .main-footer { background: #222; color: white; padding: 30px 0; text-align: center; margin-top: 50px; }
     </style>
 </head>
 <body>
@@ -102,37 +95,34 @@
                 <li class="dropdown">
                     <a href="#">ওমেন্স ফ্যাশন <i class="fa fa-chevron-down"></i></a>
                     <div class="dropdown-content">
-                        <a href="#">শাড়ি</a><a href="#">থ্রি-পিস</a><a href="#">গহনা</a>
+                        <a href="#">শাড়ি</a><a href="#">থ্রি-পিস</a>
                     </div>
                 </li>
                 <li class="dropdown">
                     <a href="#">বেবি আইটেম <i class="fa fa-chevron-down"></i></a>
                     <div class="dropdown-content">
-                        <a href="#">খেলনা</a><a href="#">ডায়াপার</a><a href="#">পোশাক</a>
+                        <a href="#">খেলনা</a><a href="#">পোশাক</a>
                     </div>
                 </li>
                 <li class="dropdown">
                     <a href="#">ন্যাচারাল প্রোডাক্ট <i class="fa fa-chevron-down"></i></a>
                     <div class="dropdown-content">
-                        <a href="#">খাঁটি মধু</a><a href="#">অর্গানিক অয়েল</a><a href="#">ঘি</a>
+                        <a href="#">মধু</a><a href="#">ঘি</a>
                     </div>
                 </li>
-                <li><a href="#">ইলেকট্রনিক্স</a></li>
                 <li><a href="checkout.html">চেকআউট</a></li>
             </ul>
         </div>
     </nav>
 
-    <div class="hero-wrapper">
+    <main class="container">
         <section class="hero-section">
             <div class="hero-content">
                 <h1>সেরা দামে সেরা পণ্য</h1>
-                <p>আপনার প্রতিদিনের প্রয়োজনীয় সবকিছু এক জায়গায়</p>
+                <p>নিশ্চিত বিশুদ্ধতায় আপনার প্রয়োজনীয় সবকিছু</p>
             </div>
         </section>
-    </div>
 
-    <main class="container">
         <h2 class="section-title">আমাদের পণ্যসমূহ</h2>
         <div id="product-container" class="product-grid"></div>
         
@@ -142,23 +132,6 @@
 
     <footer class="main-footer">
         <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h4>আমাদের সম্পর্কে</h4>
-                    <p>নির্বিক বাজার - বিশুদ্ধতা ও আস্থার প্রতীক। আমরা সেরা পণ্য সরাসরি গ্রাহকের কাছে পৌঁছে দিতে প্রতিশ্রুতিবদ্ধ।</p>
-                </div>
-                <div class="footer-col">
-                    <h4>দ্রুত লিঙ্ক</h4>
-                    <li><a href="#" style="color:#bbb; text-decoration:none;">প্রাইভেসি পলিসি</a></li>
-                    <li><a href="#" style="color:#bbb; text-decoration:none;">রিফান্ড পলিসি</a></li>
-                    <li><a href="#" style="color:#bbb; text-decoration:none;">যোগাযোগ</a></li>
-                </div>
-                <div class="footer-col">
-                    <h4>যোগাযোগ</h4>
-                    <p><i class="fa fa-phone"></i> ০১৭০০-০০০০০০</p>
-                    <p><i class="fa fa-envelope"></i> info@nirvikbazar.com</p>
-                </div>
-            </div>
             <p>&copy; ২০২৬ নির্বিক বাজার | মিলন ভাই</p>
         </div>
     </footer>
@@ -167,17 +140,12 @@
     <script src="render-products.js"></script>
     <script src="script.js"></script>
     <script>
-        // সার্চ ফাংশন
         function searchProduct() {
             let input = document.getElementById('searchInput').value.toLowerCase();
             let cards = document.getElementsByClassName('product-card');
             for (let card of cards) {
                 let name = card.querySelector('h3').innerText.toLowerCase();
-                if (name.includes(input)) {
-                    card.style.display = "";
-                } else {
-                    card.style.display = "none";
-                }
+                card.style.display = name.includes(input) ? "" : "none";
             }
         }
     </script>
