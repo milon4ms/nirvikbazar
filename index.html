@@ -8,16 +8,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* সরাসরি সিএসএস এখানে দেওয়া হলো যাতে লোডিং সমস্যা না হয় */
-        :root { --primary: #00a651; --secondary: #e67e22; --dark: #333; --light: #f9f9f9; --white: #fff; }
+        :root { 
+            --primary: #00a651; 
+            --secondary: #e67e22; 
+            --dark: #333; 
+            --light: #f9f9f9; 
+            --white: #fff; 
+            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
         body { background: var(--light); color: var(--dark); }
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
 
         /* Header */
         .main-header { background: var(--white); padding: 15px 0; border-bottom: 1px solid #ddd; }
         .header-flex { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
-        .logo img { height: 50px; }
+        
+        /* Logo: টেক্সট বেসড লোগো সেট করা হয়েছে */
+        .logo a { text-decoration: none; display: flex; align-items: center; }
+        .logo-text { font-size: 24px; font-weight: 700; color: var(--primary); }
+        .logo-text span { color: var(--secondary); }
+        /* ছবিটি লোড হলে ব্যবহারের জন্য: .logo img { height: 50px; } */
+
         .search-bar { flex: 1; display: flex; max-width: 500px; }
         .search-bar input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 5px 0 0 5px; outline: none; }
         .search-bar button { padding: 10px 15px; background: var(--primary); color: white; border: none; border-radius: 0 5px 5px 0; cursor: pointer; }
@@ -26,39 +38,56 @@
 
         /* Nav Menu */
         .nav-menu { background: var(--primary); color: white; }
-        .menu-list { list-style: none; display: flex; gap: 20px; justify-content: center; }
+        .menu-list { list-style: none; display: flex; gap: 20px; justify-content: center; overflow-x: auto; white-space: nowrap; }
         .menu-list li { padding: 15px 0; position: relative; }
         .menu-list a { color: white; text-decoration: none; font-weight: 600; font-size: 15px; }
         
         .dropdown-content { display: none; position: absolute; background: white; min-width: 160px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); z-index: 100; top: 100%; border-radius: 4px; }
         .dropdown:hover .dropdown-content { display: block; }
         .dropdown-content a { color: #333; padding: 12px 16px; display: block; border-bottom: 1px solid #eee; }
+        .dropdown-content a:hover { background: #f1f1f1; color: var(--primary); }
 
-        /* Hero Section */
-        .hero-section { background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80'); height: 350px; background-size: cover; background-position: center; display: flex; align-items: center; color: white; text-align: center; margin-bottom: 30px; }
-        .hero-content { width: 100%; }
-        .hero-content h1 { font-size: 40px; margin-bottom: 10px; }
+        /* Hero Section - UPDATED */
+        .hero-section { 
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80'); 
+            height: 400px; /* উচ্চতা কমানো হয়েছে যাতে পণ্যগুলোর সমান দেখায় */
+            background-size: cover; 
+            background-position: center; 
+            display: flex; 
+            align-items: center; 
+            color: white; 
+            text-align: center; 
+            margin: 20px 0; /* বডির সমান প্রস্থ করার জন্য কন্টেইনারের ভেতর ঢুকানো হয়েছে */
+            border-radius: 15px; /* কোনা গোলাকার করা হয়েছে */
+            width: 100%;
+        }
+        .hero-content { width: 100%; padding: 20px; }
+        .hero-content h1 { font-size: 2.5rem; margin-bottom: 10px; font-weight: 700; }
+        .hero-content p { font-size: 1.1rem; }
 
         /* Product Grid */
-        .section-title { margin: 40px 0 20px; padding-left: 10px; border-left: 5px solid var(--primary); font-size: 22px; }
+        .section-title { margin: 40px 0 20px; padding-left: 10px; border-left: 5px solid var(--primary); font-size: 22px; font-weight: 600; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; }
-        .product-card { background: var(--white); padding: 15px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; transition: 0.3s; }
-        .product-card:hover { transform: translateY(-5px); }
+        .product-card { background: var(--white); padding: 15px; border-radius: 10px; box-shadow: var(--shadow); text-align: center; transition: 0.3s; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 12px rgba(0,0,0,0.1); }
         .product-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; }
-        .product-card h3 { font-size: 16px; margin: 10px 0; height: 40px; overflow: hidden; }
+        .product-card h3 { font-size: 16px; margin: 10px 0; height: 40px; overflow: hidden; color: var(--dark); text-decoration: none; }
+        .product-card a { text-decoration: none; }
         .price-tag { font-size: 18px; font-weight: bold; color: var(--secondary); margin-bottom: 10px; }
         
         .btn-group { display: flex; gap: 8px; margin-top: 10px; }
-        .btn { flex: 1; padding: 8px; border: none; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; text-decoration: none; font-size: 14px; }
+        .btn { flex: 1; padding: 10px; border: none; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; text-decoration: none; font-size: 14px; text-align: center; }
         .cart-btn { background: #27ae60; }
         .order-btn { background: var(--secondary); }
+        .btn:hover { opacity: 0.9; }
 
         .main-footer { background: #333; color: white; padding: 20px 0; text-align: center; margin-top: 50px; }
+        .footer-text { font-size: 14px; color: #ccc; }
 
         @media (max-width: 768px) {
             .header-flex { flex-direction: column; text-align: center; }
-            .menu-list { flex-wrap: wrap; gap: 10px; }
-            .hero-content h1 { font-size: 28px; }
+            .hero-content h1 { font-size: 1.8rem; }
+            .hero-section { height: 300px; }
         }
     </style>
 </head>
@@ -66,7 +95,11 @@
 
     <header class="main-header">
         <div class="container header-flex">
-            <div class="logo"><a href="index.html"><img src="images/logo.png" alt="Logo"></a></div>
+            <div class="logo">
+                <a href="index.html">
+                    <span class="logo-text">Nirvik <span>Bazar</span></span>
+                    </a>
+            </div>
             <div class="search-bar">
                 <input type="text" placeholder="পণ্য খুঁজুন...">
                 <button><i class="fa fa-search"></i></button>
@@ -96,14 +129,14 @@
         </div>
     </nav>
 
-    <section class="hero-section">
-        <div class="hero-content">
-            <div class="container">
+    <div class="container">
+        <section class="hero-section">
+            <div class="hero-content">
                 <h1>সেরা দামে সেরা পণ্য</h1>
                 <p>নিশ্চিত বিশুদ্ধতায় আপনার প্রতিদিনের প্রয়োজনীয় সবকিছু</p>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 
     <div class="container">
         <h2 class="section-title">জনপ্রিয় প্রোডাক্ট</h2>
@@ -117,7 +150,10 @@
     </div>
 
     <footer class="main-footer">
-        <p>&copy; ২০২৬ নির্বিক বাজার | মিলন ভাই</p>
+        <div class="container">
+            <p>&copy; ২০২৬ নির্বিক বাজার | মোঃ আসাদুজ্জামান মিলন</p>
+            <p class="footer-text">আপনার কেনাকাটার বিশ্বস্ত সঙ্গী</p>
+        </div>
     </footer>
 
     <script src="products.js"></script>
