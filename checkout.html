@@ -20,14 +20,14 @@
         
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; outline: none; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; outline: none; font-size: 15px; }
         
         .summary-item { display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
         .summary-item.total { border-bottom: none; color: var(--primary); font-size: 20px; font-weight: 700; }
         
-        .order-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .order-btn:hover { background: #008541; }
-        .order-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .order-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 5px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .order-btn:hover { background: #008541; transform: translateY(-20px; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,166,81,0.3); }
+        .order-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
     </style>
 </head>
 <body>
@@ -97,7 +97,6 @@
             const shippingDisplay = document.getElementById('shippingDisplay');
             const totalDisplay = document.getElementById('totalDisplay');
 
-            // কুরিয়ার খরচ এবং সর্বমোট আপডেট করা
             shippingDisplay.innerText = '৳' + shippingCost;
             
             if (currentSubtotal > 0) {
@@ -139,17 +138,23 @@
             }
 
             subtotalEl.innerText = '৳' + currentSubtotal;
-            updateTotal(); // পেজ লোড হওয়ার সময় একবার আপডেট করা
+            updateTotal();
 
             document.getElementById('checkoutForm').addEventListener('submit', function(e) {
                 e.preventDefault();
-                const name = document.getElementById('name').value;
-                const shippingCost = document.getElementById('shippingArea').value;
-                const grandTotal = currentSubtotal + parseInt(shippingCost);
+                
+                // বাটনটি ডিজেবল করে দিচ্ছি যাতে ডাবল ক্লিক না হয়
+                submitBtn.disabled = true;
+                submitBtn.innerText = "অর্ডার প্রসেস হচ্ছে...";
 
-                alert(`ধন্যবাদ ${name}!\nআপনার ৳${grandTotal} টাকার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে।`);
+                // ১. কার্ট ডিলিট করা
                 localStorage.removeItem('cart'); 
-                window.location.href = 'index.html';
+
+                // ২. থ্যাংক ইউ পেজে রিডাইরেক্ট করা
+                // নিশ্চিত করুন আপনার ফোল্ডারে thank-you.html ফাইলটি আছে
+                setTimeout(() => {
+                    window.location.href = 'thank-you.html';
+                }, 500); 
             });
         });
     </script>
