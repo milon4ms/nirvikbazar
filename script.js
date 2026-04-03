@@ -3,25 +3,6 @@
  * Handles: Product Rendering, Cart Logic, Checkout & Order Processing
  */
 
-// ১. পন্যের তালিকা (১৬টি পণ্য + ক্যাটাগরি)
-const products = [
-    { id: 1, name: "ডিজাইনার সিল্ক শাড়ি", price: 3800, category: "women", popular: true, new: false, image: "https://via.placeholder.com/300x300?text=Saree" },
-    { id: 2, name: "ডিজাইনার সিল্ক শাড়ি", price: 3800, category: "women", popular: true, new: false, image: "https://via.placeholder.com/300x300?text=Saree" },
-    { id: 3, name: "বেবি ফিডিং সেট", price: 950, category: "baby", popular: false, new: true, image: "https://via.placeholder.com/300x300?text=BabySet" },
-    { id: 4, name: "খাঁটি সুন্দরবনের মধু (১ কেজি)", price: 850, category: "natural", popular: true, new: true, image: "https://via.placeholder.com/300x300?text=Honey" },
-    { id: 5, name: "স্মার্ট ওয়াচ আল্ট্রা", price: 2200, category: "electronics", popular: true, new: false, image: "https://via.placeholder.com/300x300?text=SmartWatch" },
-    { id: 6, name: "কটন পাঞ্জাবি কালেকশন", price: 1650, category: "man", popular: false, new: true, image: "https://via.placeholder.com/300x300?text=Punjabi" },
-    { id: 7, name: "লেডিস হ্যান্ডব্যাগ", price: 1450, category: "women", popular: false, new: false, image: "https://via.placeholder.com/300x300?text=Handbag" },
-    { id: 8, name: "বেবি ডায়াপার প্যাক", price: 1200, category: "baby", popular: true, new: false, image: "https://via.placeholder.com/300x300?text=Diaper" },
-    { id: 9, name: "অর্গানিক ভার্জিন কোকোনাট অয়েল", price: 550, category: "natural", popular: false, new: true, image: "https://via.placeholder.com/300x300?text=Oil" },
-    { id: 10, name: "অয়্যারলেস ইয়ারবাডস", price: 1850, category: "electronics", popular: true, new: true, image: "https://via.placeholder.com/300x300?text=Earbuds" },
-    { id: 11, name: "স্লিম ফিট ডেনিম প্যান্ট", price: 1350, category: "man", popular: false, new: false, image: "https://via.placeholder.com/300x300?text=Jeans" },
-    { id: 12, name: "এমব্রয়ডারি থ্রি-পিস", price: 2800, category: "women", popular: false, new: true, image: "https://via.placeholder.com/300x300?text=Dress" },
-    { id: 13, name: "বেবি স্কিন কেয়ার কিট", price: 750, category: "baby", popular: false, new: false, image: "https://via.placeholder.com/300x300?text=BabyKit" },
-    { id: 14, name: "খাঁটি গাওয়া ঘি (৫০০ গ্রাম)", price: 900, category: "natural", popular: true, new: false, image: "https://via.placeholder.com/300x300?text=Ghee" },
-    { id: 15, name: "পাওয়ার ব্যাংক ২০০০০ mAh", price: 1950, category: "electronics", popular: false, new: true, image: "https://via.placeholder.com/300x300?text=PowerBank" },
-    { id: 16, name: "ফরমাল লেদার বেল্ট", price: 650, category: "man", popular: false, new: false, image: "https://via.placeholder.com/300x300?text=Belt" }
-];
 
 // ২. কার্ট স্টেট ম্যানেজমেন্ট
 let cart = JSON.parse(localStorage.getItem('nirvik_cart')) || [];
