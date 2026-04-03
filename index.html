@@ -25,21 +25,18 @@
         .badge { position: absolute; top: -10px; right: -10px; background: red; color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; }
 
         /* Navigation with Dropdown (বাম দিকে এলাইন) */
-        .nav-menu { background: var(--primary); color: white; position: sticky; top: 0; z-index: 1000; }
-        .menu-list { list-style: none; display: flex; gap: 20px; justify-content: flex-start; padding: 0; }
-        .menu-list > li { position: relative; padding: 15px 0; }
-        .menu-list a { color: white; text-decoration: none; font-weight: 600; font-size: 14px; display: block; }
-        
-        /* Dropdown Styles */
-        .dropdown-content { 
-            display: none; position: absolute; background: white; min-width: 180px; 
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1); z-index: 100; top: 100%; left: 0; 
-            border-radius: 0 0 5px 5px; border-top: 3px solid var(--secondary);
-        }
-        .dropdown:hover .dropdown-content { display: block; }
-        .dropdown-content li { list-style: none; }
-        .dropdown-content a { color: #333; padding: 10px 15px; border-bottom: 1px solid #eee; font-size: 13px; }
-        .dropdown-content a:hover { background: #f9f9f9; color: var(--primary); }
+       <nav class="nav-menu">
+    <div class="container">
+        <ul class="menu-list">
+            <li><a href="category.html?cat=mens"><i class="fas fa-tshirt"></i> পুরুষের কাপড়</a></li>
+            <li><a href="category.html?cat=womens"><i class="fas fa-female"></i> মহিলাদের কাপড়</a></li>
+            <li><a href="category.html?cat=kids"><i class="fas fa-child"></i> শিশুদের পন্য</a></li>
+            <li><a href="category.html?cat=herbal"><i class="fas fa-leaf"></i> হারবাল পন্য</a></li>
+            <li><a href="category.html?cat=others"><i class="fas fa-box-open"></i> অন্যান্য পন্য</a></li>
+            <li><a href="checkout.html" style="background: var(--secondary); padding: 8px 15px; border-radius: 5px;"><i class="fas fa-shopping-cart"></i> চেক আউট</a></li>
+        </ul>
+    </div>
+</nav>
 
         /* Hero Banner */
         .hero-section { 
