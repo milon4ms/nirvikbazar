@@ -41,6 +41,21 @@ function createProductCard(p) {
         </div>
     `;
 }
+function renderProducts() {
+    const container = document.getElementById('product-container');
+    if (!container) return;
+
+    container.innerHTML = products.map(product => `
+        <div class="product-card">
+            <img src="${product.image}" alt="${product.name}">
+            <div class="product-info">
+                <h3>${product.name}</h3>
+                <p class="desc">${product.description}</p> <p class="price">৳${product.price}</p>
+                <button onclick="addToCart(${product.id})" class="btn">কার্টে যোগ করুন</button>
+            </div>
+        </div>
+    `).join('');
+}
 
 // ৫. কার্ট ফাংশনালিটি
 function addToCart(id) {
