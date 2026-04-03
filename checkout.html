@@ -28,8 +28,6 @@
         .order-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .order-btn:hover { background: #008541; }
         .order-btn:disabled { background: #ccc; cursor: not-allowed; }
-
-        @media (max-width: 768px) { .order-summary { width: 100%; } }
     </style>
 </head>
 <body>
@@ -51,15 +49,15 @@
                     <label>ঠিকানা (আবশ্যক):</label>
                     <textarea id="address" rows="3" placeholder="বাসা নং, রোড, থানা, জেলা" required></textarea>
                 </div>
-                <p style="font-size: 13px; color: #666; margin-top: 10px;">
+                <p style="font-size: 14px; color: #444; background: #e8f5e9; padding: 10px; border-radius: 5px;">
                     <strong>পেমেন্ট মেথড:</strong> ক্যাশ অন ডেলিভারি (COD)
                 </p>
             </div>
 
             <div class="order-summary">
                 <h3 style="margin-bottom: 20px; border-bottom: 2px solid var(--primary); padding-bottom: 5px;">অর্ডার সামারি</h3>
-                <div id="cart-items-list" style="margin-bottom: 20px; font-size: 14px;">
-                    </div>
+                
+                <div id="cart-items-display" style="margin-bottom: 20px;"></div>
                 
                 <div class="summary-item">
                     <span>সাব-টোটাল:</span>
@@ -82,8 +80,11 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const itemsList = document.getElementById('cart-items-list');
+            // ১. কার্ট ডেটা রিড করা
+            const cartData = localStorage.getItem('cart');
+            const cart = cartData ? JSON.parse(cartData) : [];
+            
+            const itemsDisplay = document.getElementById('cart-items-display');
             const subtotalEl = document.getElementById('subtotal');
             const totalEl = document.getElementById('total');
             const submitBtn = document.getElementById('submitBtn');
@@ -91,38 +92,40 @@
             let subtotal = 0;
             const shippingCost = 80;
 
+            // ২. কার্ট খালি কি না পরীক্ষা করা
             if (cart.length === 0) {
-                itemsList.innerHTML = '<p style="color:red;">আপনার কার্ট খালি!</p>';
+                itemsDisplay.innerHTML = '<p style="color:red; text-align:center;">আপনার কার্ট বর্তমানে খালি আছে!</p>';
                 submitBtn.disabled = true;
+                submitBtn.innerText = "কার্ট খালি";
             } else {
+                // ৩. কার্টে পণ্য থাকলে তা লুপ করে দেখানো
+                itemsDisplay.innerHTML = ''; // পরিষ্কার করা
                 cart.forEach(item => {
-                    // স্ক্রিনশটে দাম না আসার মূল ফিক্স এখানে
-                    const price = parseFloat(item.price) || 0;
-                    const qty = parseInt(item.quantity) || 1;
-                    subtotal += price * qty;
+                    // দাম সংখ্যায় রূপান্তর নিশ্চিত করা
+                    const itemPrice = parseFloat(item.price) || 0;
+                    const itemQty = parseInt(item.quantity) || 1;
+                    const itemTotal = itemPrice * itemQty;
+                    subtotal += itemTotal;
                     
-                    itemsList.innerHTML += `
-                        <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-                            <span>${item.name} (x${qty})</span>
-                            <span>৳${price * qty}</span>
+                    itemsDisplay.innerHTML += `
+                        <div style="display:flex; justify-content:space-between; margin-bottom:8px; border-bottom:1px dashed #ddd; padding-bottom:5px; font-size:14px;">
+                            <span>${item.name} (x${itemQty})</span>
+                            <span style="font-weight:600;">৳${itemTotal}</span>
                         </div>
                     `;
                 });
             }
 
+            // ৪. ক্যালকুলেশন আপডেট
             subtotalEl.innerText = '৳' + subtotal;
-            totalEl.innerText = '৳' + (subtotal + shippingCost);
+            totalEl.innerText = '৳' + (subtotal > 0 ? (subtotal + shippingCost) : 0);
 
-            // অর্ডার সাবমিট হ্যান্ডলার (টেলিগ্রাম বা মেসেজ পাঠানোর জন্য)
+            // ৫. অর্ডার সাবমিট (অ্যালার্ট মেসেজ)
             document.getElementById('checkoutForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const name = document.getElementById('name').value;
-                const phone = document.getElementById('phone').value;
-                const address = document.getElementById('address').value;
-
-                alert(`ধন্যবাদ ${name}! আপনার ৳${subtotal + shippingCost} টাকার অর্ডারটি গ্রহণ করা হয়েছে। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।`);
-                
-                localStorage.removeItem('cart'); // অর্ডার শেষে কার্ট খালি করুন
+                alert(`ধন্যবাদ ${name}! আপনার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে।`);
+                localStorage.removeItem('cart'); // অর্ডার শেষে কার্ট পরিষ্কার
                 window.location.href = 'index.html';
             });
         });
