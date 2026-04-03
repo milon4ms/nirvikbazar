@@ -21,7 +21,6 @@
 
         /* Product Detail Layout */
         .details-container { display: flex; flex-wrap: wrap; gap: 40px; background: var(--white); padding: 30px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
-        
         .details-image-side { flex: 1; min-width: 320px; }
         .main-img-box { width: 100%; border: 1px solid #eee; border-radius: 8px; overflow: hidden; position: relative; margin-bottom: 15px; }
         .main-img-box img { width: 100%; height: auto; display: block; }
@@ -35,7 +34,6 @@
         .details-info-side { flex: 1.2; min-width: 320px; }
         .details-info-side h1 { font-size: 28px; margin-bottom: 10px; color: #222; }
         .sku-cat { font-size: 14px; color: #777; margin-bottom: 20px; }
-        
         .price-row { margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
         .old-price { text-decoration: line-through; color: #999; font-size: 20px; margin-right: 10px; }
         .current-price { color: var(--secondary); font-size: 28px; font-weight: 700; }
@@ -45,7 +43,6 @@
         .description-box ul li { position: relative; padding-left: 20px; margin-bottom: 8px; }
         .description-box ul li::before { content: "•"; color: var(--primary); font-weight: bold; position: absolute; left: 0; }
 
-        /* Action Buttons */
         .btn-group { display: flex; gap: 15px; margin-bottom: 25px; }
         .btn { flex: 1; padding: 15px; border: none; border-radius: 5px; font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
         .cart-btn { background: var(--primary); color: white; }
@@ -54,8 +51,8 @@
 
         .share-row { border-top: 1px solid #eee; padding-top: 15px; display: flex; align-items: center; gap: 15px; }
         .share-row span { font-weight: bold; font-size: 14px; }
-        .share-icons a { color: #888; font-size: 20px; transition: 0.3s; margin-right: 10px; }
-        .share-icons a:hover { color: var(--primary); }
+        .share-icons a { color: #888; font-size: 24px; transition: 0.3s; margin-right: 15px; }
+        .share-icons a:hover { transform: scale(1.1); }
 
         @media (max-width: 768px) { .details-container { flex-direction: column; padding: 15px; } }
     </style>
@@ -88,10 +85,13 @@
         const product = products.find(p => p.id === productId);
 
         if (product) {
-            // গ্যালারি লজিক
+            // ১. ভেরিয়েবলগুলো আগে ডিফাইন করতে হবে
+            const currentUrl = encodeURIComponent(window.location.href);
+            const shareText = encodeURIComponent("নির্বিক বাজার থেকে এই পণ্যটি দেখুন: " + product.name);
+
+            // ২. গ্যালারি লজিক
             const basePath = product.image.substring(0, product.image.lastIndexOf('.'));
             const extension = product.image.substring(product.image.lastIndexOf('.'));
-            
             let galleryHTML = `<div class="thumb-item active" onclick="changeImg('${product.image}', this)"><img src="${product.image}"></div>`;
             
             for(let i=2; i<=5; i++) {
@@ -99,7 +99,7 @@
                 galleryHTML += `<div class="thumb-item" onclick="changeImg('${extraImg}', this)"><img src="${extraImg}" onerror="this.parentElement.style.display='none'"></div>`;
             }
 
-            // ডাইনামিক কন্টেন্ট রেন্ডার
+            // ৩. ডাইনামিক কন্টেন্ট রেন্ডার (সবটুকু একসাথেই থাকবে)
             document.getElementById('product-details-content').innerHTML = `
                 <div class="details-container">
                     <div class="details-image-side">
@@ -126,7 +126,7 @@
                             <strong>প্রোডাক্ট ডিটেইলস:</strong>
                             <p>${product.description}</p>
                             <ul style="margin-top:10px;">
-                                <li>১০০% প্রিমিয়াম কোয়ালিটি নিশ্চিত।</li>
+                                <li>১০০% প্রিমিয়াম কোয়ালিটি নিশ্চিত।</li>
                                 <li>সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।</li>
                             </ul>
                         </div>
@@ -140,21 +140,15 @@
                             </button>
                         </div>
 
-                       // শেয়ার রো-এর কোডটি এভাবে আপডেট করুন:
-`
-<div class="share-row">
-    <span>শেয়ার করুন:</span>
-    <div class="share-icons">
-        <a href="https://www.facebook.com/sharer/sharer.php?u=${currentUrl}" target="_blank">
-            <i class="fab fa-facebook" style="color: #1877F2;"></i>
-        </a>
-        
-        <a href="https://api.whatsapp.com/send?text=${shareText}%20${currentUrl}" target="_blank">
-            <i class="fab fa-whatsapp" style="color: #25D366;"></i>
-        </a>
-    </div>
-</div>
-`
+                        <div class="share-row">
+                            <span>শেয়ার করুন:</span>
+                            <div class="share-icons">
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=${currentUrl}" target="_blank">
+                                    <i class="fab fa-facebook" style="color: #1877F2;"></i>
+                                </a>
+                                <a href="https://api.whatsapp.com/send?text=${shareText}%20${currentUrl}" target="_blank">
+                                    <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -163,44 +157,33 @@
         }
     });
 
-    // ইমেজ পরিবর্তনের ফাংশন
     function changeImg(src, el) {
         document.getElementById('mainImg').src = src;
         document.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('active'));
         el.classList.add('active');
     }
 
-    // কার্টে যোগ করার মূল ফাংশন (যদি script.js এ সমস্যা থাকে, তবে এটি কাজ করবে)
     function addToCart(id, showAlert = true) {
         const product = products.find(p => p.id === id);
         if (!product) return;
-
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         const existingItem = cart.find(item => item.id === id);
-
         if (existingItem) {
             existingItem.quantity = (existingItem.quantity || 1) + 1;
         } else {
             cart.push({ ...product, quantity: 1 });
         }
-
         localStorage.setItem('cart', JSON.stringify(cart));
-        
-        // কার্ট কাউন্ট আপডেট (যদি header এ থাকে)
         const cartBadge = document.getElementById('cart-count');
         if (cartBadge) cartBadge.innerText = cart.length;
-
-        if (showAlert) {
-            alert(product.name + " কার্টে যোগ করা হয়েছে!");
-        }
+        if (showAlert) alert(product.name + " কার্টে যোগ করা হয়েছে!");
     }
 
-    // সরাসরি অর্ডার ফাংশন (ফিক্সড)
     function buyNow(id) {
-        addToCart(id, false); // অ্যালার্ট ছাড়া কার্টে যোগ করবে
+        addToCart(id, false);
         setTimeout(() => {
             window.location.href = 'checkout.html';
-        }, 100); // ১০০ মিলিসেকেন্ড সময় দেওয়া হয়েছে যাতে ডাটা ঠিকমতো সেভ হয়
+        }, 100);
     }
 </script>
 </body>
