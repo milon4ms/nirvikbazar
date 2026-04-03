@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>পুরুষের কাপড় - নির্বিক বাজার</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root { --primary: #00a651; --secondary: #e67e22; --dark: #333; --light: #f4f4f4; --white: #fff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
+        body { background: var(--light); color: var(--dark); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 15px; width: 100%; }
+
+        .main-header { background: var(--white); padding: 15px 0; border-bottom: 1px solid #ddd; }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: 700; color: var(--primary); text-decoration: none; }
+        .logo span { color: var(--secondary); }
+
+        .section-title { margin: 30px 0 15px; padding-left: 10px; border-left: 5px solid var(--primary); font-size: 24px; font-weight: bold; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .product-card { background: var(--white); padding: 15px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; }
+        .product-card img { width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; }
+        .price-tag { font-size: 18px; font-weight: bold; color: var(--secondary); margin-bottom: 15px; display: block; }
+        
+        .btn-group { display: flex; gap: 8px; }
+        .btn { flex: 1; padding: 10px; border: none; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; text-decoration: none; text-align: center; font-size: 13px; }
+        .cart-btn { background: var(--primary); }
+        .order-btn { background: var(--secondary); }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="container header-flex">
+            <a href="index.html" class="logo">Nirvik <span>Bazar</span></a>
+            <a href="index.html" style="text-decoration: none; color: var(--primary); font-weight: bold;"><i class="fa fa-arrow-left"></i> হোমপেজে ফিরুন</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2 class="section-title">পুরুষের পোশাক সংগ্রহ</h2>
+        <div id="category-product-list" class="product-grid">
+            </div>
+    </main>
+
+    <script>
+        // ১. আপনার মূল ডাটাবেজ (এখানে প্রতিটি পণ্যে 'category' যোগ করা হয়েছে)
+        const products = [
+            { id: 3, name: "ম্যানস কটন শার্ট", price: 1250, image: "images/product3.jpg", category: "mens" },
+            { id: 4, name: "স্টাইলিশ পাঞ্জাবি", price: 1800, image: "images/product4.jpg", category: "mens" },
+            { id: 11, name: "জিন্স প্যান্ট", price: 1100, image: "images/product3.jpg", category: "mens" },
+            { id: 12, name: "টি-শার্ট কম্বো", price: 700, image: "images/product4.jpg", category: "mens" },
+            { id: 1, name: "সুন্দরবনের খাঁটি মধু", price: 450, image: "images/product1.jpg", category: "herbal" },
+            // অন্য সব প্রোডাক্ট এখানে থাকবে...
+        ];
+
+        // ২. শুধুমাত্র 'mens' ক্যাটাগরির পণ্যগুলো ফিল্টার করা
+        function renderCategoryProducts() {
+            const list = document.getElementById('category-product-list');
+            
+            // ফিল্টার লজিক: যাদের ক্যাটাগরি 'mens'
+            const mensProducts = products.filter(p => p.category === "womens");
+
+            if(mensProducts.length === 0) {
+                list.innerHTML = "<p>দুঃখিত, এই মুহূর্তে কোনো পণ্য নেই।</p>";
+                return;
+            }
+
+            list.innerHTML = mensProducts.map(p => `
+                <div class="product-card">
+                    <img src="${p.image}" onerror="this.src='https://via.placeholder.com/200x180?text=No+Image'" alt="${p.name}">
+                    <h3>${p.name}</h3>
+                    <span class="price-tag">৳${p.price}</span>
+                    <div class="btn-group">
+                        <button class="btn cart-btn" onclick="addToCart(${p.id})">কার্ট</button>
+                        <button class="btn order-btn" onclick="buyNow(${p.id})">অর্ডার</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // কার্ট ফাংশন (index.html এর মতোই)
+        function addToCart(id) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const p = products.find(i => i.id === id);
+            cart.push({...p, quantity: 1});
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert(p.name + " কার্টে যোগ হয়েছে!");
+        }
+
+        function buyNow(id) {
+            addToCart(id);
+            window.location.href = 'checkout.html';
+        }
+
+        window.onload = renderCategoryProducts;
+    </script>
+</body>
+</html>
