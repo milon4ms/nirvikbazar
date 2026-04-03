@@ -4,82 +4,128 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>চেকআউট - নির্বিক বাজার</title>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
-        .checkout-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; }
-        .order-summary { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .summary-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
-        .total-row { font-size: 20px; color: #27ae60; font-weight: bold; border-top: 2px solid #eee; margin-top: 10px; }
+        :root { --primary: #00a651; --secondary: #e67e22; --dark: #333; --light: #f9f9f9; --white: #fff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
+        body { background: var(--light); padding: 20px; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .checkout-title { text-align: center; margin-bottom: 30px; font-size: 28px; color: var(--dark); }
         
-        /* মোবাইল রেসপন্সিভ */
-        @media (max-width: 768px) {
-            .checkout-container { grid-template-columns: 1fr; }
-        }
+        .checkout-flex { display: flex; flex-wrap: wrap; gap: 20px; }
+        .billing-form { flex: 1; min-width: 300px; background: var(--white); padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .order-summary { width: 350px; background: var(--white); padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); height: fit-content; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 14px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; outline: none; }
+        
+        .summary-item { display: flex; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .summary-item.total { border-bottom: none; color: var(--primary); font-size: 20px; font-weight: 700; }
+        
+        .order-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .order-btn:hover { background: #008541; }
+        .order-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        @media (max-width: 768px) { .order-summary { width: 100%; } }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h1 style="text-align: center; margin-top: 30px;">চেকআউট ফরম</h1>
-        <div class="checkout-container">
-            <div class="delivery-info">
-                <form id="orderForm">
-                    <div class="form-group">
-                        <label>নাম (আবশ্যিক):</label>
-                        <input type="text" id="custName" required placeholder="আপনার পুরো নাম">
-                    </div>
-                    <div class="form-group">
-                        <label>মোবাইল নম্বর (১১ সংখ্যা):</label>
-                        <input type="text" id="custMobile" required maxlength="11" placeholder="যেমন: 01700000000">
-                    </div>
-                    <div class="form-group">
-                        <label>ঠিকানা (আবশ্যিক):</label>
-                        <textarea id="custAddress" required rows="4" placeholder="আপনার বিস্তারিত ঠিকানা (গ্রাম/শহর, থানা, জেলা)"></textarea>
-                    </div>
-                    <p><strong>পেমেন্ট মেথড:</strong> ক্যাশ অন ডেলিভারি (COD)</p>
-                    <button type="submit" class="btn" style="width: 100%; font-size: 18px; padding: 15px;">অর্ডার কনফার্ম করুন</button>
-                </form>
+        <h1 class="checkout-title">চেকআউট ফরম</h1>
+        
+        <form id="checkoutForm" class="checkout-flex">
+            <div class="billing-form">
+                <div class="form-group">
+                    <label>নাম (আবশ্যক):</label>
+                    <input type="text" id="name" placeholder="আপনার পুরো নাম লিখুন" required>
+                </div>
+                <div class="form-group">
+                    <label>মোবাইল নম্বর (১১ সংখ্যা):</label>
+                    <input type="tel" id="phone" placeholder="যেমন: 01700000000" pattern="[0-9]{11}" required>
+                </div>
+                <div class="form-group">
+                    <label>ঠিকানা (আবশ্যক):</label>
+                    <textarea id="address" rows="3" placeholder="বাসা নং, রোড, থানা, জেলা" required></textarea>
+                </div>
+                <p style="font-size: 13px; color: #666; margin-top: 10px;">
+                    <strong>পেমেন্ট মেথড:</strong> ক্যাশ অন ডেলিভারি (COD)
+                </p>
             </div>
 
             <div class="order-summary">
-                <h3>অর্ডার সামারি</h3>
-                <div id="summary-items">
+                <h3 style="margin-bottom: 20px; border-bottom: 2px solid var(--primary); padding-bottom: 5px;">অর্ডার সামারি</h3>
+                <div id="cart-items-list" style="margin-bottom: 20px; font-size: 14px;">
                     </div>
-                <div class="summary-row" style="margin-top: 20px;">
+                
+                <div class="summary-item">
                     <span>সাব-টোটাল:</span>
                     <span id="subtotal">৳০</span>
                 </div>
-                <div class="summary-row">
-                    <span>কুরিয়ার খরচ:</span>
+                <div class="summary-item">
+                    <span>কুরিয়ার খরচ:</span>
                     <span id="shipping">৳৮০</span>
                 </div>
-                <div class="summary-row total-row">
+                <div class="summary-item total">
                     <span>সর্বমোট:</span>
-                    <span id="grandtotal">৳০</span>
+                    <span id="total">৳০</span>
                 </div>
+                
+                <button type="submit" class="order-btn" id="submitBtn">অর্ডার কনফার্ম করুন</button>
+                <a href="index.html" style="display:block; text-align:center; margin-top:15px; color:#666; text-decoration:none; font-size:14px;">কেনাকাটা চালিয়ে যান</a>
             </div>
-        </div>
+        </form>
     </div>
-        // checkout.html এর নিচের দিকে এই স্ক্রিপ্টটি চেক করুন
-window.onload = function() {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    let subtotal = 0;
-    const shipping = 80; // আপনার সেট করা কুরিয়ার খরচ
 
-    cart.forEach(item => {
-        subtotal += item.price * item.quantity;
-    });
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const itemsList = document.getElementById('cart-items-list');
+            const subtotalEl = document.getElementById('subtotal');
+            const totalEl = document.getElementById('total');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            let subtotal = 0;
+            const shippingCost = 80;
 
-    document.getElementById('subtotal').innerText = '৳' + subtotal;
-    document.getElementById('shipping').innerText = '৳' + shipping;
-    document.getElementById('total').innerText = '৳' + (subtotal + shipping);
-};
+            if (cart.length === 0) {
+                itemsList.innerHTML = '<p style="color:red;">আপনার কার্ট খালি!</p>';
+                submitBtn.disabled = true;
+            } else {
+                cart.forEach(item => {
+                    // স্ক্রিনশটে দাম না আসার মূল ফিক্স এখানে
+                    const price = parseFloat(item.price) || 0;
+                    const qty = parseInt(item.quantity) || 1;
+                    subtotal += price * qty;
+                    
+                    itemsList.innerHTML += `
+                        <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                            <span>${item.name} (x${qty})</span>
+                            <span>৳${price * qty}</span>
+                        </div>
+                    `;
+                });
+            }
 
-    <script src="public/secrets.js"></script>
-    <script src="script.js"></script>
-    <script src="save-order.js"></script>
+            subtotalEl.innerText = '৳' + subtotal;
+            totalEl.innerText = '৳' + (subtotal + shippingCost);
 
+            // অর্ডার সাবমিট হ্যান্ডলার (টেলিগ্রাম বা মেসেজ পাঠানোর জন্য)
+            document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('name').value;
+                const phone = document.getElementById('phone').value;
+                const address = document.getElementById('address').value;
+
+                alert(`ধন্যবাদ ${name}! আপনার ৳${subtotal + shippingCost} টাকার অর্ডারটি গ্রহণ করা হয়েছে। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।`);
+                
+                localStorage.removeItem('cart'); // অর্ডার শেষে কার্ট খালি করুন
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
 </body>
 </html>
