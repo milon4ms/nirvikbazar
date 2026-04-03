@@ -66,5 +66,19 @@
     <script src="public/secrets.js"></script>
     <script src="script.js"></script>
     <script src="save-order.js"></script>
+    // checkout.html এর নিচের দিকে এই স্ক্রিপ্টটি চেক করুন
+window.onload = function() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let subtotal = 0;
+    const shipping = 80; // আপনার সেট করা কুরিয়ার খরচ
+
+    cart.forEach(item => {
+        subtotal += item.price * item.quantity;
+    });
+
+    document.getElementById('subtotal').innerText = '৳' + subtotal;
+    document.getElementById('shipping').innerText = '৳' + shipping;
+    document.getElementById('total').innerText = '৳' + (subtotal + shipping);
+};
 </body>
 </html>
