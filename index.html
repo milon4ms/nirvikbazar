@@ -13,7 +13,7 @@
         body { background: var(--light); color: var(--dark); display: flex; flex-direction: column; min-height: 100vh; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 15px; width: 100%; }
 
-        /* Header & Nav */
+        /* Header & Search */
         .main-header { background: var(--white); padding: 15px 0; border-bottom: 1px solid #ddd; }
         .header-flex { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
         .logo { font-size: 24px; font-weight: 700; color: var(--primary); text-decoration: none; }
@@ -21,22 +21,34 @@
         .search-bar { flex: 1; display: flex; max-width: 500px; }
         .search-bar input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 5px 0 0 5px; outline: none; }
         .search-bar button { padding: 10px 15px; background: var(--primary); color: white; border: none; border-radius: 0 5px 5px 0; cursor: pointer; }
-        .nav-menu { background: var(--primary); color: white; position: sticky; top: 0; z-index: 1000; }
-        .menu-list { list-style: none; display: flex; gap: 10px; overflow-x: auto; padding: 0; }
-        .menu-list a { color: white; text-decoration: none; font-weight: 600; padding: 15px 12px; display: block; white-space: nowrap; }
+        .cart-icon { position: relative; font-size: 24px; color: var(--primary); text-decoration: none; }
+        .badge { position: absolute; top: -10px; right: -10px; background: red; color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; }
+
+        /* Nav Menu */
+        .nav-menu { background: var(--primary); color: white; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .menu-list { list-style: none; display: flex; gap: 10px; justify-content: flex-start; padding: 0; overflow-x: auto; scrollbar-width: none; }
+        .menu-list a { color: white; text-decoration: none; font-weight: 600; font-size: 14px; display: block; padding: 15px 12px; white-space: nowrap; }
+        .menu-list a:hover { background: rgba(255,255,255,0.1); }
 
         /* Product Grid */
         .section-title { margin: 30px 0 15px; padding-left: 10px; border-left: 5px solid var(--primary); font-size: 20px; font-weight: bold; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-bottom: 40px; }
-        .product-card { background: var(--white); padding: 15px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; }
+        .product-card { background: var(--white); padding: 15px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; transition: 0.3s; }
         .product-card img { width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; }
+        .product-card h3 { font-size: 16px; margin-bottom: 10px; height: 45px; overflow: hidden; }
         .price-tag { font-size: 18px; font-weight: bold; color: var(--secondary); margin-bottom: 15px; display: block; }
+        
         .btn-group { display: flex; gap: 8px; }
         .btn { flex: 1; padding: 10px; border: none; border-radius: 5px; cursor: pointer; color: white; font-weight: bold; font-size: 13px; }
         .cart-btn { background: var(--primary); }
         .order-btn { background: var(--secondary); }
-        .badge { position: absolute; top: -10px; right: -10px; background: red; color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; }
-        .cart-icon { position: relative; font-size: 24px; color: var(--primary); text-decoration: none; }
+
+        /* Footer */
+        .main-footer { background: #222; color: white; padding: 40px 0 20px; margin-top: auto; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
+        .footer-col h4 { margin-bottom: 20px; color: var(--primary); }
+        .footer-col p, .footer-col ul li { font-size: 14px; color: #ccc; margin-bottom: 10px; list-style: none; }
+        .footer-bottom { border-top: 1px solid #444; padding-top: 20px; text-align: center; font-size: 14px; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -46,7 +58,7 @@
             <a href="index.html" class="logo">Nirvik <span>Bazar</span></a>
             <div class="search-bar">
                 <input type="text" id="searchInput" placeholder="পণ্য খুঁজুন..." onkeyup="searchProduct()">
-                <button><i class="fa fa-search"></i></button>
+                <button onclick="searchProduct()"><i class="fa fa-search"></i></button>
             </div>
             <a href="checkout.html" class="cart-icon">
                 <i class="fa fa-shopping-cart"></i>
@@ -65,35 +77,52 @@
                 <li><a href="electronics.html">ইলেক্ট্রনিক্স</a></li>
                 <li><a href="herbal.html">হারবাল পন্য</a></li>
                 <li><a href="others.html">অন্যান্য পন্য</a></li>
+                <li><a href="checkout.html" style="background:var(--secondary)">চেক আউট</a></li>
             </ul>
         </div>
     </nav>
 
     <main class="container">
-        <h2 class="section-title">আমাদের পণ্যসমূহ</h2>
-        <div id="product-list" class="product-grid">লোড হচ্ছে...</div>
+        <h2 class="section-title">আমাদের সকল পণ্যসমূহ</h2>
+        <div id="product-list" class="product-grid">পণ্য লোড হচ্ছে...</div>
     </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>সম্পর্কে</h4>
+                    <p>নির্ভীক বাজার - বিশুদ্ধতা ও আস্থার প্রতীক।</p>
+                </div>
+                <div class="footer-col">
+                    <h4>সাপোর্ট</h4>
+                    <p>হেল্পলাইন: +8801722855738</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; ২০২৬ নির্ভীক বাজার | মোঃ আসাদুজ্জামান মিলন</p>
+            </div>
+        </div>
+    </footer>
 
     <script src="products.js"></script>
 
     <script>
-        // যদি products.js লোড না হয়, তবে এই নিচের ডাটা কাজ করবে (Fallback)
-        if (typeof products === 'undefined') {
-            var products = [
-                { id: 1, name: "চুলকানির যম নিমতেল", price: 501, category: "herbal", image: "images/product1.jpg" },
-                { id: 2, name: "নির্ভীক পাইলস কেয়ার", price: 680, category: "herbal", image: "images/product2.jpg" },
-                { id: 5, name: "কাতুয়া-Katua", price: 700, category: "mens", image: "images/product5.jpg" }
-            ];
-            console.warn("External products.js not found. Using internal fallback data.");
-        }
-
+        // সব পণ্য দেখানোর ফাংশন
         function renderProducts(data) {
             const list = document.getElementById('product-list');
             if (!list) return;
-            
+
+            if (!data || data.length === 0) {
+                list.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>পণ্য পাওয়া যায়নি।</p>";
+                return;
+            }
+
             list.innerHTML = data.map(p => `
                 <div class="product-card">
-                    <img src="${p.image}" onerror="this.src='https://via.placeholder.com/200x180?text=No+Image'" alt="${p.name}">
+                    <a href="product-details.html?id=${p.id}">
+                        <img src="${p.image}" onerror="this.src='https://via.placeholder.com/200x180?text=No+Image'" alt="${p.name}">
+                    </a>
                     <h3>${p.name}</h3>
                     <span class="price-tag">৳${p.price}</span>
                     <div class="btn-group">
@@ -104,16 +133,21 @@
             `).join('');
         }
 
+        // সার্চ ফাংশন
         function searchProduct() {
             const term = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = products.filter(p => p.name.toLowerCase().includes(term));
-            renderProducts(filtered);
+            if (typeof products !== 'undefined') {
+                const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+                renderProducts(filtered);
+            }
         }
 
+        // কার্ট ফাংশন
         function addToCart(id) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const p = products.find(i => i.id === id);
-            if (p) {
+            if (typeof products !== 'undefined') {
+                const p = products.find(i => i.id === id);
+                if (!p) return;
                 const existing = cart.find(i => i.id === id);
                 if(existing) existing.quantity += 1;
                 else cart.push({...p, quantity: 1});
@@ -133,8 +167,11 @@
             document.getElementById('cart-count').innerText = cart.reduce((s, i) => s + i.quantity, 0);
         }
 
+        // পেজ লোড হলে সব পণ্য দেখাবে
         window.onload = () => {
-            renderProducts(products);
+            if (typeof products !== 'undefined') {
+                renderProducts(products); // এখানে সব ১৬টি পণ্য আসবে
+            }
             updateCartCount();
         };
     </script>
