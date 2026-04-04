@@ -3,95 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>পণ্যের বিবরণ - নির্ভীক বাজার</title>
+    <title>পণ্যের বিবরণ - নির্বিক বাজার</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #00a651; --secondary: #e67e22; --dark: #333; --light: #f4f4f4; --white: #fff; }
+        :root { --primary: #00a651; --secondary: #e67e22; --dark: #333; --light: #f9f9f9; --white: #fff; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
-        body { background: var(--light); color: var(--dark); padding: 20px; }
-        .container { max-width: 1000px; margin: 0 auto; background: var(--white); padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .back-btn { display: inline-block; margin-bottom: 20px; text-decoration: none; color: var(--primary); font-weight: bold; }
-        .details-flex { display: flex; flex-wrap: wrap; gap: 30px; min-height: 300px; }
-        .product-img { flex: 1; min-width: 300px; text-align: center; }
-        .product-img img { max-width: 100%; border-radius: 10px; height: auto; border: 1px solid #ddd; }
-        .product-info { flex: 1; min-width: 300px; }
-        .product-info h1 { font-size: 28px; margin-bottom: 10px; color: var(--primary); }
-        .price { font-size: 26px; color: var(--secondary); font-weight: bold; margin-bottom: 15px; display: block; }
-        .desc { line-height: 1.8; color: #444; margin-bottom: 25px; white-space: pre-line; font-size: 16px; }
-        .btn-group { display: flex; gap: 10px; }
-        .btn { flex: 1; padding: 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: white; text-align: center; text-decoration: none; font-size: 16px; display: inline-block; }
-        .cart-btn { background: var(--primary); }
-        .order-btn { background: var(--secondary); }
+        body { background: var(--light); padding-top: 20px; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 15px; }
+
+        /* Header Style */
+        .main-header { background: var(--white); padding: 15px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; }
+        .logo img { height: 40px; }
+        .cart-icon { position: relative; font-size: 24px; color: var(--primary); text-decoration: none; }
+        .badge { position: absolute; top: -10px; right: -10px; background: red; color: white; border-radius: 50%; padding: 2px 6px; font-size: 12px; }
+
+        /* Product Detail Layout */
+        .details-container { display: flex; flex-wrap: wrap; gap: 40px; background: var(--white); padding: 30px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .details-image-side { flex: 1; min-width: 320px; }
+        .main-img-box { width: 100%; border: 1px solid #eee; border-radius: 8px; overflow: hidden; position: relative; margin-bottom: 15px; }
+        .main-img-box img { width: 100%; height: auto; display: block; }
+        .sale-badge { position: absolute; top: 15px; right: 15px; background: var(--secondary); color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; }
+
+        .product-gallery { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; }
+        .thumb-item { width: 70px; height: 70px; border: 2px solid #eee; border-radius: 5px; cursor: pointer; overflow: hidden; transition: 0.3s; }
+        .thumb-item img { width: 100%; height: 100%; object-fit: cover; }
+        .thumb-item.active { border-color: var(--primary); }
+
+        .details-info-side { flex: 1.2; min-width: 320px; }
+        .details-info-side h1 { font-size: 28px; margin-bottom: 10px; color: #222; }
+        .sku-cat { font-size: 14px; color: #777; margin-bottom: 20px; }
+        .price-row { margin-bottom: 25px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .old-price { text-decoration: line-through; color: #999; font-size: 20px; margin-right: 10px; }
+        .current-price { color: var(--secondary); font-size: 28px; font-weight: 700; }
+
+        .description-box { margin-bottom: 30px; color: #555; line-height: 1.6; }
+        .description-box ul { list-style: none; padding-top: 10px; }
+        .description-box ul li { position: relative; padding-left: 20px; margin-bottom: 8px; }
+        .description-box ul li::before { content: "•"; color: var(--primary); font-weight: bold; position: absolute; left: 0; }
+
+        .btn-group { display: flex; gap: 15px; margin-bottom: 25px; }
+        .btn { flex: 1; padding: 15px; border: none; border-radius: 5px; font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; }
+        .cart-btn { background: var(--primary); color: white; }
+        .order-btn { background: var(--secondary); color: white; }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        .share-row { border-top: 1px solid #eee; padding-top: 15px; display: flex; align-items: center; gap: 15px; }
+        .share-row span { font-weight: bold; font-size: 14px; }
+        .share-icons a { color: #888; font-size: 24px; transition: 0.3s; margin-right: 15px; }
+        .share-icons a:hover { transform: scale(1.1); }
+
+        @media (max-width: 768px) { .details-container { flex-direction: column; padding: 15px; } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" class="back-btn"><i class="fa fa-arrow-left"></i> কেনাকাটা চালিয়ে যান</a>
-        <div id="product-content" class="details-flex">
-            <h3 id="loading-msg">অপেক্ষা করুন, লোড হচ্ছে...</h3>
+
+    <header class="main-header">
+        <div class="container header-flex">
+            <div class="logo"><a href="index.html"><img src="images/logo.png" alt="Nirvik Bazar"></a></div>
+            <a href="checkout.html" class="cart-icon">
+                <i class="fa fa-shopping-cart"></i>
+                <span class="badge" id="cart-count">0</span>
+            </a>
         </div>
+    </header>
+
+    <div class="container">
+        <div id="product-details-content"></div>
+        <a href="index.html" style="display:inline-block; margin:20px 0; color:var(--primary); text-decoration:none; font-weight: 600;">
+            <i class="fa fa-arrow-left"></i> কেনাকাটা চালিয়ে যান
+        </a>
     </div>
 
-    <script src="products.js"></script>
+<script src="products.js"></script>
+<script src="script.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = parseInt(urlParams.get('id'));
+        const product = products.find(p => p.id === productId);
 
-    <script>
-        window.onload = function() {
-            const contentArea = document.getElementById('product-content');
-            const loadingMsg = document.getElementById('loading-msg');
+        if (product) {
+            // ১. ভেরিয়েবলগুলো আগে ডিফাইন করতে হবে
+            const currentUrl = encodeURIComponent(window.location.href);
+            const shareText = encodeURIComponent("নির্বিক বাজার থেকে এই পণ্যটি দেখুন: " + product.name);
 
-            // ১. ইউআরএল থেকে আইডি বের করা
-            const params = new URLSearchParams(window.location.search);
-            const productId = params.get('id');
-
-            // ২. চেক করা হচ্ছে ডাটা ফাইল ঠিকমতো লোড হয়েছে কি না
-            if (typeof products === 'undefined') {
-                alert("Error: products.js ফাইলটি লোড হয়নি!");
-                contentArea.innerHTML = "<h2 style='color:red;'>ভুল: products.js ফাইলটি পাওয়া যায়নি!</h2>";
-                return;
+            // ২. গ্যালারি লজিক
+            const basePath = product.image.substring(0, product.image.lastIndexOf('.'));
+            const extension = product.image.substring(product.image.lastIndexOf('.'));
+            let galleryHTML = `<div class="thumb-item active" onclick="changeImg('${product.image}', this)"><img src="${product.image}"></div>`;
+            
+            for(let i=2; i<=5; i++) {
+                const extraImg = `${basePath}.${i}${extension}`;
+                galleryHTML += `<div class="thumb-item" onclick="changeImg('${extraImg}', this)"><img src="${extraImg}" onerror="this.parentElement.style.display='none'"></div>`;
             }
 
-            // ৩. আইডি দিয়ে পণ্য খুঁজে বের করা (এখানে == ব্যবহার করা হয়েছে)
-            const product = products.find(p => p.id == productId);
-
-            if (product) {
-                contentArea.innerHTML = `
-                    <div class="product-img">
-                        <img src="${product.image}" onerror="this.src='https://via.placeholder.com/400?text=No+Image'" alt="${product.name}">
+            // ৩. ডাইনামিক কন্টেন্ট রেন্ডার (সবটুকু একসাথেই থাকবে)
+            document.getElementById('product-details-content').innerHTML = `
+                <div class="details-container">
+                    <div class="details-image-side">
+                        <div class="main-img-box">
+                            ${product.new ? '<span class="sale-badge">New!</span>' : '<span class="sale-badge">Sale!</span>'}
+                            <img id="mainImg" src="${product.image}" alt="${product.name}">
+                        </div>
+                        <div class="product-gallery">${galleryHTML}</div>
                     </div>
-                    <div class="product-info">
+                    
+                    <div class="details-info-side">
                         <h1>${product.name}</h1>
-                        <span class="price">৳${product.price}</span>
-                        <div class="desc">${product.description}</div>
+                        <div class="sku-cat">
+                            SKU: <strong>NB-${product.id}</strong> | 
+                            Category: <strong>${product.category.toUpperCase()}</strong>
+                        </div>
+                        
+                        <div class="price-row">
+                            <span class="old-price">৳${Math.floor(product.price * 1.2)}</span>
+                            <span class="current-price">৳${product.price}</span>
+                        </div>
+
+                        <div class="description-box">
+                            <strong>প্রোডাক্ট ডিটেইলস:</strong>
+                            <p>${product.description}</p>
+                            <ul style="margin-top:10px;">
+                                <li>১০০% প্রিমিয়াম কোয়ালিটি নিশ্চিত।</li>
+                                <li>সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।</li>
+                            </ul>
+                        </div>
+
                         <div class="btn-group">
-                            <button class="btn cart-btn" onclick="addToCart(${product.id})">কার্টে যোগ করুন</button>
-                            <button class="btn order-btn" onclick="buyNow(${product.id})">অর্ডার করুন</button>
+                            <button onclick="addToCart(${product.id})" class="btn cart-btn">
+                                <i class="fa fa-shopping-cart"></i> কার্টে যোগ করুন
+                            </button>
+                            <button onclick="buyNow(${product.id})" class="btn order-btn">
+                                সরাসরি অর্ডার
+                            </button>
+                        </div>
+
+                        <div class="share-row">
+                            <span>শেয়ার করুন:</span>
+                            <div class="share-icons">
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=${currentUrl}" target="_blank">
+                                    <i class="fab fa-facebook" style="color: #1877F2;"></i>
+                                </a>
+                                <a href="https://api.whatsapp.com/send?text=${shareText}%20${currentUrl}" target="_blank">
+                                    <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                `;
-                document.title = product.name + " - নির্ভীক বাজার";
-            } else {
-                alert("Error: এই আইডি (ID: " + productId + ") দিয়ে কোনো পণ্য খুঁজে পাওয়া যায়নি!");
-                contentArea.innerHTML = "<h2>দুঃখিত, পণ্যটি পাওয়া যায়নি! আইডি চেক করুন।</h2>";
-            }
-        };
-
-        function addToCart(id) {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const p = products.find(i => i.id == id);
-            if(p) {
-                const existing = cart.find(i => i.id == id);
-                if(existing) { existing.quantity += 1; } 
-                else { cart.push({...p, quantity: 1}); }
-                localStorage.setItem('cart', JSON.stringify(cart));
-                alert(p.name + " কার্টে যোগ হয়েছে!");
-            }
+                </div>
+            `;
         }
+    });
 
-        function buyNow(id) {
-            addToCart(id);
+    function changeImg(src, el) {
+        document.getElementById('mainImg').src = src;
+        document.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function addToCart(id, showAlert = true) {
+        const product = products.find(p => p.id === id);
+        if (!product) return;
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const existingItem = cart.find(item => item.id === id);
+        if (existingItem) {
+            existingItem.quantity = (existingItem.quantity || 1) + 1;
+        } else {
+            cart.push({ ...product, quantity: 1 });
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+        const cartBadge = document.getElementById('cart-count');
+        if (cartBadge) cartBadge.innerText = cart.length;
+        if (showAlert) alert(product.name + " কার্টে যোগ করা হয়েছে!");
+    }
+
+    function buyNow(id) {
+        addToCart(id, false);
+        setTimeout(() => {
             window.location.href = 'checkout.html';
-        }
-    </script>
+        }, 100);
+    }
+</script>
 </body>
 </html>
