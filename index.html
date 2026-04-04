@@ -44,7 +44,7 @@
 
         /* Product Grid */
         .section-title { margin: 30px 0 15px; padding-left: 10px; border-left: 5px solid var(--primary); font-size: 20px; font-weight: bold; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-bottom: 40px; min-height: 200px;}
         .product-card { background: var(--white); padding: 15px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); text-align: center; transition: 0.3s; border: 1px solid #eee; }
         .product-card img { width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; cursor: pointer; }
         .product-card h3 { font-size: 16px; margin-bottom: 10px; height: 45px; overflow: hidden; }
@@ -57,11 +57,6 @@
 
         /* Footer */
         .main-footer { background: #222; color: white; padding: 40px 0 20px; margin-top: auto; border-top: 4px solid var(--primary); }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
-        .footer-col h4 { margin-bottom: 20px; color: var(--primary); }
-        .footer-col ul { list-style: none; }
-        .footer-col ul li { margin-bottom: 10px; }
-        .footer-col ul li a { color: #ccc; text-decoration: none; font-size: 14px; }
         .footer-bottom { border-top: 1px solid #444; padding-top: 20px; text-align: center; font-size: 14px; margin-top: 20px; }
     </style>
 </head>
@@ -105,41 +100,28 @@
         </section>
 
         <h2 class="section-title">আমাদের পণ্যসমূহ</h2>
-        <div id="product-list" class="product-grid"></div>
+        <div id="product-list" class="product-grid">পণ্যের তালিকা লোড হচ্ছে...</div>
     </main>
 
     <footer class="main-footer">
         <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h4>সম্পর্কে</h4>
-                    <p style="font-size: 14px; color: #ccc;">নির্ভীক বাজার - বিশুদ্ধতা ও আস্থার প্রতীক।</p>
-                </div>
-                <div class="footer-col">
-                    <h4>লিংকসমূহ</h4>
-                    <ul>
-                        <li><a href="index.html">হোম</a></li>
-                        <li><a href="#">যোগাযোগ</a></li>
-                        <li><a href="checkout.html">রিটার্ণ পলিসি</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>সাপোর্ট</h4>
-                    <p style="font-size: 14px; color: #ccc;">হেল্পলাইন: +8801722855738</p>
-                </div>
-            </div>
             <div class="footer-bottom">
                 <p>&copy; ২০২৬ নির্ভীক বাজার | মোঃ আসাদুজ্জামান মিলন</p>
             </div>
         </div>
     </footer>
 
-    <script src="products.js"></script>
+    <script src="./products.js"></script>
 
     <script>
         function renderProducts(data) {
             const list = document.getElementById('product-list');
             if (!list) return;
+
+            if (!data || data.length === 0) {
+                list.innerHTML = "<p style='grid-column: 1/-1; text-align: center; padding: 20px;'>কোন পণ্য পাওয়া যায়নি।</p>";
+                return;
+            }
             
             list.innerHTML = data.map(p => `
                 <div class="product-card">
@@ -160,7 +142,7 @@
 
         function searchProduct() {
             const term = document.getElementById('searchInput').value.toLowerCase();
-            if (typeof products !== 'undefined') {
+            if (typeof products !== 'undefined' && products) {
                 const filtered = products.filter(p => p.name.toLowerCase().includes(term));
                 renderProducts(filtered);
             }
@@ -168,17 +150,12 @@
 
         function addToCart(id) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            if (typeof products !== 'undefined') {
+            if (typeof products !== 'undefined' && products) {
                 const p = products.find(i => i.id === id);
                 if (!p) return;
-                
                 const existing = cart.find(i => i.id === id);
-                if(existing) {
-                    existing.quantity += 1;
-                } else {
-                    cart.push({...p, quantity: 1});
-                }
-                
+                if(existing) existing.quantity += 1;
+                else cart.push({...p, quantity: 1});
                 localStorage.setItem('cart', JSON.stringify(cart));
                 updateCartCount();
                 alert(p.name + " কার্টে যোগ হয়েছে!");
@@ -191,22 +168,22 @@
         }
 
         function updateCartCount() {
-            const cartCountElement = document.getElementById('cart-count');
-            if (cartCountElement) {
-                const cart = JSON.parse(localStorage.getItem('cart')) || [];
-                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-                cartCountElement.innerText = totalItems;
-            }
+            const countEl = document.getElementById('cart-count');
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (countEl) countEl.innerText = cart.reduce((sum, item) => sum + item.quantity, 0);
         }
 
-        window.onload = () => { 
-            if (typeof products !== 'undefined') {
-                renderProducts(products); 
-            } else {
-                console.log("Error: products.js not loaded");
-            }
-            updateCartCount(); 
-        };
+        // সব ফাইল লোড হওয়ার পর ডাটা রেন্ডার করার চেষ্টা করবে
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                if (typeof products !== 'undefined' && products) {
+                    renderProducts(products);
+                } else {
+                    document.getElementById('product-list').innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: red;'>Error: products.js ফাইলটি পাওয়া যায়নি। দয়া করে ফাইলের নাম চেক করুন।</p>";
+                }
+                updateCartCount();
+            }, 500); // লোড হওয়ার জন্য ৫০০ মিলি-সেকেন্ড সময় দেওয়া হয়েছে
+        });
     </script>
 </body>
 </html>
