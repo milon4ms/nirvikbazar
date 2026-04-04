@@ -24,14 +24,12 @@
         .cart-icon { position: relative; font-size: 24px; color: var(--primary); text-decoration: none; }
         .badge { position: absolute; top: -10px; right: -10px; background: red; color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; }
 
-        /* Navigation (আপডেট করা মেনু) */
+        /* Navigation */
         .nav-menu { background: var(--primary); color: white; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .menu-list { list-style: none; display: flex; gap: 10px; justify-content: flex-start; padding: 0; overflow-x: auto; scrollbar-width: none; }
-        .menu-list::-webkit-scrollbar { display: none; } /* মোবাইলে স্ক্রলবার লুকানোর জন্য */
-        .menu-list > li { position: relative; }
+        .menu-list::-webkit-scrollbar { display: none; }
         .menu-list a { color: white; text-decoration: none; font-weight: 600; font-size: 14px; display: block; padding: 15px 12px; white-space: nowrap; transition: 0.3s; }
         .menu-list a:hover { background: rgba(255,255,255,0.1); }
-        .menu-list a i { margin-right: 5px; }
         .menu-checkout { background: var(--secondary); }
 
         /* Hero Banner */
@@ -59,9 +57,6 @@
         .main-footer { background: #222; color: white; padding: 40px 0 20px; margin-top: auto; border-top: 4px solid var(--primary); }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
         .footer-col h4 { margin-bottom: 20px; color: var(--primary); }
-        .footer-col ul { list-style: none; }
-        .footer-col ul li { margin-bottom: 10px; }
-        .footer-col ul li a { color: #ccc; text-decoration: none; font-size: 14px; }
         .footer-bottom { border-top: 1px solid #444; padding-top: 20px; text-align: center; font-size: 14px; margin-top: 20px; }
     </style>
 </head>
@@ -118,9 +113,8 @@
                 <div class="footer-col">
                     <h4>লিংকসমূহ</h4>
                     <ul>
-                        <li><a href="index.html">হোম</a></li>
-                        <li><a href="#">যোগাযোগ</a></li>
-                        <li><a href="checkout.html">রিটার্ণ পলিসি</a></li>
+                        <li><a href="index.html" style="color:#ccc; text-decoration:none;">হোম</a></li>
+                        <li><a href="checkout.html" style="color:#ccc; text-decoration:none;">রিটার্ণ পলিসি</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -134,78 +128,16 @@
         </div>
     </footer>
 
-    <script>
     <script src="product.js"></script>
 
-<script>
-    // নোট: এখানে আর আলাদা করে const products লিখতে হবে না। 
-    // সেটি অটোমেটিক product.js থেকে আসবে।
-
-    function renderProducts(data) {
-        const list = document.getElementById('product-list');
-        list.innerHTML = data.map(p => `
-            <div class="product-card">
-                <a href="product-details.html?id=${p.id}">
-                    <img src="${p.image}" onerror="this.src='https://via.placeholder.com/200x180?text=No+Image'" alt="${p.name}">
-                </a>
-                <a href="product-details.html?id=${p.id}" style="text-decoration:none; color:inherit;">
-                    <h3>${p.name}</h3>
-                </a>
-                <span class="price-tag">৳${p.price}</span>
-                <div class="btn-group">
-                    <button class="btn cart-btn" onclick="addToCart(${p.id})">কার্ট</button>
-                    <button class="btn order-btn" onclick="buyNow(${p.id})">অর্ডার</button>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    function searchProduct() {
-        const term = document.getElementById('searchInput').value.toLowerCase();
-        const filtered = products.filter(p => p.name.toLowerCase().includes(term));
-        renderProducts(filtered);
-    }
-
-    function addToCart(id) {
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const p = products.find(i => i.id === id);
-        
-        const existing = cart.find(i => i.id === id);
-        if(existing) {
-            existing.quantity += 1;
-        } else {
-            cart.push({...p, quantity: 1});
-        }
-        
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartCount();
-        alert(p.name + " কার্টে যোগ হয়েছে!");
-    }
-
-    function buyNow(id) {
-        addToCart(id);
-        window.location.href = 'checkout.html';
-    }
-
-    function updateCartCount() {
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-        document.getElementById('cart-count').innerText = totalItems;
-    }
-
-    // পেজ লোড হওয়ার সময় পণ্যগুলো দেখাবে
-    window.onload = () => { 
-        if (typeof products !== 'undefined') {
-            renderProducts(products); 
-        } else {
-            alert("Error: product.js ফাইলটি পাওয়া যায়নি!");
-        }
-        updateCartCount(); 
-    };
-</script>
-
+    <script>
+        // পণ্যগুলো পেজে দেখানোর ফাংশন
         function renderProducts(data) {
             const list = document.getElementById('product-list');
+            if (!data || data.length === 0) {
+                list.innerHTML = "<p>কোনো পণ্য পাওয়া যায়নি!</p>";
+                return;
+            }
             list.innerHTML = data.map(p => `
                 <div class="product-card">
                     <a href="product-details.html?id=${p.id}">
@@ -223,12 +155,14 @@
             `).join('');
         }
 
+        // পণ্য খোঁজার ফাংশন
         function searchProduct() {
             const term = document.getElementById('searchInput').value.toLowerCase();
             const filtered = products.filter(p => p.name.toLowerCase().includes(term));
             renderProducts(filtered);
         }
 
+        // কার্টে যোগ করার ফাংশন
         function addToCart(id) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             const p = products.find(i => i.id === id);
@@ -245,18 +179,28 @@
             alert(p.name + " কার্টে যোগ হয়েছে!");
         }
 
+        // অর্ডার করার ফাংশন
         function buyNow(id) {
             addToCart(id);
             window.location.href = 'checkout.html';
         }
 
+        // কার্ট কাউন্ট আপডেট
         function updateCartCount() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             document.getElementById('cart-count').innerText = totalItems;
         }
 
-        window.onload = () => { renderProducts(products); updateCartCount(); };
+        // পেজ লোড হওয়ার পর এক্সিকিউট হবে
+        window.onload = () => { 
+            if (typeof products !== 'undefined') {
+                renderProducts(products); 
+            } else {
+                console.error("product.js ফাইলটি পাওয়া যায়নি!");
+            }
+            updateCartCount(); 
+        };
     </script>
 </body>
 </html>
