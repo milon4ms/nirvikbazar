@@ -139,6 +139,8 @@
     <script>
         function renderProducts(data) {
             const list = document.getElementById('product-list');
+            if (!list) return;
+            
             list.innerHTML = data.map(p => `
                 <div class="product-card">
                     <a href="product-details.html?id=${p.id}">
@@ -158,25 +160,29 @@
 
         function searchProduct() {
             const term = document.getElementById('searchInput').value.toLowerCase();
-            // এখানে products ভ্যারিয়েবলটি সরাসরি products.js থেকে আসবে
-            const filtered = products.filter(p => p.name.toLowerCase().includes(term));
-            renderProducts(filtered);
+            if (typeof products !== 'undefined') {
+                const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+                renderProducts(filtered);
+            }
         }
 
         function addToCart(id) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const p = products.find(i => i.id === id);
-            
-            const existing = cart.find(i => i.id === id);
-            if(existing) {
-                existing.quantity += 1;
-            } else {
-                cart.push({...p, quantity: 1});
+            if (typeof products !== 'undefined') {
+                const p = products.find(i => i.id === id);
+                if (!p) return;
+                
+                const existing = cart.find(i => i.id === id);
+                if(existing) {
+                    existing.quantity += 1;
+                } else {
+                    cart.push({...p, quantity: 1});
+                }
+                
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+                alert(p.name + " কার্টে যোগ হয়েছে!");
             }
-            
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateCartCount();
-            alert(p.name + " কার্টে যোগ হয়েছে!");
         }
 
         function buyNow(id) {
@@ -185,15 +191,19 @@
         }
 
         function updateCartCount() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            document.getElementById('cart-count').innerText = totalItems;
+            const cartCountElement = document.getElementById('cart-count');
+            if (cartCountElement) {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                cartCountElement.innerText = totalItems;
+            }
         }
 
-        // পেজ লোড হওয়ার সময় products.js থেকে ডাটা রেন্ডার হবে
         window.onload = () => { 
             if (typeof products !== 'undefined') {
                 renderProducts(products); 
+            } else {
+                console.log("Error: products.js not loaded");
             }
             updateCartCount(); 
         };
