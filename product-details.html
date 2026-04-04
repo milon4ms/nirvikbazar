@@ -20,7 +20,7 @@
         .price { font-size: 26px; color: var(--secondary); font-weight: bold; margin-bottom: 15px; display: block; }
         .desc { line-height: 1.8; color: #444; margin-bottom: 25px; white-space: pre-line; font-size: 16px; }
         .btn-group { display: flex; gap: 10px; }
-        .btn { flex: 1; padding: 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: white; text-align: center; text-decoration: none; font-size: 16px; }
+        .btn { flex: 1; padding: 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: white; text-align: center; text-decoration: none; font-size: 16px; display: inline-block; }
         .cart-btn { background: var(--primary); }
         .order-btn { background: var(--secondary); }
     </style>
@@ -29,52 +29,52 @@
     <div class="container">
         <a href="index.html" class="back-btn"><i class="fa fa-arrow-left"></i> কেনাকাটা চালিয়ে যান</a>
         <div id="product-content" class="details-flex">
-            <p id="status-msg">তথ্য লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...</p>
+            <h3 id="loading-text">লোড হচ্ছে... একটু অপেক্ষা করুন।</h3>
         </div>
     </div>
 
     <script src="products.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const statusMsg = document.getElementById('status-msg');
+        // window.onload ব্যবহার করা বেশি নিরাপদ
+        window.onload = function() {
             const contentArea = document.getElementById('product-content');
 
-            // ১. ইউআরএল থেকে আইডি নেওয়া
-            const urlParams = new URLSearchParams(window.location.search);
-            const productId = parseInt(urlParams.get('id'));
+            // ১. ইউআরএল থেকে আইডি বের করা
+            const params = new URLSearchParams(window.location.search);
+            const id = parseInt(params.get('id'));
 
-            // ২. চেক করা হচ্ছে ডাটা ফাইল ঠিকমতো লোড হয়েছে কি না
+            // ২. চেক করা products ভেরিয়েবলটি পাওয়া যাচ্ছে কি না
             if (typeof products === 'undefined') {
-                statusMsg.innerHTML = "<b style='color:red;'>ভুল: products.js ফাইলটি পাওয়া যায়নি অথবা কাজ করছে না।</b>";
-                console.error("Products array is not defined.");
+                contentArea.innerHTML = "<h2 style='color:red;'>ভুল: products.js ফাইলটি পাওয়া যায়নি! দয়া করে ফাইল ম্যানেজার চেক করুন।</h2>";
                 return;
             }
 
             // ৩. আইডি দিয়ে পণ্য খুঁজে বের করা
-            const product = products.find(p => p.id === productId);
+            const item = products.find(p => p.id === id);
 
-            if (product) {
+            if (item) {
                 contentArea.innerHTML = `
                     <div class="product-img">
-                        <img src="${product.image}" onerror="this.src='https://via.placeholder.com/400?text=Image+Not+Found'" alt="${product.name}">
+                        <img src="${item.image}" onerror="this.src='https://via.placeholder.com/400?text=ছবি+পাওয়া+যায়নি'" alt="${item.name}">
                     </div>
                     <div class="product-info">
-                        <h1>${product.name}</h1>
-                        <span class="price">৳${product.price}</span>
-                        <div class="desc">${product.description}</div>
+                        <h1>${item.name}</h1>
+                        <span class="price">৳${item.price}</span>
+                        <div class="desc">${item.description}</div>
                         <div class="btn-group">
-                            <button class="btn cart-btn" onclick="addToCart(${product.id})"><i class="fa fa-shopping-cart"></i> কার্টে যোগ করুন</button>
-                            <button class="btn order-btn" onclick="buyNow(${product.id})">অর্ডার করুন</button>
+                            <button class="btn cart-btn" onclick="addToCart(${item.id})">কার্টে যোগ করুন</button>
+                            <button class="btn order-btn" onclick="buyNow(${item.id})">অর্ডার করুন</button>
                         </div>
                     </div>
                 `;
-                document.title = product.name + " - নির্ভীক বাজার";
+                document.title = item.name + " - নির্ভীক বাজার";
             } else {
-                statusMsg.innerHTML = "<b style='color:red;'>দুঃখিত, এই আইডির (ID: " + productId + ") কোনো পণ্য ডাটাবেজে নেই।</b>";
+                contentArea.innerHTML = "<h2>দুঃখিত, এই পণ্যটি আমাদের তালিকায় নেই (ID: " + id + ")।</h2>";
             }
-        });
+        };
 
+        // কার্ট ফাংশন
         function addToCart(id) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             const p = products.find(i => i.id === id);
