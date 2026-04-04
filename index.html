@@ -13,7 +13,7 @@
         body { background: var(--light); color: var(--dark); display: flex; flex-direction: column; min-height: 100vh; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 15px; width: 100%; }
 
-        /* Header & Nav */
+        /* Header & Search */
         .main-header { background: var(--white); padding: 15px 0; border-bottom: 1px solid #ddd; }
         .header-flex { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
         .logo { font-size: 24px; font-weight: 700; color: var(--primary); text-decoration: none; }
@@ -24,14 +24,16 @@
         .cart-icon { position: relative; font-size: 24px; color: var(--primary); text-decoration: none; }
         .badge { position: absolute; top: -10px; right: -10px; background: red; color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; }
 
+        /* Nav Menu */
         .nav-menu { background: var(--primary); color: white; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .menu-list { list-style: none; display: flex; gap: 10px; overflow-x: auto; padding: 0; scrollbar-width: none; }
-        .menu-list a { color: white; text-decoration: none; font-weight: 600; padding: 15px 12px; display: block; white-space: nowrap; }
+        .menu-list { list-style: none; display: flex; gap: 10px; justify-content: flex-start; padding: 0; overflow-x: auto; scrollbar-width: none; }
+        .menu-list a { color: white; text-decoration: none; font-weight: 600; font-size: 14px; display: block; padding: 15px 12px; white-space: nowrap; }
+        .menu-list a:hover { background: rgba(255,255,255,0.1); }
 
         /* Product Grid */
         .section-title { margin: 30px 0 15px; padding-left: 10px; border-left: 5px solid var(--primary); font-size: 20px; font-weight: bold; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-bottom: 40px; }
-        .product-card { background: var(--white); padding: 15px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; }
+        .product-card { background: var(--white); padding: 15px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; transition: 0.3s; }
         .product-card img { width: 100%; height: 180px; object-fit: contain; border-radius: 8px; margin-bottom: 10px; }
         .product-card h3 { font-size: 16px; margin-bottom: 10px; height: 45px; overflow: hidden; }
         .price-tag { font-size: 18px; font-weight: bold; color: var(--secondary); margin-bottom: 15px; display: block; }
@@ -41,18 +43,12 @@
         .cart-btn { background: var(--primary); }
         .order-btn { background: var(--secondary); }
 
-        /* Footer - 3 Columns */
+        /* Footer */
         .main-footer { background: #222; color: white; padding: 40px 0 20px; margin-top: auto; }
-        .footer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; } /* ৩ কলাম ফিক্সড */
-        .footer-col h4 { margin-bottom: 15px; color: var(--primary); font-size: 18px; }
-        .footer-col p, .footer-col ul li { font-size: 14px; color: #ccc; margin-bottom: 8px; list-style: none; }
-        .footer-col ul { padding: 0; }
-        .footer-col ul li a { color: #ccc; text-decoration: none; }
-        .footer-bottom { border-top: 1px solid #444; padding-top: 20px; text-align: center; font-size: 13px; margin-top: 20px; color: #888; }
-
-        @media (max-width: 768px) {
-            .footer-grid { grid-template-columns: 1fr; text-align: center; }
-        }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
+        .footer-col h4 { margin-bottom: 20px; color: var(--primary); }
+        .footer-col p, .footer-col ul li { font-size: 14px; color: #ccc; margin-bottom: 10px; list-style: none; }
+        .footer-bottom { border-top: 1px solid #444; padding-top: 20px; text-align: center; font-size: 14px; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -88,7 +84,7 @@
 
     <main class="container">
         <h2 class="section-title">আমাদের সকল পণ্যসমূহ</h2>
-        <div id="product-list" class="product-grid">লোড হচ্ছে...</div>
+        <div id="product-list" class="product-grid">পণ্য লোড হচ্ছে...</div>
     </main>
 
     <footer class="main-footer">
@@ -96,24 +92,15 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <h4>সম্পর্কে</h4>
-                    <p>নির্ভীক বাজার - বিশুদ্ধতা ও আস্থার প্রতীক। আমরা মানসম্মত পণ্য সরাসরি গ্রাহকের হাতে পৌঁছে দিতে অঙ্গীকারবদ্ধ।</p>
-                </div>
-                <div class="footer-col">
-                    <h4>লিংকসমূহ</h4>
-                    <ul>
-                        <li><a href="index.html">হোম</a></li>
-                        <li><a href="herbal.html">হারবাল পণ্য</a></li>
-                        <li><a href="checkout.html">রিটার্ণ পলিসি</a></li>
-                    </ul>
+                    <p>নির্ভীক বাজার - বিশুদ্ধতা ও আস্থার প্রতীক।</p>
                 </div>
                 <div class="footer-col">
                     <h4>সাপোর্ট</h4>
-                    <p><i class="fa fa-phone"></i> হেল্পলাইন: +8801722855738</p>
-                    <p><i class="fa fa-envelope"></i> ইমেইল: support@nirvikbazar.com</p>
+                    <p>হেল্পলাইন: +8801722855738</p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; ২০২৬ নির্ভীক বাজার | প্রোপ্রাইটর: মোঃ আসাদুজ্জামান মিলন</p>
+                <p>&copy; ২০২৬ নির্ভীক বাজার | মোঃ আসাদুজ্জামান মিলন</p>
             </div>
         </div>
     </footer>
@@ -121,31 +108,16 @@
     <script src="products.js"></script>
 
     <script>
-        // Fallback ডাটা (যদি products.js কোনো কারণে লোড না হয়)
-        if (typeof products === 'undefined') {
-            var products = [
-                { id: 1, name: "চুলকানির যম নিমতেল", price: 501, category: "herbal", image: "images/product1.jpg" },
-                { id: 2, name: "নির্ভীক পাইলস কেয়ার", price: 680, category: "herbal", image: "images/product2.jpg" },
-                { id: 3, name: "পুরুষদের পঞ্চভূত পাউডার", price: 450, category: "herbal", image: "images/product3.jpg" },
-                { id: 4, name: "ত্রিফলা গুঁড়া", price: 380, category: "herbal", image: "images/product4.jpg" },
-                { id: 5, name: "কাতুয়া-Katua", price: 700, category: "mens", image: "images/product5.jpg" },
-                { id: 6, name: "সুতি চেক শার্ট", price: 700, category: "mens", image: "images/product6.jpg" },
-                { id: 7, name: "লাক্সারি কটন পাঞ্জাবি", price: 900, category: "mens", image: "images/product7.jpg" },
-                { id: 8, name: "CRRJU স্টাইলিশ ঘড়ি", price: 2200, category: "mens", image: "images/product8.jpg" },
-                { id: 9, name: "প্লাজু খিমার সেট", price: 1000, category: "womens", image: "images/product9.jpg" },
-                { id: 10, name: "হ্যান্ডেল শোল্ডার ব্যাগ", price: 800, category: "womens", image: "images/product10.jpg" },
-                { id: 11, name: "স্টাইলিশ স্কুল ব্যাগ", price: 700, category: "kids", image: "images/product11.jpg" },
-                { id: 12, name: "মিনি ডান্সিং রোবট", price: 780, category: "kids", image: "images/product12.jpg" },
-                { id: 13, name: "Remax Power Bank", price: 800, category: "electronics", image: "images/product13.jpg" },
-                { id: 14, name: "WiFi Repeater", price: 800, category: "electronics", image: "images/product14.jpg" },
-                { id: 15, name: "কেমেই KM-678 ট্রিমার", price: 1200, category: "others", image: "images/product15.jpg" },
-                { id: 16, name: "পোর্টেবল মিনি ফ্যান", price: 300, category: "others", image: "images/product16.jpg" }
-            ];
-        }
-
+        // সব পণ্য দেখানোর ফাংশন
         function renderProducts(data) {
             const list = document.getElementById('product-list');
             if (!list) return;
+
+            if (!data || data.length === 0) {
+                list.innerHTML = "<p style='grid-column: 1/-1; text-align: center;'>পণ্য পাওয়া যায়নি।</p>";
+                return;
+            }
+
             list.innerHTML = data.map(p => `
                 <div class="product-card">
                     <a href="product-details.html?id=${p.id}">
@@ -161,16 +133,21 @@
             `).join('');
         }
 
+        // সার্চ ফাংশন
         function searchProduct() {
             const term = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = products.filter(p => p.name.toLowerCase().includes(term));
-            renderProducts(filtered);
+            if (typeof products !== 'undefined') {
+                const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+                renderProducts(filtered);
+            }
         }
 
+        // কার্ট ফাংশন
         function addToCart(id) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const p = products.find(i => i.id === id);
-            if (p) {
+            if (typeof products !== 'undefined') {
+                const p = products.find(i => i.id === id);
+                if (!p) return;
                 const existing = cart.find(i => i.id === id);
                 if(existing) existing.quantity += 1;
                 else cart.push({...p, quantity: 1});
@@ -180,14 +157,23 @@
             }
         }
 
-        function buyNow(id) { addToCart(id); window.location.href = 'checkout.html'; }
+        function buyNow(id) {
+            addToCart(id);
+            window.location.href = 'checkout.html';
+        }
 
         function updateCartCount() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             document.getElementById('cart-count').innerText = cart.reduce((s, i) => s + i.quantity, 0);
         }
 
-        window.onload = () => { renderProducts(products); updateCartCount(); };
+        // পেজ লোড হলে সব পণ্য দেখাবে
+        window.onload = () => {
+            if (typeof products !== 'undefined') {
+                renderProducts(products); // এখানে সব ১৬টি পণ্য আসবে
+            }
+            updateCartCount();
+        };
     </script>
 </body>
 </html>
