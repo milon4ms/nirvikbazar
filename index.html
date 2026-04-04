@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>নির্বিক বাজার - সেরা দামে সেরা পণ্য</title>
+    <title>নির্ভীক বাজার - সেরা দামে সেরা পণ্য</title>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -24,12 +24,14 @@
         .cart-icon { position: relative; font-size: 24px; color: var(--primary); text-decoration: none; }
         .badge { position: absolute; top: -10px; right: -10px; background: red; color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; }
 
-        /* Navigation */
+        /* Navigation (আপডেট করা মেনু) */
         .nav-menu { background: var(--primary); color: white; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .menu-list { list-style: none; display: flex; gap: 10px; justify-content: flex-start; padding: 0; overflow-x: auto; scrollbar-width: none; }
-        .menu-list::-webkit-scrollbar { display: none; }
+        .menu-list::-webkit-scrollbar { display: none; } /* মোবাইলে স্ক্রলবার লুকানোর জন্য */
+        .menu-list > li { position: relative; }
         .menu-list a { color: white; text-decoration: none; font-weight: 600; font-size: 14px; display: block; padding: 15px 12px; white-space: nowrap; transition: 0.3s; }
         .menu-list a:hover { background: rgba(255,255,255,0.1); }
+        .menu-list a i { margin-right: 5px; }
         .menu-checkout { background: var(--secondary); }
 
         /* Hero Banner */
@@ -57,6 +59,9 @@
         .main-footer { background: #222; color: white; padding: 40px 0 20px; margin-top: auto; border-top: 4px solid var(--primary); }
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
         .footer-col h4 { margin-bottom: 20px; color: var(--primary); }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col ul li a { color: #ccc; text-decoration: none; font-size: 14px; }
         .footer-bottom { border-top: 1px solid #444; padding-top: 20px; text-align: center; font-size: 14px; margin-top: 20px; }
     </style>
 </head>
@@ -113,8 +118,9 @@
                 <div class="footer-col">
                     <h4>লিংকসমূহ</h4>
                     <ul>
-                        <li><a href="index.html" style="color:#ccc; text-decoration:none;">হোম</a></li>
-                        <li><a href="checkout.html" style="color:#ccc; text-decoration:none;">রিটার্ণ পলিসি</a></li>
+                        <li><a href="index.html">হোম</a></li>
+                        <li><a href="#">যোগাযোগ</a></li>
+                        <li><a href="checkout.html">রিটার্ণ পলিসি</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -128,16 +134,28 @@
         </div>
     </footer>
 
-    <script src="products.js"></script>
-
     <script>
-        // পণ্যগুলো পেজে দেখানোর ফাংশন
+        const products = [
+            { id: 1, name: "চুলকানির যম নিমতেল", price: 500, image: "images/product1.jpg" },
+            { id: 2, name: "নির্ভীক পাইলস কেয়ার", price: 680, image: "images/product2.jpg" },
+            { id: 3, name: "পুরূষদের পঞ্চভূত পাউডার", price: 450, image: "images/product3.jpg" },
+            { id: 4, name: "স্ত্রিফলা গুঁড়া", price: 380, image: "images/product4.jpg" },
+            { id: 5, name: "কাতুয়া-Katua", price: 700, image: "images/product5.jpg" },
+            { id: 6, name: " সুতি চেক শার্ট", price: 700, image: "images/product6.jpg" },
+            { id: 7, name: "লাক্সারি কটন পাঞ্জাবি", price: 900, image: "images/product7.jpg" },
+            { id: 8, name: "প্রিমিয়াম CRRJU স্টাইলিশ ঘড়ি", price: 2200, image: "images/product8.jpg" },
+            { id: 9, name: "প্লাজু খিমার সেট", price: 1000, image: "images/product9.jpg" },
+            { id: 10, name: "এলিগ্যান্ট নট হ্যান্ডেল শোল্ডার ব্যাগ", price: 800, image: "images/product10.jpg" },
+            { id: 11, name: "স্টাইলিশ আনকমন স্কুল ব্যাগ ", price: 700, image: "images/product11.jpg" },
+            { id: 12, name: "মিনি ডান্সিং রোবট ", price: 780, image: "images/product12.jpg" },
+            { id: 13, name: "Remax RPP-96  Power Bank ", price: 800, image: "images/product13.jpg" },
+            { id: 14, name: "WiFi Repeater ", price: 800, image: "images/product14.jpg" },
+            { id: 15, name: "কেমেই KM-678 ট্রিমার", price: 1200, image: "images/product15.jpg" },
+            { id: 16, name: "পোর্টেবল মিনি ফ্যান", price: 300, image: "images/product16.jpg" }
+        ];
+
         function renderProducts(data) {
             const list = document.getElementById('product-list');
-            if (!data || data.length === 0) {
-                list.innerHTML = "<p>কোনো পণ্য পাওয়া যায়নি!</p>";
-                return;
-            }
             list.innerHTML = data.map(p => `
                 <div class="product-card">
                     <a href="product-details.html?id=${p.id}">
@@ -155,14 +173,12 @@
             `).join('');
         }
 
-        // পণ্য খোঁজার ফাংশন
         function searchProduct() {
             const term = document.getElementById('searchInput').value.toLowerCase();
             const filtered = products.filter(p => p.name.toLowerCase().includes(term));
             renderProducts(filtered);
         }
 
-        // কার্টে যোগ করার ফাংশন
         function addToCart(id) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             const p = products.find(i => i.id === id);
@@ -179,28 +195,18 @@
             alert(p.name + " কার্টে যোগ হয়েছে!");
         }
 
-        // অর্ডার করার ফাংশন
         function buyNow(id) {
             addToCart(id);
             window.location.href = 'checkout.html';
         }
 
-        // কার্ট কাউন্ট আপডেট
         function updateCartCount() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             document.getElementById('cart-count').innerText = totalItems;
         }
 
-        // পেজ লোড হওয়ার পর এক্সিকিউট হবে
-        window.onload = () => { 
-            if (typeof products !== 'undefined') {
-                renderProducts(products); 
-            } else {
-                console.error("products.js ফাইলটি পাওয়া যায়নি!");
-            }
-            updateCartCount(); 
-        };
+        window.onload = () => { renderProducts(products); updateCartCount(); };
     </script>
 </body>
 </html>
