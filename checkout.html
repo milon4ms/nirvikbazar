@@ -99,14 +99,16 @@
     </div>
 
     <script>
-        // টেলিগ্রাম কনফিগারেশন (Safe Mode)
+        // ১. কনফিগারেশন
         const _t1 = '8575434705';
         const _t2 = 'AAHtEGHvWGcmhD6AkbshhzTD1wpVwXasksM';
         const TELEGRAM_BOT_TOKEN = `${_t1}:${_t2}`;
         const TELEGRAM_CHAT_ID = '2007567611';
+        const GOOGLE_SHEET_APP_URL = 'আপনার_স্ক্রিপ্ট_ইউআরএল_এখানে'; // আপনার Google Apps Script URL এখানে বসান
 
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
+        // ২. সহায়ক ফাংশনসমূহ
         function bnToEnNumber(str) {
             const banglaNums = {'০': '0', '১': '1', '২': '2', '৩': '3', '৪': '4', '৫': '5', '৬': '6', '৭': '7', '৮': '8', '৯': '9'};
             return str.replace(/[০-৯]/g, s => banglaNums[s]);
@@ -152,7 +154,6 @@
             subtotalEl.innerText = '৳' + currentSubtotal;
             document.getElementById('shippingDisplay').innerText = '৳' + shippingCost;
             totalDisplay.innerText = '৳' + (currentSubtotal + shippingCost);
-            
             localStorage.setItem('cart', JSON.stringify(cart));
         }
 
@@ -168,6 +169,7 @@
             renderCart();
         }
 
+        // ৩. ডাটা পাঠানোর ফাংশনসমূহ
         async function sendOrderToTelegram(orderData) {
             const message = `
 📦 **নতুন অর্ডার এসেছে!**
@@ -187,17 +189,31 @@ ${orderData.items.map(item => `- ${item.name} (${item.quantity}টি) - ৳${it
                 await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: TELEGRAM_CHAT_ID,
-                        text: message,
-                        parse_mode: 'Markdown'
-                    })
+                    body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message, parse_mode: 'Markdown' })
                 });
-            } catch (error) {
-                console.error("Telegram Error:", error);
-            }
+            } catch (error) { console.error("Telegram Error:", error); }
         }
 
+        async function sendOrderToGoogleSheet(orderData) {
+            try {
+                await fetch(GOOGLE_SHEET_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        "Name": orderData.name,
+                        "Mobile": orderData.phone,
+                        "Address": orderData.address,
+                        "Products": orderData.items.map(i => `${i.name} (${i.quantity})`).join(', '),
+                        "Total": orderData.total,
+                        "Date": new Date().toLocaleString('bn-BD'),
+                        "Status": "Pending"
+                    })
+                });
+            } catch (error) { console.error("Google Sheet Error:", error); }
+        }
+
+        // ৪. মেইন ইভেন্ট লিসেনার
         document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -222,14 +238,14 @@ ${orderData.items.map(item => `- ${item.name} (${item.quantity}টি) - ৳${it
                 total: document.getElementById('totalDisplay').innerText
             };
 
-            // অর্ডার টেলিগ্রামে পাঠানো হচ্ছে
-            await sendOrderToTelegram(orderData);
+            // একসাথে দুই জায়গায় ডাটা পাঠানো হচ্ছে
+            await Promise.all([
+                sendOrderToTelegram(orderData),
+                sendOrderToGoogleSheet(orderData)
+            ]);
 
             localStorage.removeItem('cart'); 
-            
-            setTimeout(() => {
-                window.location.href = 'thank-you.html';
-            }, 500);
+            window.location.href = 'thank-you.html';
         });
 
         document.addEventListener('DOMContentLoaded', renderCart);
