@@ -135,24 +135,74 @@
     </footer>
 
     <script>
-        const products = [
-            { id: 1, name: "চুলকানির যম নিমতেল", price: 500, image: "images/product1.jpg" },
-            { id: 2, name: "নির্ভীক পাইলস কেয়ার", price: 680, image: "images/product2.jpg" },
-            { id: 3, name: "পুরূষদের পঞ্চভূত পাউডার", price: 450, image: "images/product3.jpg" },
-            { id: 4, name: "স্ত্রিফলা গুঁড়া", price: 380, image: "images/product4.jpg" },
-            { id: 5, name: "কাতুয়া-Katua", price: 700, image: "images/product5.jpg" },
-            { id: 6, name: " সুতি চেক শার্ট", price: 700, image: "images/product6.jpg" },
-            { id: 7, name: "লাক্সারি কটন পাঞ্জাবি", price: 900, image: "images/product7.jpg" },
-            { id: 8, name: "প্রিমিয়াম CRRJU স্টাইলিশ ঘড়ি", price: 2200, image: "images/product8.jpg" },
-            { id: 9, name: "প্লাজু খিমার সেট", price: 1000, image: "images/product9.jpg" },
-            { id: 10, name: "এলিগ্যান্ট নট হ্যান্ডেল শোল্ডার ব্যাগ", price: 800, image: "images/product10.jpg" },
-            { id: 11, name: "স্টাইলিশ আনকমন স্কুল ব্যাগ ", price: 700, image: "images/product11.jpg" },
-            { id: 12, name: "মিনি ডান্সিং রোবট ", price: 780, image: "images/product12.jpg" },
-            { id: 13, name: "Remax RPP-96  Power Bank ", price: 800, image: "images/product13.jpg" },
-            { id: 14, name: "WiFi Repeater ", price: 800, image: "images/product14.jpg" },
-            { id: 15, name: "কেমেই KM-678 ট্রিমার", price: 1200, image: "images/product15.jpg" },
-            { id: 16, name: "পোর্টেবল মিনি ফ্যান", price: 300, image: "images/product16.jpg" }
-        ];
+    <script src="product.js"></script>
+
+<script>
+    // নোট: এখানে আর আলাদা করে const products লিখতে হবে না। 
+    // সেটি অটোমেটিক product.js থেকে আসবে।
+
+    function renderProducts(data) {
+        const list = document.getElementById('product-list');
+        list.innerHTML = data.map(p => `
+            <div class="product-card">
+                <a href="product-details.html?id=${p.id}">
+                    <img src="${p.image}" onerror="this.src='https://via.placeholder.com/200x180?text=No+Image'" alt="${p.name}">
+                </a>
+                <a href="product-details.html?id=${p.id}" style="text-decoration:none; color:inherit;">
+                    <h3>${p.name}</h3>
+                </a>
+                <span class="price-tag">৳${p.price}</span>
+                <div class="btn-group">
+                    <button class="btn cart-btn" onclick="addToCart(${p.id})">কার্ট</button>
+                    <button class="btn order-btn" onclick="buyNow(${p.id})">অর্ডার</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function searchProduct() {
+        const term = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = products.filter(p => p.name.toLowerCase().includes(term));
+        renderProducts(filtered);
+    }
+
+    function addToCart(id) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const p = products.find(i => i.id === id);
+        
+        const existing = cart.find(i => i.id === id);
+        if(existing) {
+            existing.quantity += 1;
+        } else {
+            cart.push({...p, quantity: 1});
+        }
+        
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+        alert(p.name + " কার্টে যোগ হয়েছে!");
+    }
+
+    function buyNow(id) {
+        addToCart(id);
+        window.location.href = 'checkout.html';
+    }
+
+    function updateCartCount() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        document.getElementById('cart-count').innerText = totalItems;
+    }
+
+    // পেজ লোড হওয়ার সময় পণ্যগুলো দেখাবে
+    window.onload = () => { 
+        if (typeof products !== 'undefined') {
+            renderProducts(products); 
+        } else {
+            alert("Error: product.js ফাইলটি পাওয়া যায়নি!");
+        }
+        updateCartCount(); 
+    };
+</script>
 
         function renderProducts(data) {
             const list = document.getElementById('product-list');
