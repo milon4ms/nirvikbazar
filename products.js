@@ -1,149 +1,96 @@
-/**
- * Nirvik Bazar - Product Database
- * এই ফাইলে আপনার দোকানের সব পণ্যের তালিকা থাকবে। 
- * ক্যাটাগরি: mens, womens, kids, electronics, herbal, others
- */
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>পণ্যের বিবরণ - নির্ভীক বাজার</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root { --primary: #00a651; --secondary: #e67e22; --dark: #333; --light: #f4f4f4; --white: #fff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
+        body { background: var(--light); color: var(--dark); }
+        .container { max-width: 1000px; margin: 20px auto; padding: 20px; background: var(--white); border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        
+        .back-btn { display: inline-block; margin-bottom: 20px; text-decoration: none; color: var(--primary); font-weight: bold; }
+        .details-flex { display: flex; flex-wrap: wrap; gap: 30px; }
+        .product-img { flex: 1; min-width: 300px; text-align: center; }
+        .product-img img { max-width: 100%; border-radius: 10px; border: 1px solid #eee; }
+        
+        .product-info { flex: 1; min-width: 300px; }
+        .product-info h1 { font-size: 28px; margin-bottom: 10px; color: var(--dark); }
+        .price { font-size: 24px; color: var(--secondary); font-weight: 700; margin-bottom: 15px; display: block; }
+        .desc { line-height: 1.6; color: #666; margin-bottom: 25px; }
+        
+        .btn-group { display: flex; gap: 15px; }
+        .btn { flex: 1; padding: 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; text-align: center; text-decoration: none; color: white; }
+        .cart-btn { background: var(--primary); }
+        .order-btn { background: var(--secondary); }
 
-const products = [
-    // ১. ন্যাচারাল প্রোডাক্ট (Herbal Products)
-    {
-        id: 1,
-        name: "চুলকানির যম নিমতেল",
-        price: 500,
-        category: "herbal",
-        description: "মালিশের সাথে সাথে চুলকানো বন্ধ হয়। নিয়মিত ব্যবহারে খোসপাচড়া দূর হবে। ব্রণ ও ফুসকুড়ি দ্রুত শুকিয়ে ফেলে। এটি গায়ে মাখলে মশা কামড়ায় না। ১০০% প্রাকৃতিক ও নিরাপদ। পরিমান ২০০ মিলি",
-        image: "images/product1.jpg"
-    },
-    {
-        id: 2,
-        name: "নির্ভীক পাইলস কেয়ার",
-        price: 680,
-        category: "herbal",
-        description: "পাইলসের ব্যথা, জ্বালা ও রক্তপাত কমাতে বিশেষভাবে কার্যকর। এটি ধীরে ধীরে ভেতর থেকে কাজ করে পাইলস দূর করে। কোষ্ঠকাঠিন্য কমিয়ে স্বাভাবিক মলত্যাগে সহায়তা করে, কোনো পার্শ্বপ্রতিক্রিয়া ছাড়াই দীর্ঘমেয়াদে ব্যবহারযোগ্য।",
-        image: "images/product2.jpg"
-    },
-    {
-        id: 3,
-        name: "পুরূষদের পঞ্চভূত পাউডার",
-        price: 450,
-        category: "herbal",
-        description: "এটি পুরুষের যৌনশক্তি বৃদ্ধি করে দ্রুত শক্তি প্রদান করে। বীর্যের পরিমাণ ও গুণমান বাড়িয়ে দেয়। দ্রুত বীর্যপাতের সমস্যা দূর করে দীর্ঘক্ষণ যৌনমিলন সম্ভব করে। নিয়মিত সেবনে কামশক্তি ও উত্তেজনা বৃদ্ধি পায়।",
-        image: "images/product3.jpg"
-    },
-    {
-        id: 4,
-        name: "ত্রিফলা গুঁড়া",
-        price: 380,
-        category: "herbal",
-        description: "ত্রিফলা গুঁড়া আয়ুর্বেদের সবচেয়ে শক্তিশালী ডিটক্স মিশ্রণ। এটি হজমশক্তি বাড়িয়ে কোষ্ঠকাঠিন্য দূর করে। শরীর থেকে টক্সিন বের করে রক্ত পরিশুদ্ধ করে। ত্বক উজ্জ্বল করে ও ব্রণ কমায়।",
-        image: "images/product4.jpg"
-    },
+        @media (max-width: 600px) { .details-flex { flex-direction: column; } }
+    </style>
+</head>
+<body>
 
-    // ২. পুরূষদের ফ্যাশন (Mens Fashion)
-    {
-        id: 5,
-        name: "কাতুয়া-Katua",
-        price: 700,
-        category: "mens",
-        description: "প্রিমিয়াম ভার্টিকাল স্ট্রাইপড কাতুয়া। উন্নতমানের আরামদায়ক কটন ফেব্রিকে তৈরি। সাইজ: M, L, XL, XXL। অর্ডার করুন আমরা ফোন করে সাইজ ও কালার জেনে নিব।",
-        image: "images/product5.jpg"
-    },
-    {
-        id: 6,
-        name: "সুতি চেক শার্ট",
-        price: 700,
-        category: "mens", 
-        description: "প্রিমিয়াম কোয়ালিটির মেন্স লং স্লিভ গ্রামীণ চেক শার্ট। ১০০% কটন ফেব্রিক। অফিস বা আড্ডা—যেকোনো অনুষ্ঠানের জন্য পারফেক্ট চয়েস। সাইজ: M, L, XL, XXL।",
-        image: "images/product6.jpg"
-    },
-    {
-        id: 7,
-        name: "লাক্সারি কটন পাঞ্জাবি",
-        price: 900,
-        category: "mens",
-        description: "১০০% কটন ফেব্রিকে তৈরি আধুনিক ও মার্জিত পাঞ্জাবি। ঈদ বা যেকোনো বিশেষ অনুষ্ঠানের জন্য আদর্শ পছন্দ। সাইজ: ৪০, ৪২, ৪৪ উপলব্ধ।",
-        image: "images/product7.jpg"
-    },
-    {
-        id: 8,
-        name: "প্রিমিয়াম CRRJU স্টাইলিশ ঘড়ি",
-        price: 2200,
-        category: "mens",
-        description: "আধুনিক ও স্টাইলিশ CRRJU ঘড়ি। ওয়াটার রেজিস্ট্যান্ট (৩০ মিটার) এবং সফট সিলিকন স্ট্র্যাপসহ প্রিমিয়াম কোয়ার্টজ মুভমেন্ট। কালার: নেভি ব্লু ও জেট ব্ল্যাক।",
-        image: "images/product8.jpg"
-    },
+    <div class="container">
+        <a href="index.html" class="back-btn"><i class="fa fa-arrow-left"></i> কেনাকাটা চালিয়ে যান</a>
+        
+        <div id="product-content" class="details-flex">
+            <p>লোড হচ্ছে...</p>
+        </div>
+    </div>
 
-    // ৩. ওমেন্স ফ্যাশন (Womens Fashion)
-    {
-        id: 9,
-        name: "প্লাজু খিমার সেট",
-        price: 1000,
-        category: "womens",
-        description: "নরম সফট চায়না লিলেন ফেব্রিকে তৈরি সামার ফ্রেন্ডলি খিমার সেট। ৫টি চমৎকার কালারে পাওয়া যাচ্ছে। অর্ডার করুন আমরা ফোন করে কালার জেনে নিব।",
-        image: "images/product9.jpg"
-    },
-    {
-        id: 10,
-        name: "এলিগ্যান্ট হ্যান্ডেল শোল্ডার ব্যাগ",
-        price: 800,
-        category: "womens",
-        description: "প্রিমিয়াম কোয়ালিটি লেদারে তৈরি স্টাইলিশ ব্যাগ। ইউনিক নট ডিজাইন হ্যান্ডেল এবং গোল্ডেন মেটাল লক। কালার: ব্রাউন, ক্রিম ও হোয়াইট।",
-        image: "images/product10.jpg"
-    },
+    <script src="products.js"></script>
 
-    // ৪. বেবি আইটেম (Kids Items)
-    {
-        id: 11,
-        name: "স্টাইলিশ স্কুল ব্যাগ",
-        price: 700,
-        category: "kids",
-        description: "বড় সাইজের ওয়াটারপ্রুফ প্রিমিয়াম স্কুল ব্যাগ। এয়ার ভেন্টিলেশন সিস্টেম এবং মেরুদণ্ড সুরক্ষা ডিজাইন। সারা বাংলাদেশে হোম ডেলিভারি!",
-        image: "images/product11.jpg"
-    },
-    {
-        id: 12,
-        name: "মিনি ডান্সিং রোবট",
-        price: 780,
-        category: "kids",
-        description: "রঙিন আলো আর মিউজিকের তালে নাচে এই স্মার্ট রোবট। টক্সিনমুক্ত নিরাপদ প্লাস্টিকে তৈরি। আপনার সন্তানের জন্য সেরা উপহার।",
-        image: "images/product12.jpg"
-    },
+    <script>
+        // ১. ইউআরএল থেকে ID খুঁজে বের করা
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = parseInt(urlParams.get('id'));
 
-    // ৫. ইলেকট্রনিক্স (Electronics)
-    {
-        id: 13,
-        name: "Remax RPP-96 Power Bank",
-        price: 800,
-        category: "electronics",
-        description: "শক্তিশালী 10000mAh ব্যাটারি। ডুয়াল USB পোর্টে একসাথে দুটি ডিভাইস দ্রুত চার্জ করা যায়। স্লিম ও লাইটওয়েট ডিজাইন।",
-        image: "images/product13.jpg"
-    },
-    {
-        id: 14,
-        name: "WiFi Repeater",
-        price: 800,
-        category: "electronics",
-        description: "বাসার দুর্বল WiFi সিগন্যাল শক্তিশালী করার সহজ সমাধান। সেটআপ করতে মাত্র ২ মিনিট সময় লাগে। বাসা বা অফিসের জন্য অত্যন্ত কার্যকর।",
-        image: "images/product14.jpg"
-    },
+        // ২. products.js থেকে সঠিক পণ্যটি খুঁজে বের করা
+        const product = products.find(p => p.id === productId);
 
-    // ৬. অন্যান্য পণ্য (Others)
-    {
-        id: 15,
-        name: "কেমেই KM-678 ট্রিমার",
-        price: 1200,
-        category: "others",
-        description: "নিখুঁত গ্রুমিংয়ের জন্য হাই-স্পিড মোটর ও স্টেইনলেস স্টিল ব্লেড। ২ ঘণ্টা চার্জে ১৫০ মিনিট ব্যবহার করা যায়। LCD ডিসপ্লে যুক্ত।",
-        image: "images/product15.jpg"
-    },
-    {
-        id: 16,
-        name: "পোর্টেবল মিনি ফ্যান",
-        price: 300,
-        category: "others",
-        description: "হ্যান্ডহেল্ড ও নেক ফ্যান—যেকোনো জায়গায় তাৎক্ষণিক ঠান্ডা বাতাস পেতে এটি সেরা। ৩টি স্পিড মোড এবং USB রিচার্জেবল।",
-        image: "images/product16.jpg"
-    }
-];
+        const content = document.getElementById('product-content');
 
-console.log("Products database updated: " + products.length + " items.");
+        if (product) {
+            // ৩. যদি পণ্য পাওয়া যায়, তবে এইচটিএমএল এ দেখানো
+            content.innerHTML = `
+                <div class="product-img">
+                    <img src="${product.image}" onerror="this.src='https://via.placeholder.com/400x400?text=No+Image'" alt="${product.name}">
+                </div>
+                <div class="product-info">
+                    <h1>${product.name}</h1>
+                    <span class="price">৳${product.price}</span>
+                    <p class="desc">${product.description}</p>
+                    
+                    <div class="btn-group">
+                        <button class="btn cart-btn" onclick="addToCart(${product.id})"><i class="fa fa-shopping-cart"></i> কার্টে যোগ করুন</button>
+                        <button class="btn order-btn" onclick="buyNow(${product.id})">সরাসরি অর্ডার</button>
+                    </div>
+                </div>
+            `;
+            document.title = product.name + " - নির্ভীক বাজার";
+        } else {
+            // ৪. পণ্য না পাওয়া গেলে এরর মেসেজ
+            content.innerHTML = `<h2>দুঃখিত! পণ্যটি খুঁজে পাওয়া যায়নি।</h2>`;
+        }
+
+        // কার্ট ও অর্ডার ফাংশন (index.html এর মতই)
+        function addToCart(id) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const p = products.find(i => i.id === id);
+            const existing = cart.find(i => i.id === id);
+            if(existing) { existing.quantity += 1; } 
+            else { cart.push({...p, quantity: 1}); }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert(p.name + " কার্টে যোগ হয়েছে!");
+        }
+
+        function buyNow(id) {
+            addToCart(id);
+            window.location.href = 'checkout.html';
+        }
+    </script>
+</body>
+</html>
