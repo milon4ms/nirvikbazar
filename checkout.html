@@ -194,5 +194,40 @@
             }, 500);
         });
     </script>
+    // আপনার টেলিগ্রাম বটের তথ্য এখানে দিন
+const TELEGRAM_BOT_TOKEN = 'আপনার_বট_টোকেন_এখানে';
+const TELEGRAM_CHAT_ID = 'আপনার_চ্যাট_আইডি_এখানে';
+
+async function sendOrderToTelegram(orderData) {
+    const message = `
+📦 **নতুন অর্ডার এসেছে!**
+--------------------------
+👤 নাম: ${orderData.name}
+📞 ফোন: ${orderData.phone}
+🏠 ঠিকানা: ${orderData.address}
+--------------------------
+🛒 পণ্যসমূহ:
+${orderData.items.map(item => `- ${item.name} (${item.quantity}টি) - ৳${item.price * item.quantity}`).join('\n')}
+--------------------------
+💰 **মোট বিল: ৳${orderData.total}**
+    `;
+
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+    try {
+        await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: TELEGRAM_CHAT_ID,
+                text: message,
+                parse_mode: 'Markdown'
+            })
+        });
+        console.log("টেলিগ্রামে অর্ডার পাঠানো হয়েছে!");
+    } catch (error) {
+        console.error("টেলিগ্রামে পাঠানো যায়নি:", error);
+    }
+}
 </body>
 </html>
