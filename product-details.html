@@ -14,13 +14,13 @@
         .back-btn { display: inline-block; margin-bottom: 20px; text-decoration: none; color: var(--primary); font-weight: bold; }
         .details-flex { display: flex; flex-wrap: wrap; gap: 30px; }
         .product-img { flex: 1; min-width: 300px; text-align: center; }
-        .product-img img { max-width: 100%; border-radius: 10px; height: auto; }
+        .product-img img { max-width: 100%; border-radius: 10px; height: auto; border: 1px solid #ddd; }
         .product-info { flex: 1; min-width: 300px; }
-        .product-info h1 { font-size: 28px; margin-bottom: 10px; }
-        .price { font-size: 24px; color: var(--secondary); font-weight: bold; margin-bottom: 15px; display: block; }
-        .desc { line-height: 1.6; color: #555; margin-bottom: 25px; white-space: pre-line; }
+        .product-info h1 { font-size: 28px; margin-bottom: 10px; color: var(--primary); }
+        .price { font-size: 26px; color: var(--secondary); font-weight: bold; margin-bottom: 15px; display: block; }
+        .desc { line-height: 1.8; color: #444; margin-bottom: 25px; white-space: pre-line; font-size: 16px; }
         .btn-group { display: flex; gap: 10px; }
-        .btn { flex: 1; padding: 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: white; text-align: center; text-decoration: none; }
+        .btn { flex: 1; padding: 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; color: white; text-align: center; text-decoration: none; font-size: 16px; }
         .cart-btn { background: var(--primary); }
         .order-btn { background: var(--secondary); }
     </style>
@@ -29,45 +29,51 @@
     <div class="container">
         <a href="index.html" class="back-btn"><i class="fa fa-arrow-left"></i> কেনাকাটা চালিয়ে যান</a>
         <div id="product-content" class="details-flex">
-            <p>তথ্য লোড হচ্ছে...</p>
+            <p id="status-msg">তথ্য লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...</p>
         </div>
     </div>
 
     <script src="products.js"></script>
 
     <script>
-        window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const productId = parseInt(urlParams.get('id'));
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusMsg = document.getElementById('status-msg');
             const contentArea = document.getElementById('product-content');
 
-            // চেক করা হচ্ছে ডাটা লোড হয়েছে কি না
+            // ১. ইউআরএল থেকে আইডি নেওয়া
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = parseInt(urlParams.get('id'));
+
+            // ২. চেক করা হচ্ছে ডাটা ফাইল ঠিকমতো লোড হয়েছে কি না
             if (typeof products === 'undefined') {
-                contentArea.innerHTML = "<h2 style='color:red;'>ভুল: products.js ফাইলটি পাওয়া যায়নি!</h2>";
+                statusMsg.innerHTML = "<b style='color:red;'>ভুল: products.js ফাইলটি পাওয়া যায়নি অথবা কাজ করছে না।</b>";
+                console.error("Products array is not defined.");
                 return;
             }
 
+            // ৩. আইডি দিয়ে পণ্য খুঁজে বের করা
             const product = products.find(p => p.id === productId);
 
             if (product) {
                 contentArea.innerHTML = `
                     <div class="product-img">
-                        <img src="${product.image}" onerror="this.src='https://via.placeholder.com/400?text=No+Image'" alt="${product.name}">
+                        <img src="${product.image}" onerror="this.src='https://via.placeholder.com/400?text=Image+Not+Found'" alt="${product.name}">
                     </div>
                     <div class="product-info">
                         <h1>${product.name}</h1>
                         <span class="price">৳${product.price}</span>
                         <div class="desc">${product.description}</div>
                         <div class="btn-group">
-                            <button class="btn cart-btn" onclick="addToCart(${product.id})">কার্টে যোগ করুন</button>
+                            <button class="btn cart-btn" onclick="addToCart(${product.id})"><i class="fa fa-shopping-cart"></i> কার্টে যোগ করুন</button>
                             <button class="btn order-btn" onclick="buyNow(${product.id})">অর্ডার করুন</button>
                         </div>
                     </div>
                 `;
+                document.title = product.name + " - নির্ভীক বাজার";
             } else {
-                contentArea.innerHTML = "<h2>দুঃখিত, এই আইডি দিয়ে কোনো পণ্য পাওয়া যায়নি।</h2>";
+                statusMsg.innerHTML = "<b style='color:red;'>দুঃখিত, এই আইডির (ID: " + productId + ") কোনো পণ্য ডাটাবেজে নেই।</b>";
             }
-        };
+        });
 
         function addToCart(id) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
