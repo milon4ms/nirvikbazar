@@ -1,7 +1,7 @@
 /**
  * Nirvik Bazar - Product Database
  * এই ফাইলে আপনার দোকানের সব পণ্যের তালিকা থাকবে। 
- * ক্যাটাগরি: mens, womens, kids, electronics, herbal, others
+ * ক্যাটাগরি: mens, womens, baby, electronics, herbal, others
  */
 
 const products = [
@@ -96,7 +96,7 @@ const products = [
         id: 11,
         name: "স্টাইলিশ স্কুল ব্যাগ",
         price: 700,
-        category: "kids",
+        category: "baby",
         description: "বড় সাইজের ওয়াটারপ্রুফ প্রিমিয়াম স্কুল ব্যাগ। এয়ার ভেন্টিলেশন সিস্টেম এবং মেরুদণ্ড সুরক্ষা ডিজাইন। সারা বাংলাদেশে হোম ডেলিভারি!",
         image: "images/product11.jpg"
     },
@@ -104,7 +104,7 @@ const products = [
         id: 12,
         name: "মিনি ডান্সিং রোবট",
         price: 780,
-        category: "kids",
+        category: "baby",
         description: "রঙিন আলো আর মিউজিকের তালে নাচে এই স্মার্ট রোবট। টক্সিনমুক্ত নিরাপদ প্লাস্টিকে তৈরি। আপনার সন্তানের জন্য সেরা উপহার।",
         image: "images/product12.jpg"
     },
