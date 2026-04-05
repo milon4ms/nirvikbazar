@@ -47,6 +47,29 @@
         .footer-bottom { border-top: 1px solid #444; padding-top: 20px; text-align: center; font-size: 13px; margin-top: 20px; }
 
         @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr; text-align: center; } }
+        /* নতুন লোগো স্টাইল */
+    .logo { 
+        text-decoration: none; 
+        font-size: 30px; 
+        font-weight: 800; 
+        display: flex; 
+        align-items: center;
+        letter-spacing: -0.5px;
+    }
+    
+    .logo .nirvik { 
+        color: var(--primary); /* সবুজ রঙ (#00a651) */
+    }
+    
+    .logo .bazar { 
+        color: var(--secondary); /* কমলা রঙ (#e67e22) */
+        margin-left: 5px; /* Nirvik এবং Bazar এর মাঝে সামান্য ফাঁকা */
+    }
+
+    /* লোগোর ওপর মাউস নিলে হালকা ইফেক্ট (ঐচ্ছিক) */
+    .logo:hover {
+        opacity: 0.9;
+    }
     </style>
 </head>
 <body>
