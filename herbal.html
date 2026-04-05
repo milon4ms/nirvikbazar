@@ -4,131 +4,148 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>হারবাল পণ্য - নির্বিক বাজার</title>
-    <link rel="stylesheet" href="style.css"> 
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        :root { --primary: #00a651; --secondary: #e67e22; --dark: #333; --light: #f4f4f4; --white: #fff; }
-        body { font-family: 'Hind Siliguri', sans-serif; background-color: var(--light); margin: 0; padding: 0; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        /* আপনার ইনডেক্স পেজের মূল সিএসএস (CSS) */
+        :root { --primary: #00a651; --secondary: #e67e22; --dark: #333; --light: #f9f9f9; --white: #fff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
+        body { background: var(--light); color: var(--dark); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* হেডার ও মেনুবার (আপনার ইনডেক্স থেকে কপি করা) */
+        header { background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
+        .logo { font-size: 26px; font-weight: 800; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 10px; }
+        .nav-menu { display: flex; gap: 25px; list-style: none; }
+        .nav-menu a { text-decoration: none; color: var(--dark); font-weight: 600; transition: 0.3s; font-size: 16px; }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--primary); }
         
-        /* প্রডাক্ট গ্রিড ডিজাইন */
-        .product-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
-            gap: 20px; 
-            margin-top: 30px;
-        }
-        .product-card { 
-            background: var(--white); 
-            border-radius: 10px; 
-            padding: 15px; 
-            text-align: center; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-            transition: 0.3s;
-        }
-        .product-card:hover { transform: translateY(-5px); }
-        .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
-        .product-card h3 { font-size: 18px; margin: 15px 0 10px; color: var(--dark); }
-        .price { color: var(--primary); font-size: 20px; font-weight: 700; margin-bottom: 15px; }
-        .btn-add { 
-            background: var(--primary); 
-            color: white; 
-            border: none; 
-            padding: 10px 20px; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            width: 100%; 
-            font-weight: 600;
-            transition: 0.3s;
-        }
-        .btn-add:hover { background: #008541; }
+        /* প্রডাক্ট সেকশন স্টাইল */
+        .section-title { text-align: center; margin: 40px 0 30px; font-size: 28px; position: relative; padding-bottom: 10px; }
+        .section-title::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80px; height: 3px; background: var(--primary); }
         
-        /* হেডার ও মেনুবার স্টাইল (আপনার ইনডেক্স পেজের সাথে মিল রেখে) */
-        nav { background: var(--white); padding: 15px 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); sticky: top; }
-        .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .logo { font-size: 24px; font-weight: bold; color: var(--primary); text-decoration: none; }
-        .menu { list-style: none; display: flex; gap: 20px; }
-        .menu a { text-decoration: none; color: var(--dark); font-weight: 600; }
-        .menu a:hover { color: var(--primary); }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; margin-bottom: 50px; }
+        .product-card { background: var(--white); border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid #eee; position: relative; overflow: hidden; }
+        .product-card:hover { transform: translateY(-10px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; }
+        .product-card h3 { font-size: 19px; margin-bottom: 10px; color: #222; }
+        .product-card .price { font-size: 22px; font-weight: 700; color: var(--primary); margin-bottom: 20px; display: block; }
+        
+        .add-to-cart-btn { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 6px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .add-to-cart-btn:hover { background: #008541; }
+
+        /* ফুটার (আপনার ইনডেক্স থেকে কপি করা) */
+        footer { background: #1a1a1a; color: white; padding: 60px 0 20px; margin-top: 50px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-about h3 { color: var(--primary); margin-bottom: 20px; }
+        .footer-links h3 { margin-bottom: 20px; }
+        .footer-links ul { list-style: none; }
+        .footer-links li { margin-bottom: 12px; }
+        .footer-links a { color: #ccc; text-decoration: none; transition: 0.3s; }
+        .footer-links a:hover { color: var(--primary); padding-left: 5px; }
+        .footer-bottom { text-align: center; padding-top: 25px; border-top: 1px solid #333; color: #888; font-size: 14px; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="nav-container">
-            <a href="index.html" class="logo">নির্বিক বাজার</a>
-            <ul class="menu">
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-leaf"></i> নির্বিক বাজার
+            </a>
+            <ul class="nav-menu">
                 <li><a href="index.html">হোম</a></li>
-                <li><a href="herbal.html" style="color: var(--primary);">হারবাল পণ্য</a></li>
+                <li><a href="herbal.html" class="active">হারবাল পণ্য</a></li>
                 <li><a href="neem.html">নিম তেল</a></li>
-                <li><a href="checkout.html">কার্ট</a></li>
+                <li><a href="contact.html">যোগাযোগ</a></li>
+                <li><a href="checkout.html" style="position: relative;">
+                    <i class="fas fa-shopping-basket"></i>
+                </a></li>
             </ul>
         </div>
-    </nav>
+    </header>
 
     <div class="container">
-        <h2 style="border-left: 5px solid var(--primary); padding-left: 15px; margin-top: 30px;">আমাদের হারবাল কালেকশন</h2>
+        <h2 class="section-title">আমাদের সকল হারবাল পণ্য</h2>
         
-        <div id="herbal-list" class="product-grid">
+        <div id="herbal-display" class="product-grid">
             </div>
     </div>
 
-    <footer style="background: var(--dark); color: white; padding: 40px 0; margin-top: 50px; text-align: center;">
+    <footer>
         <div class="container">
-            <p>&copy; 2026 নির্বিক বাজার - সর্বস্বত্ব সংরক্ষিত</p>
-            <p style="font-size: 14px; color: #bbb;">প্রোপ্রাইটর: ডাঃ মিলন</p>
+            <div class="footer-grid">
+                <div class="footer-about">
+                    <h3>নির্বিক বাজার</h3>
+                    <p>আপনার সুস্থতাই আমাদের কাম্য। আমরা দিচ্ছি ১০০% খাঁটি ও প্রাকৃতিক ভেষজ পণ্য।</p>
+                </div>
+                <div class="footer-links">
+                    <h3>প্রয়োজনীয় লিঙ্ক</h3>
+                    <ul>
+                        <li><a href="index.html">হোম পেজ</a></li>
+                        <li><a href="herbal.html">হারবাল আইটেম</a></li>
+                        <li><a href="checkout.html">অর্ডার চেকআউট</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>যোগাযোগ</h3>
+                    <p><i class="fas fa-phone"></i> +৮৮০ ১৭XXXXXXXX</p>
+                    <p><i class="fas fa-envelope"></i> info@nirvikbazar.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 নির্বিক বাজার। সকল স্বত্ব সংরক্ষিত।</p>
+                <p>পরিচালনায়: ডাঃ মিলন</p>
+            </div>
         </div>
     </footer>
 
     <script src="products.js"></script>
-
     <script>
-        // ১. শুধুমাত্র 'herbal' ক্যাটাগরির পণ্য আলাদা করা
-        function loadHerbalProducts() {
-            const herbalContainer = document.getElementById('herbal-list');
+        // পণ্য রেন্ডার করার ফাংশন
+        function renderHerbalContent() {
+            const displayArea = document.getElementById('herbal-display');
             
-            // products.js থেকে ফিল্টার করা
-            const herbalItems = products.filter(item => item.category === 'herbal');
+            // products.js থেকে শুধুমাত্র 'herbal' ক্যাটাগরি ফিল্টার করা
+            const herbalItems = products.filter(p => p.category === 'herbal');
 
             if (herbalItems.length === 0) {
-                herbalContainer.innerHTML = "<p>বর্তমানে কোনো হারবাল পণ্য স্টকে নেই।</p>";
+                displayArea.innerHTML = "<p style='grid-column: 1/-1; text-align:center;'>বর্তমানে এই ক্যাটাগরিতে কোনো পণ্য নেই।</p>";
                 return;
             }
 
-            // পেজে প্রডাক্টগুলো রেন্ডার করা
-            herbalContainer.innerHTML = herbalItems.map(item => `
+            displayArea.innerHTML = herbalItems.map(product => `
                 <div class="product-card">
-                    <img src="${item.image}" alt="${item.name}">
-                    <h3>${item.name}</h3>
-                    <p class="price">৳${item.price}</p>
-                    <button class="btn-add" onclick="addToCart(${item.id})">
-                        <i class="fas fa-shopping-cart"></i> কার্টে যোগ করুন
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <span class="price">৳${product.price}</span>
+                    <button class="add-to-cart-btn" onclick="addToCart(${product.id})">
+                        <i class="fas fa-cart-plus"></i> কার্টে যোগ করুন
                     </button>
                 </div>
             `).join('');
         }
 
-        // ২. কার্টে যোগ করার ফাংশন
+        // কার্ট লজিক
         function addToCart(id) {
-            const product = products.find(p => p.id === id);
+            const item = products.find(p => p.id === id);
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             
-            const existing = cart.find(item => item.id === id);
+            const existing = cart.find(c => c.id === id);
             if (existing) {
                 existing.quantity += 1;
             } else {
-                cart.push({ ...product, quantity: 1 });
+                cart.push({ ...item, quantity: 1 });
             }
             
             localStorage.setItem('cart', JSON.stringify(cart));
-            alert("'" + product.name + "' কার্টে যোগ করা হয়েছে!");
+            alert("'" + item.name + "' কার্টে যোগ করা হয়েছে।");
         }
 
-        // পেজ লোড হলে ফাংশনটি কল করা
-        window.onload = loadHerbalProducts;
+        // পেজ লোড হলে কল হবে
+        window.addEventListener('DOMContentLoaded', renderHerbalContent);
     </script>
-
 </body>
 </html>
