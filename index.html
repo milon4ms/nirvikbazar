@@ -70,6 +70,32 @@
     .logo:hover {
         opacity: 0.9;
     }
+        /* ফুটারে লিঙ্কের রঙ সাদা করার জন্য */
+.footer-custom-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-custom-links li {
+    margin-bottom: 10px;
+}
+
+.footer-custom-links a {
+    color: #ccc !important; /* হালকা সাদা/ধূসর রঙ */
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.footer-custom-links a:hover {
+    color: var(--primary) !important; /* মাউস নিলে আপনার সবুজ রঙ হবে */
+}
+
+/* পাশাপাশি থাকা লিঙ্কগুলোর মাঝে গ্যাপ তৈরি করা */
+.inline-links {
+    display: flex;
+    gap: 15px; /* লিঙ্কগুলোর মাঝখানের দূরত্ব */
+}
     </style>
 </head>
 <body>
