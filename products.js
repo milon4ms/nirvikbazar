@@ -84,7 +84,7 @@ const products = [
     },
     {
         id: 10,
-        name: "এলিগ্যান্ট হ্যান্ডেল শোল্ডার ব্যাগ",
+        name: "এলিগ্যান্ট শোল্ডার ব্যাগ",
         price: 800,
         category: "womens",
         description: "প্রিমিয়াম কোয়ালিটি লেদারে তৈরি স্টাইলিশ ব্যাগ। ইউনিক নট ডিজাইন হ্যান্ডেল এবং গোল্ডেন মেটাল লক। কালার: ব্রাউন, ক্রিম ও হোয়াইট।",
@@ -112,7 +112,7 @@ const products = [
     // ৫. ইলেকট্রনিক্স (Electronics)
     {
         id: 13,
-        name: "Remax RPP-96 Power Bank",
+        name: "Remax96 PowerBank",
         price: 800,
         category: "electronics",
         description: "শক্তিশালী 10000mAh ব্যাটারি। ডুয়াল USB পোর্টে একসাথে দুটি ডিভাইস দ্রুত চার্জ করা যায়। স্লিম ও লাইটওয়েট ডিজাইন।",
